@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>证照办理 - 政企通</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;color:#1a1a2e}
+.nav{background:linear-gradient(135deg,#1a56db,#1e40af);height:64px;display:flex;align-items:center;padding:0 24px;position:sticky;top:0;z-index:100}
+.nav a{color:#fff;text-decoration:none;font-size:15px;font-weight:600}
+.nav a:hover{opacity:.85}
+.container{max-width:1100px;margin:0 auto;padding:30px 24px}
+.page-title{font-size:26px;font-weight:800;margin-bottom:6px}
+.page-sub{color:#64748b;font-size:14px;margin-bottom:28px}
+.license-list{display:flex;flex-direction:column;gap:14px}
+.l-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);transition:.2s}
+.l-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.l-header{padding:18px 22px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none;flex-wrap:wrap;gap:10px}
+.l-header .l-left{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.l-badge{font-size:11px;font-weight:700;padding:4px 12px;border-radius:12px;white-space:nowrap}
+.lb-hot{background:#fef2f2;color:#dc2626}.lb-cater{background:#fffbeb;color:#d97706}
+.lb-build{background:#eff6ff;color:#2563eb}.lb-med{background:#f0fdf4;color:#16a34a}
+.lb-trade{background:#fff7ed;color:#ea580c}.lb-edu{background:#faf5ff;color:#9333ea}
+.lb-general{background:#f1f5f9;color:#475569}.lb-special{background:#fef2f2;color:#dc2626}
+.l-header h3{font-size:16px;font-weight:700}
+.l-header .l-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.l-price{font-size:16px;font-weight:700;color:#1a56db}
+.l-time{font-size:12px;color:#64748b}
+.l-arrow{font-size:20px;color:#94a3b8;transition:.3s}
+.l-arrow.open{transform:rotate(180deg)}
+.l-detail{display:none;padding:0 22px 20px;border-top:1px solid #f1f5f9}
+.l-detail.show{display:block}
+.l-detail h5{font-size:13px;font-weight:700;color:#1a1a2e;margin:14px 0 8px}
+.l-detail ul{padding-left:18px;margin-bottom:8px;font-size:12px;color:#475569;line-height:2}
+.l-detail .chk-list{list-style:none;padding-left:0}
+.l-detail .chk-list li::before{content:'☐ ';color:#1a56db;font-size:13px}
+.l-detail .step-list{list-style:none;padding-left:0;counter-reset:step}
+.l-detail .step-list li{counter-increment:step;margin-bottom:4px}
+.l-detail .step-list li::before{content:counter(step)'. ';color:#1a56db;font-weight:700}
+.l-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.l-detail .l-dept{font-size:12px;color:#64748b;margin-top:8px}
+.btn{padding:9px 18px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:.2s;white-space:nowrap}
+.btn-p{background:#1a56db;color:#fff}.btn-p:hover{background:#1e40af}
+.btn-o{background:#fff;color:#1a56db;border:1.5px solid #1a56db}.btn-o:hover{background:#eff6ff}
+.empty-state{text-align:center;padding:60px 20px;color:#94a3b8}
+.empty-state p{font-size:14px}
+@media(max-width:768px){.l-header{flex-direction:column;align-items:flex-start}.l-header .l-meta{width:100%;justify-content:space-between}}
+.footer{text-align:center;padding:40px;color:#94a3b8;font-size:12px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<link rel="manifest" href="manifest.json">
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      console.log('SW registered:',reg.scope);
+    }).catch(function(err){
+      console.log('SW registration failed:',err);
+    });
+  });
+}
+</script>
+
+</head>
+<body>
+<nav class="nav"><a href="index.html">&#8592; 返回首页</a></nav>
+<div class="container">
+<h1 class="page-title">证照办理</h1>
+<p class="page-sub">企业证照一站代办 — 条件审查 · 材料准备 · 流程跟进 · 快速拿证</p>
+<div class="license-list" id="license-list"><div style="text-align:center;padding:60px;color:#94a3b8">加载中...</div></div>
+</div>
+<div class="footer">政企通 · 南通开发区企业一站式智慧服务平台 | 证照办理时限以主管部门实际审批为准</div>
+<script>
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function toggleDetail(id){var el=document.getElementById('detail-'+id),arrow=document.getElementById('arrow-'+id);el.classList.toggle('show');arrow.classList.toggle('open')}
+var badgeMap={危化品:'lb-hot',食品:'lb-cater',建筑:'lb-build',医疗:'lb-med',进出口:'lb-trade',教育:'lb-edu',人力:'lb-general',电信:'lb-special'};
+
+function getBadge(cat){
+  if(!cat)return['lb-general','通用'];
+  for(var k in badgeMap){if(cat.indexOf(k)!==-1)return[badgeMap[k],cat]}
+  return['lb-general',cat||'通用'];
+}
+
+async function loadLicenses(){
+  var el=document.getElementById('license-list');
+  if(!window.ZQTong){el.innerHTML='<div class="empty-state"><p>SDK未就绪</p></div>';return}
+  try{
+    var data=await window.ZQTong.fetchLicenses();
+    if(!data||data.length===0){el.innerHTML='<div class="empty-state"><p>暂无证照办理服务</p></div>';return}
+    render(data);
+  }catch(e){el.innerHTML='<div class="empty-state"><p>加载失败: '+esc(e.message)+'</p></div>'}
+}
+
+function render(data){
+  var el=document.getElementById('license-list');
+  el.innerHTML=data.map(function(l,i){
+    var b=getBadge(l.category||'');
+    var conds=Array.isArray(l.conditions)?l.conditions:(l.conditions||'').split(/[；;]/).filter(Boolean);
+    var mats=Array.isArray(l.materials)?l.materials:(l.materials||'');
+    var stps=Array.isArray(l.process)?l.process:(l.process||'');
+    return'<div class="l-card"><div class="l-header" onclick="toggleDetail('+i+')"><div class="l-left"><span class="l-badge '+b[0]+'">'+esc(b[1])+'</span><h3>'+esc(l.name||'')+'</h3></div><div class="l-meta"><span class="l-price">'+esc(l.fee||'面议')+'</span><span class="l-time">'+(l.duration_days?l.duration_days+'个工作日':'咨询')+'</span><span class="l-arrow" id="arrow-'+i+'">&#x25BC;</span></div></div><div class="l-detail" id="detail-'+i+'"><h5>办理条件</h5><p style="font-size:12px;color:#475569;line-height:1.8">'+esc(l.conditions||'请咨询')+'</p><h5>所需材料清单</h5><ul class="chk-list">'+(mats.length?mats.map(function(m){return'<li>'+esc(m)+'</li>'}).join(''):'<li>请咨询</li>')+'</ul><h5>办理流程</h5><ul class="step-list">'+(stps.length?stps.map(function(s){return'<li>'+esc(s)+'</li>'}).join(''):'<li>请咨询</li>')+'</ul><h5>办理时限</h5><p style="font-size:12px;color:#475569">'+(l.duration_days?l.duration_days+'个工作日':'咨询')+'</p><div class="l-dept">主管部门：<b>'+esc(l.dept||'请咨询')+'</b></div><div class="l-actions"><button class="btn btn-p">立即办理</button><button class="btn btn-o">咨询详情</button></div></div></div>';
+  }).join('');
+}
+
+document.addEventListener('DOMContentLoaded',loadLicenses);
+</script>
+</body>
+</html>
