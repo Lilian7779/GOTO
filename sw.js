@@ -1,4 +1,4 @@
-const CACHE_NAME = 'zqtong-v1';
+const CACHE_NAME = 'zqtong-v2';
 const STATIC_ASSETS = [
   '/',
   'index.html',
@@ -39,13 +39,13 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// Fetch: network-first for HTML, cache-first for others
+// Fetch: network-first for all static assets (includes supabase-client.js)
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
   const isHTML = event.request.headers.get('accept') && event.request.headers.get('accept').includes('text/html');
 
+  // Network first for HTML
   if (isHTML) {
-    // Network first, fall back to cache
     event.respondWith(
       fetch(event.request)
         .then(response => {
@@ -56,18 +56,17 @@ self.addEventListener('fetch', event => {
         .catch(() => caches.match(event.request))
     );
   } else {
-    // Cache first, network fallback for static assets
+    // Network first for all static assets (JS, CSS, JSON, images, etc.)
     event.respondWith(
-      caches.match(event.request).then(cached => {
-        if (cached) return cached;
-        return fetch(event.request).then(response => {
+      fetch(event.request)
+        .then(response => {
           if (response.ok && event.request.method === 'GET') {
             const cloned = response.clone();
             caches.open(CACHE_NAME).then(cache => cache.put(event.request, cloned));
           }
           return response;
-        });
-      })
+        })
+        .catch(() => caches.match(event.request))
     );
   }
 });
