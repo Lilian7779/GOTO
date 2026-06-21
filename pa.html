@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>政企通 - 政企信息服务平台</title>
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;color:#1a1a2e}
+.nav{background:linear-gradient(135deg,#1a56db,#1e40af);height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;position:sticky;top:0;z-index:100}
+.nav-logo{color:#fff;font-size:24px;font-weight:700;letter-spacing:2px}
+.nav-links{display:flex;gap:24px}
+.nav-links a{color:rgba(255,255,255,.85);text-decoration:none;font-size:14px;cursor:pointer;transition:.2s}
+.nav-links a:hover{color:#fff}
+.hero{background:linear-gradient(135deg,#1a56db 0%,#1e3a8a 100%);padding:70px 40px 90px;text-align:center;color:#fff}
+.hero h1{font-size:38px;font-weight:800;margin-bottom:8px}
+.hero p{font-size:17px;opacity:.9;margin-bottom:36px}
+.sb{max-width:740px;margin:0 auto;background:#fff;border-radius:16px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.sr{display:flex;gap:14px;margin-bottom:14px}
+.sf{flex:1;text-align:left}
+.sf label{display:block;font-size:13px;color:#64748b;margin-bottom:5px;font-weight:500}
+.sf select,.sf input{width:100%;padding:11px 14px;border:2px solid #e2e8f0;border-radius:10px;font-size:14px;color:#1a1a2e;background:#f8fafc;outline:none}
+.sf select:focus,.sf input:focus{border-color:#1a56db;background:#fff}
+.sbtn{width:100%;padding:14px;background:linear-gradient(135deg,#1a56db,#2563eb);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;margin-top:8px;transition:.2s}
+.sbtn:hover{transform:translateY(-1px);box-shadow:0 8px 25px rgba(26,86,219,.35)}
+.fts{max-width:1200px;margin:-30px auto 50px;padding:0 30px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.fc{background:#fff;border-radius:14px;padding:26px 22px;box-shadow:0 2px 12px rgba(0,0,0,.06);text-align:center;cursor:pointer;transition:.2s}
+.fc:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+.fc .fi{font-size:32px;margin-bottom:10px}
+.fc h3{font-size:16px;margin-bottom:5px}
+.fc p{font-size:12px;color:#64748b}
+.nb{display:inline-block;background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff;font-size:10px;padding:2px 6px;border-radius:8px;margin-left:6px;vertical-align:middle}
+.rs{max-width:1200px;margin:0 auto;padding:30px}
+.rh{margin-bottom:20px}
+.rh h2{font-size:22px}
+.rh span{color:#64748b;font-size:13px}
+.tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid #e2e8f0;overflow-x:auto}
+.tab{padding:10px 16px;font-size:13px;font-weight:600;color:#64748b;cursor:pointer;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;background:none;transition:.2s}
+.tab:hover{color:#1a56db}
+.tab.act{color:#1a56db;border-bottom-color:#1a56db}
+.cl{display:flex;flex-direction:column;gap:14px}
+.cd{background:#fff;border-radius:14px;padding:20px 22px;box-shadow:0 2px 8px rgba(0,0,0,.04);display:flex;gap:16px;align-items:flex-start;transition:.2s}
+.cd:hover{box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.cb{flex-shrink:0;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
+.br{background:#fef2f2;color:#dc2626}.by{background:#fffbeb;color:#d97706}.bg{background:#f0fdf4;color:#16a34a}
+.bb{background:#eff6ff;color:#2563eb}.bp{background:#faf5ff;color:#9333ea}
+.cd-body{flex:1;min-width:0}
+.cd-title{font-size:15px;font-weight:700;margin-bottom:5px}
+.cd-desc{font-size:12px;color:#64748b;margin-bottom:8px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tag{font-size:11px;padding:3px 8px;background:#f1f5f9;border-radius:12px;color:#475569}
+.cd-bot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.price{font-size:16px;font-weight:700;color:#1a56db}
+.op{font-size:12px;color:#94a3b8;text-decoration:line-through;margin-left:6px}
+.stars{color:#f59e0b;font-size:13px}
+.rc{font-size:11px;color:#94a3b8;margin-left:3px}
+.btn{display:inline-block;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;border:none;transition:.2s}
+.btn-p{background:#1a56db;color:#fff}.btn-p:hover{background:#1e40af}
+.btn-o{background:#fff;color:#1a56db;border:1.5px solid #1a56db}.btn-o:hover{background:#eff6ff}
+.tl{position:relative;padding-left:28px;margin-top:20px}
+.tl::before{content:'';position:absolute;left:9px;top:0;bottom:0;width:2px;background:#e2e8f0}
+.tl-item{position:relative;margin-bottom:18px}
+.tl-dot{position:absolute;left:-28px;top:4px;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700}
+.tl-dot.rd{background:#dc2626}.tl-dot.yl{background:#d97706}.tl-dot.gn{background:#16a34a}.tl-dot.bl{background:#2563eb}
+.tlc{background:#fff;border-radius:12px;padding:16px 20px;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.tlt{font-size:14px;font-weight:700;margin-bottom:3px}
+.tlm{font-size:11px;color:#94a3b8;margin-bottom:6px}
+.tld{font-size:12px;color:#475569}.tla{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+.cmp{width:100%;border-collapse:collapse;margin-top:16px;font-size:12px}
+.cmp th{background:#f1f5f9;padding:10px;text-align:left;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0}
+.cmp td{padding:10px;border-bottom:1px solid #f1f5f9;vertical-align:top}
+.cmp tr:hover td{background:#f8fafc}
+.hid{display:none}
+.footer{text-align:center;padding:40px;color:#94a3b8;font-size:12px}
+@media(max-width:768px){.fts{grid-template-columns:1fr}.sr{flex-direction:column}.nav-links{display:none}.hero h1{font-size:26px}}
+
+.sec-tt{font-size:15px;font-weight:700;color:#475569;margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid #e2e8f0}
+.ind-guide{background:#fff;border-radius:12px;padding:16px 20px;margin-bottom:12px;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.ind-guide h4{font-size:14px;font-weight:700;margin-bottom:8px;color:#1a1a2e}
+.ind-steps{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.step-chip{display:inline-flex;align-items:center;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:5px 10px;font-size:11px;color:#1e40af;gap:5px}
+.step-chip .sn{background:#1a56db;color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.gov-info{display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:#64748b;margin-bottom:10px}
+.gov-info span{background:#f8fafc;padding:4px 8px;border-radius:6px}
+.gov-info b{color:#1a1a2e}
+.form-links{display:flex;flex-wrap:wrap;gap:6px}
+.form-link{font-size:11px;padding:4px 10px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;border-radius:6px;cursor:pointer;text-decoration:none}
+.form-link:hover{background:#dcfce7}
+.bo{background:#fff7ed;color:#ea580c}
+
+</style>
+</head>
+<body>
+
+<nav class="nav">
+<div class="nav-logo">政企通</div>
+<div class="nav-links">
+<a onclick="showHome()">首页</a>
+<a onclick="showResults('tab-policy')">政策匹配</a>
+<a onclick="showResults('tab-service')">企业服务</a>
+<a onclick="showResults('tab-ip')">知识产权<span class="nb">NEW</span></a>
+<a onclick="showResults('tab-software')">企业软件</a>
+<a onclick="showResults('tab-office')">找办公室</a>
+<a onclick="showResults('tab-guide')">行业办事</a>
+</div>
+<button class="btn btn-p">企业登录</button>
+</nav>
+
+<div id="home">
+<div class="hero">
+<h1>开公司，找政企通就够了</h1>
+<p>政策匹配 · 企业服务(财税/法律/审计/税务) · 知识产权 · 选软件 · 租办公室 · 行业办事指南</p>
+<div class="sb">
+<div class="sr">
+<div class="sf"><label>企业所在地</label>
+<select id="region">
+<option>江苏省 · 南通市 · 开发区</option>
+<option>江苏省 · 南通市 · 崇川区</option>
+<option>江苏省 · 南通市 · 通州区</option>
+<option>江苏省 · 南通市 · 海门区</option>
+<option>江苏省 · 南通市 · 如皋市</option>
+</select></div>
+<div class="sf"><label>所属行业</label>
+<select id="industry">
+<option>能源化工 · 油气贸易</option>
+<option>信息技术 · 软件开发</option>
+<option>制造加工 · 机械制造</option>
+<option>商贸物流 · 进出口贸易</option>
+<option>建筑房产 · 建筑施工</option>
+<option>专业服务 · 财税服务</option>
+</select></div>
+</div>
+<div class="sf" style="margin-bottom:0"><label>企业名称（选填，填了更准）</label>
+<input type="text" placeholder="输入企业名称，自动匹配工商信息"></div>
+<button class="sbtn" onclick="showResults()">一键匹配</button>
+</div>
+</div>
+
+<div class="fts">
+<div class="fc" onclick="showResults('tab-policy')"><div class="fi">&#x1F4CB;</div><h3>惠企政策匹配</h3><p>按区域+行业精准推荐，告诉你能拿多少钱</p></div>
+<div class="fc" onclick="showResults('tab-service')"><div class="fi">&#x1F3E2;</div><h3>企业服务</h3><p>财税·法律·审计·税务，一站式服务商对接</p></div>
+<div class="fc" onclick="showResults('tab-ip')"><div class="fi">&#x1F4DC;</div><h3>知识产权服务<span class="nb">NEW</span></h3><p>商标注册/专利申请/软著登记，全流程代办</p></div>
+<div class="fc" onclick="showResults('tab-software')"><div class="fi">&#x1F4BB;</div><h3>企业软件推荐</h3><p>按行业推荐管理软件，财税/ERP/CRM全覆盖</p></div>
+<div class="fc" onclick="showResults('tab-office')"><div class="fi">&#x1F3E2;</div><h3>办公空间租赁</h3><p>独立办公室/工位/园区，自动匹配租金补贴</p></div>
+<div class="fc" onclick="showResults('tab-guide')"><div class="fi">&#x1F4C4;</div><h3>行业办事指南</h3><p>新公司指引+各行业设立/变更流程+主管部门信息</p></div>
+</div>
+</div>
+
