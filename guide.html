@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>行业办事指南 - 政企通</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;color:#1a1a2e}
+.nav{background:linear-gradient(135deg,#1a56db,#1e40af);height:64px;display:flex;align-items:center;padding:0 24px;position:sticky;top:0;z-index:100}
+.nav a{color:#fff;text-decoration:none;font-size:15px;font-weight:600}
+.nav a:hover{opacity:.85}
+.container{max-width:1100px;margin:0 auto;padding:30px 24px}
+.page-title{font-size:26px;font-weight:800;margin-bottom:6px}
+.page-sub{color:#64748b;font-size:14px;margin-bottom:28px}
+.section-title{font-size:20px;font-weight:700;margin:36px 0 18px;padding-bottom:8px;border-bottom:3px solid #1a56db;display:inline-block}
+.timeline{display:flex;flex-wrap:wrap;gap:0;margin-bottom:30px;position:relative}
+.tl-item{flex:1;min-width:140px;text-align:center;position:relative;padding:0 4px 20px}
+.tl-dot{width:44px;height:44px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;margin-bottom:10px;position:relative;z-index:2}
+.tl-dot.day{background:#1a56db;color:#fff}.tl-dot.week{background:#dbeafe;color:#1a56db;border:2px solid #1a56db}
+.tl-line{position:absolute;top:22px;left:50%;right:-50%;height:3px;background:#e2e8f0;z-index:1}
+.tl-item:last-child .tl-line{display:none}
+.tl-item h4{font-size:13px;font-weight:700;margin-bottom:4px}
+.tl-item p{font-size:11px;color:#64748b;line-height:1.5}
+.ind-card{background:#fff;border-radius:14px;padding:20px 22px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.ind-card h4{font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.ind-card h4 .ind-badge{font-size:10px;padding:3px 8px;border-radius:8px;font-weight:600}
+.ib-c{background:#eff6ff;color:#2563eb}.ib-d{background:#fef2f2;color:#dc2626}
+.ib-e{background:#f0fdf4;color:#16a34a}.ib-f{background:#fffbeb;color:#d97706}
+.ib-g{background:#faf5ff;color:#9333ea}
+.steps-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.step-chip{display:inline-flex;align-items:center;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:5px 10px;font-size:11px;color:#1e40af;gap:5px}
+.step-chip .sn{background:#1a56db;color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.gov-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;font-size:11px;color:#64748b}
+.gov-row span{background:#f8fafc;padding:4px 10px;border-radius:6px}
+.gov-row b{color:#1a1a2e}
+.form-links{display:flex;flex-wrap:wrap;gap:6px}
+.form-link{font-size:11px;padding:5px 12px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;border-radius:6px;cursor:pointer;text-decoration:none}
+.form-link:hover{background:#dcfce7}
+.notes-box{font-size:11px;color:#64748b;margin-top:8px;padding:8px 12px;background:#fffbeb;border-radius:8px;border:1px solid #fde68a}
+.empty-state{text-align:center;padding:60px 20px;color:#94a3b8}
+.empty-state p{font-size:14px}
+@media(max-width:768px){.timeline{flex-direction:column;gap:12px}.tl-line{display:none}.tl-item{padding-bottom:0}}
+.footer{text-align:center;padding:40px;color:#94a3b8;font-size:12px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<link rel="manifest" href="manifest.json">
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      console.log('SW registered:',reg.scope);
+    }).catch(function(err){
+      console.log('SW registration failed:',err);
+    });
+  });
+}
+</script>
+
+</head>
+<body>
+<nav class="nav"><a href="index.html">&#8592; 返回首页</a></nav>
+<div class="container">
+<h1 class="page-title">行业办事指南</h1>
+<p class="page-sub">5大行业设立变更全流程 · 30天时间线指引 · 主管部门对接 · 表单一键下载</p>
+
+<div class="section-title">新公司设立 30天时间线</div>
+<div class="timeline">
+<div class="tl-item"><div class="tl-line"></div><div class="tl-dot day">1</div><h4>Day 1-3</h4><p>名称核准<br>提交注册材料<br>领取营业执照</p></div>
+<div class="tl-item"><div class="tl-line"></div><div class="tl-dot week">2</div><h4>Day 3-5</h4><p>公安备案刻章点<br>公章+财务章<br>法人章+发票章</p></div>
+<div class="tl-item"><div class="tl-line"></div><div class="tl-dot week">3</div><h4>Day 5-10</h4><p>银行开立基本账户<br>税务报到+税种核定<br>领取发票</p></div>
+<div class="tl-item"><div class="tl-line"></div><div class="tl-dot week">4</div><h4>Day 10-15</h4><p>社保登记+公积金<br>单位缴费比例<br>社保约27%、公积金5-12%</p></div>
+<div class="tl-item"><div class="tl-dot week">5</div><h4>Day 15-30</h4><p>行业许可/资质审批<br>食品/危化/建筑<br>根据行业办理</p></div>
+</div>
+
+<div class="section-title">行业 · 设立变更流程</div>
+<div id="guide-container"><div style="text-align:center;padding:60px;color:#94a3b8">加载中...</div></div>
+</div>
+<div class="footer">政企通 · 南通开发区企业一站式智慧服务平台 | 指南内容依据主管部门公开信息编制，如有更新以主管部门最新文件为准</div>
+<script>
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+var badgeColors=['ib-c','ib-d','ib-e','ib-f','ib-g'];
+
+async function loadGuides(){
+  var el=document.getElementById('guide-container');
+  if(!window.ZQTong){el.innerHTML='<div class="empty-state"><p>SDK未就绪</p></div>';return}
+  try{
+    var data=await window.ZQTong.fetchGuideIndustries();
+    if(!data||data.length===0){el.innerHTML='<div class="empty-state"><p>暂无行业指南数据</p></div>';return}
+    el.innerHTML=data.map(function(g,i){
+      var steps=Array.isArray(g.steps)?g.steps:(g.steps||'');
+      var chips=steps.map(function(s,j){return'<div class="step-chip"><span class="sn">'+(j+1)+'</span>'+esc(s)+'</div>'}).join('');
+      var forms='';
+      try{var fobj=typeof g.forms==='string'?JSON.parse(g.forms):g.forms;if(fobj&&fobj.forms){forms=fobj.forms.map(function(f){return'<a class="form-link" href="'+(f.url||'#')+'" target="_blank">'+esc(f.name||'')+'</a>'}).join('')}}catch(e){}
+      var notes=g.notes?'<div class="notes-box"><strong>注意事项：</strong>'+esc(g.notes)+'</div>':'';
+      return'<div class="ind-card"><h4><span class="ind-badge '+badgeColors[i%badgeColors.length]+'">'+esc(g.industry||'')+'</span>'+esc(g.industry||'')+'企业</h4><div class="steps-row">'+(chips||'<span style="font-size:12px;color:#94a3b8">暂无步骤</span>')+'</div><div class="gov-row"><span>主管部门：<b>'+esc(g.dept||'请咨询')+'</b></span></div>'+(forms?'<div class="form-links">'+forms+'</div>':'')+notes+'</div>';
+    }).join('');
+  }catch(e){el.innerHTML='<div class="empty-state"><p>加载失败: '+esc(e.message)+'</p></div>'}
+}
+
+document.addEventListener('DOMContentLoaded',loadGuides);
+</script>
+</body>
+</html>
