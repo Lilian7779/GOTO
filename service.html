@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>企业服务 - 政企通</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;color:#1a1a2e}
+.nav{background:linear-gradient(135deg,#1a56db,#1e40af);height:64px;display:flex;align-items:center;padding:0 24px;position:sticky;top:0;z-index:100}
+.nav a{color:#fff;text-decoration:none;font-size:15px;font-weight:600}
+.nav a:hover{opacity:.85}
+.container{max-width:1100px;margin:0 auto;padding:30px 24px}
+.page-title{font-size:26px;font-weight:800;margin-bottom:6px}
+.page-sub{color:#64748b;font-size:14px;margin-bottom:28px}
+.tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid #e2e8f0;overflow-x:auto}
+.tab{padding:10px 16px;font-size:13px;font-weight:600;color:#64748b;cursor:pointer;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;background:none;transition:.2s}
+.tab:hover{color:#1a56db}
+.tab.act{color:#1a56db;border-bottom-color:#1a56db}
+.service-list{display:flex;flex-direction:column;gap:14px}
+.s-card{background:#fff;border-radius:14px;padding:20px 22px;box-shadow:0 2px 8px rgba(0,0,0,.04);display:flex;gap:16px;align-items:flex-start;transition:.2s}
+.s-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.s-left{flex-shrink:0;width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;background:#eff6ff}
+.s-body{flex:1;min-width:0}
+.s-name{font-size:16px;font-weight:700;margin-bottom:4px}
+.s-desc{font-size:12px;color:#64748b;margin-bottom:8px;line-height:1.5}
+.s-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.s-tag{font-size:11px;padding:3px 8px;background:#f1f5f9;border-radius:12px;color:#475569}
+.s-meta{display:flex;flex-wrap:wrap;gap:16px;align-items:center;font-size:12px;color:#64748b}
+.s-price{font-size:18px;font-weight:800;color:#1a56db}
+.s-rating{color:#f59e0b;font-size:14px}
+.s-reviews{color:#94a3b8}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:.2s;text-decoration:none}
+.btn-p{background:#1a56db;color:#fff}.btn-p:hover{background:#1e40af}
+.btn-o{background:#fff;color:#1a56db;border:1.5px solid #1a56db}.btn-o:hover{background:#eff6ff}
+.stat-row{display:flex;gap:10px;font-size:12px;color:#64748b;margin-bottom:16px}
+.stat-row span{background:#f1f5f9;padding:5px 10px;border-radius:8px}
+.empty-state{text-align:center;padding:60px 20px;color:#94a3b8}
+.empty-state p{font-size:14px}
+@media(max-width:768px){.s-card{flex-direction:column}}
+.footer{text-align:center;padding:40px;color:#94a3b8;font-size:12px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<link rel="manifest" href="manifest.json">
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      console.log('SW registered:',reg.scope);
+    }).catch(function(err){
+      console.log('SW registration failed:',err);
+    });
+  });
+}
+</script>
+
+</head>
+<body>
+<nav class="nav"><a href="index.html">&#8592; 返回首页</a></nav>
+<div class="container">
+<h1 class="page-title">企业服务商</h1>
+<p class="page-sub">财税 · 法律 · 审计 · 税务 — 精选服务商，线上对接、比价、咨询</p>
+<div class="tabs">
+<button class="tab act" onclick="filterByCat('all')">全部</button>
+<button class="tab" onclick="filterByCat('财税')">财税</button>
+<button class="tab" onclick="filterByCat('法律')">法律</button>
+<button class="tab" onclick="filterByCat('审计')">审计</button>
+<button class="tab" onclick="filterByCat('税务')">税务</button>
+</div>
+<div class="stat-row" id="stat-row"></div>
+<div class="service-list" id="service-list"><div style="text-align:center;padding:60px;color:#94a3b8">加载中...</div></div>
+</div>
+<div class="footer">政企通 · 南通开发区企业一站式智慧服务平台 | 服务商信息仅供参考</div>
+
+<script>
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+var allServices=[],currentCat='all';
+
+async function loadServices(){
+  var el=document.getElementById('service-list');
+  if(!window.ZQTong){el.innerHTML='<div class="empty-state"><p>SDK未就绪，请配置Supabase连接</p></div>';return}
+  try{
+    allServices=await window.ZQTong.fetchServices()||[];
+    if(allServices.length===0){el.innerHTML='<div class="empty-state"><p>暂无服务商数据</p></div>';return}
+    filterByCat('all');
+  }catch(e){el.innerHTML='<div class="empty-state"><p>加载失败: '+esc(e.message)+'</p></div>'}
+}
+
+function filterByCat(cat){
+  currentCat=cat;
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('act')});
+  var target=document.querySelector('.tabs button[onclick="filterByCat(\''+cat+'\')"]');
+  if(target)target.classList.add('act');
+  var filtered=cat==='all'?allServices:allServices.filter(function(s){return s.category===cat});
+  document.getElementById('stat-row').innerHTML='<span>共 '+filtered.length+' 家服务商</span>';
+  renderServices(filtered);
+}
+
+function renderServices(data){
+  var el=document.getElementById('service-list');
+  el.innerHTML=data.map(function(s){
+    var stars='';for(var i=1;i<=5;i++)stars+=i<=Math.round(s.rating||0)?'\u2605':'\u2606';
+    var tags=(s.tags||[]).map(function(t){return'<span class="s-tag">'+esc(t)+'</span>'}).join('');
+    return'<div class="s-card"><div class="s-left">'+catIcon(s.category)+'</div><div class="s-body"><div class="s-name">'+esc(s.name||'')+'</div><div class="s-desc">'+esc(s.description||'')+'</div><div class="s-tags">'+tags+'</div><div class="s-meta"><span class="s-price">'+esc(s.price_range||'面议')+'</span><span class="s-rating">'+stars+'</span><span class="s-reviews">'+(s.rating||0)+'分 ('+(s.review_count||0)+'评价)</span></div><div style="margin-top:8px;display:flex;gap:8px"><button class="btn btn-p">立即咨询</button><button class="btn btn-o">查看详情</button></div></div></div>';
+  }).join('')||'<div class="empty-state"><p>暂无该分类服务商</p></div>';
+}
+
+function catIcon(cat){
+  var icons={财税:'📊',法律:'⚖',审计:'🔍',税务:'💰'};
+  return icons[cat]||'🏢';
+}
+
+document.addEventListener('DOMContentLoaded',loadServices);
+</script>
+</body>
+</html>
