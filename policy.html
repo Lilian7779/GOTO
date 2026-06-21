@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>惠企政策匹配 - 政企通</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;color:#1a1a2e}
+.nav{background:linear-gradient(135deg,#1a56db,#1e40af);height:64px;display:flex;align-items:center;padding:0 24px;position:sticky;top:0;z-index:100}
+.nav a{color:#fff;text-decoration:none;font-size:15px;font-weight:600}
+.nav a:hover{opacity:.85}
+.container{max-width:1200px;margin:0 auto;padding:30px 24px}
+.page-title{font-size:26px;font-weight:800;margin-bottom:6px}
+.page-sub{color:#64748b;font-size:14px;margin-bottom:28px}
+.filter-bar{background:#fff;border-radius:14px;padding:18px 22px;margin-bottom:24px;box-shadow:0 2px 8px rgba(0,0,0,.04);display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.filter-bar select,.filter-bar input{padding:9px 12px;border:2px solid #e2e8f0;border-radius:8px;font-size:13px;background:#f8fafc;outline:none;min-width:130px}
+.filter-bar select:focus,.filter-bar input:focus{border-color:#1a56db;background:#fff}
+.filter-bar label{display:block;font-size:11px;color:#64748b;margin-bottom:4px}
+.filter-bar .filter-group{display:flex;flex-direction:column}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:.2s;text-decoration:none}
+.btn-p{background:#1a56db;color:#fff}.btn-p:hover{background:#1e40af}
+.btn-o{background:#fff;color:#1a56db;border:1.5px solid #1a56db}.btn-o:hover{background:#eff6ff}
+.stat-row{display:flex;gap:10px;font-size:12px;color:#64748b;margin-bottom:16px}
+.stat-row span{background:#f1f5f9;padding:5px 10px;border-radius:8px}
+.policy-list{display:flex;flex-direction:column;gap:14px}
+.p-card{background:#fff;border-radius:14px;padding:20px 22px;box-shadow:0 2px 8px rgba(0,0,0,.04);transition:.2s}
+.p-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.p-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:10px}
+.p-title{font-size:16px;font-weight:700;flex:1;min-width:0}
+.p-badges{display:flex;flex-wrap:wrap;gap:6px;flex-shrink:0}
+.badge{font-size:11px;padding:3px 10px;border-radius:12px;font-weight:600;white-space:nowrap}
+.bd-region{background:#eff6ff;color:#2563eb}.bd-industry{background:#faf5ff;color:#9333ea}
+.bd-type{background:#fef2f2;color:#dc2626}.bd-scale{background:#fffbeb;color:#d97706}
+.p-desc{font-size:13px;color:#475569;margin-bottom:10px;line-height:1.6}
+.p-meta{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:#64748b;margin-bottom:10px}
+.p-meta b{color:#1a1a2e}
+.p-amount{font-size:18px;font-weight:800;color:#1a56db}
+.p-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.p-tag{font-size:11px;padding:3px 8px;background:#f1f5f9;border-radius:12px;color:#475569}
+.p-footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.p-deadline{font-size:12px;color:#94a3b8}
+.p-conditions{margin-top:10px;padding:12px 14px;background:#f8fafc;border-radius:10px;font-size:12px;color:#475569;line-height:1.8;display:none}
+.p-conditions.show{display:block}
+.empty-state{text-align:center;padding:60px 20px;color:#94a3b8}
+.empty-state p{font-size:14px}
+@media(max-width:768px){.filter-bar{flex-direction:column;align-items:stretch}.filter-bar select,.filter-bar input{width:100%}}
+.footer{text-align:center;padding:40px;color:#94a3b8;font-size:12px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<link rel="manifest" href="manifest.json">
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      console.log('SW registered:',reg.scope);
+    }).catch(function(err){
+      console.log('SW registration failed:',err);
+    });
+  });
+}
+</script>
+
+</head>
+<body>
+<nav class="nav"><a href="index.html">&#8592; 返回首页</a></nav>
+<div class="container">
+<h1 class="page-title">惠企政策匹配</h1>
+<p class="page-sub">所在地+行业+政策类型+企业规模，四维精准匹配最适合的扶持政策</p>
+
+<div class="filter-bar">
+<div class="filter-group"><label>所在地</label><select id="f-region"><option value="">不限</option><option value="南通市">南通市</option><option value="崇川区">崇川区</option><option value="开发区">开发区</option><option value="通州区">通州区</option><option value="海门区">海门区</option></select></div>
+<div class="filter-group"><label>行业</label><select id="f-industry"><option value="">不限</option><option value="通用">通用</option><option value="建筑施工">建筑施工</option><option value="餐饮服务">餐饮服务</option><option value="信息技术">信息技术</option><option value="商贸物流">商贸物流</option><option value="油气贸易">油气贸易</option><option value="教育培训">教育培训</option><option value="医疗器械">医疗器械</option></select></div>
+<div class="filter-group"><label>政策类型</label><select id="f-type"><option value="">不限</option><option value="资金补贴">资金补贴</option><option value="税收优惠">税收优惠</option><option value="人才引进">人才引进</option><option value="资质认定">资质认定</option></select></div>
+<div class="filter-group"><label>企业规模</label><select id="f-scale"><option value="">不限</option><option value="小微">小微</option><option value="中型">中型</option><option value="大型">大型</option><option value="专精特新">专精特新</option></select></div>
+<div class="filter-group"><label>&nbsp;</label><button class="btn btn-p" onclick="applyFilter()">筛选政策</button></div>
+<div class="filter-group"><label>&nbsp;</label><button class="btn btn-o" onclick="resetFilter()">重置</button></div>
+</div>
+<div class="stat-row" id="stat-row"></div>
+<div class="policy-list" id="policy-list"><div style="text-align:center;padding:60px;color:#94a3b8">加载中...</div></div>
+</div>
+<div class="footer">政企通 · 南通开发区企业一站式智慧服务平台 | 政策数据源自各级政府部门公开文件</div>
+
+<script>
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+var allPolicies=[];
+
+async function loadPolicies(){
+  var el=document.getElementById('policy-list');
+  if(!window.ZQTong){el.innerHTML='<div class="empty-state"><p>SDK未就绪，请配置Supabase连接</p></div>';return}
+  try{
+    allPolicies=await window.ZQTong.fetchPolicies()||[];
+    if(allPolicies.length===0){el.innerHTML='<div class="empty-state"><p>暂无政策数据</p></div>';return}
+    renderPolicies(allPolicies);
+  }catch(e){el.innerHTML='<div class="empty-state"><p>加载失败: '+esc(e.message)+'</p></div>'}
+}
+
+function renderPolicies(data){
+  var el=document.getElementById('policy-list');
+  document.getElementById('stat-row').innerHTML='<span>共 '+data.length+' 条政策</span>';
+  el.innerHTML=data.map(function(p){
+    var conditions=p.conditions||'';
+    var tags=(p.tags||[]).map(function(t){return'<span class="p-tag">'+esc(t)+'</span>'}).join('');
+    return'<div class="p-card"><div class="p-header"><div class="p-title">'+esc(p.title||'')+'</div><div class="p-badges"><span class="badge bd-region">'+esc(p.region||'')+'</span><span class="badge bd-industry">'+esc(p.industry||'')+'</span><span class="badge bd-type">'+esc(p.policy_type||'')+'</span><span class="badge bd-scale">'+esc(p.enterprise_scale||'不限')+'</span></div></div><div class="p-desc">'+esc(p.description||'')+'</div><div class="p-tags">'+tags+'</div><div class="p-meta">补贴金额: <b class="p-amount">'+esc(p.amount||'面议')+'</b> | 发文部门: <b>'+esc(p.source_dept||'')+'</b></div><div class="p-footer"><span class="p-deadline">截止日期: '+(p.deadline||'长期有效')+'</span><button class="btn btn-o" onclick="var cd=this.parentElement.parentElement.querySelector(\'.p-conditions\');cd.classList.toggle(\'show\');this.textContent=cd.classList.contains(\'show\')?\'收起条件\':\'查看申请条件\'">查看申请条件</button></div><div class="p-conditions"><strong>申请条件：</strong><br>'+esc(conditions)+'</div></div>';
+  }).join('');
+}
+
+function applyFilter(){
+  var r=document.getElementById('f-region').value,i=document.getElementById('f-industry').value,t=document.getElementById('f-type').value,s=document.getElementById('f-scale').value;
+  var filtered=allPolicies.filter(function(p){
+    if(r&&p.region!==r)return false;
+    if(i&&p.industry!==i)return false;
+    if(t&&p.policy_type!==t)return false;
+    if(s&&p.enterprise_scale!==s)return false;
+    return true;
+  });
+  renderPolicies(filtered);
+}
+
+function resetFilter(){
+  document.getElementById('f-region').value='';document.getElementById('f-industry').value='';document.getElementById('f-type').value='';document.getElementById('f-scale').value='';
+  renderPolicies(allPolicies);
+}
+
+document.addEventListener('DOMContentLoaded',loadPolicies);
+</script>
+</body>
+</html>
