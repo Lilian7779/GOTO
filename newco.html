@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>新公司必做清单 - 政企通</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;color:#1a1a2e}
+.nav{background:linear-gradient(135deg,#1a56db,#1e40af);height:64px;display:flex;align-items:center;padding:0 24px;position:sticky;top:0;z-index:100}
+.nav a{color:#fff;text-decoration:none;font-size:15px;font-weight:600}
+.nav a:hover{opacity:.85}
+.container{max-width:960px;margin:0 auto;padding:30px 24px}
+.page-title{font-size:26px;font-weight:800;margin-bottom:6px}
+.page-sub{color:#64748b;font-size:14px;margin-bottom:28px}
+.progress-bar{background:#e2e8f0;border-radius:10px;height:10px;margin-bottom:8px;overflow:hidden}
+.progress-fill{background:linear-gradient(90deg,#1a56db,#2563eb);height:100%;border-radius:10px;transition:width .3s}
+.progress-text{font-size:12px;color:#64748b;margin-bottom:24px;text-align:right}
+.week-header{font-size:18px;font-weight:700;margin:30px 0 14px;padding:8px 14px;background:#1a56db;color:#fff;border-radius:10px;display:inline-block}
+.day-list{display:flex;flex-direction:column;gap:8px}
+.day-item{background:#fff;border-radius:12px;padding:14px 18px;box-shadow:0 1px 4px rgba(0,0,0,.04);display:flex;align-items:center;gap:12px;transition:.2s;cursor:pointer}
+.day-item:hover{box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.day-item.done{opacity:.6}
+.day-item.done .day-title{text-decoration:line-through}
+.day-num{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;flex-shrink:0}
+.dn-active{background:#1a56db}.dn-done{background:#16a34a}.dn-future{background:#cbd5e1}
+.day-body{flex:1;min-width:0}
+.day-title{font-size:14px;font-weight:700;margin-bottom:3px}
+.day-desc{font-size:12px;color:#64748b;line-height:1.5}
+.day-action{flex-shrink:0}
+.btn{display:inline-block;padding:7px 14px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;border:none;text-decoration:none;transition:.2s;white-space:nowrap;background:#fff;color:#1a56db;border:1.5px solid #1a56db}
+.btn:hover{background:#eff6ff}
+.btn-done{background:#16a34a;color:#fff;border-color:#16a34a}.btn-done:hover{background:#15803d}
+.empty-state{text-align:center;padding:60px 20px;color:#94a3b8}
+.empty-state p{font-size:14px}
+@media(max-width:768px){.day-item{flex-wrap:wrap}.day-action{width:100%}.day-action .btn{width:100%;text-align:center}}
+.footer{text-align:center;padding:40px;color:#94a3b8;font-size:12px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<link rel="manifest" href="manifest.json">
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      console.log('SW registered:',reg.scope);
+    }).catch(function(err){
+      console.log('SW registration failed:',err);
+    });
+  });
+}
+</script>
+
+</head>
+<body>
+<nav class="nav"><a href="index.html">&#8592; 返回首页</a></nav>
+<div class="container">
+<h1 class="page-title">新公司必做清单</h1>
+<p class="page-sub">注册后30天每日任务清单 — 不遗漏任何合规步骤，点击任务直达代办</p>
+<div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+<div class="progress-text"><span id="done-count">0</span> / <span id="total-count">0</span> 项已完成</div>
+<div id="checklist"><div style="text-align:center;padding:60px;color:#94a3b8">加载中...</div></div>
+</div>
+<div class="footer">政企通 · 南通开发区企业一站式智慧服务平台</div>
+<script>
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+var allTasks=[],doneSet=new Set(JSON.parse(localStorage.getItem('newco_done')||'[]'));
+
+function getWeek(day){
+  if(day<=5)return 1;
+  if(day<=10)return 2;
+  if(day<=15)return 3;
+  if(day<=21)return 4;
+  if(day<=28)return 5;
+  return 6;
+}
+
+function toggleDay(day){
+  doneSet.has(day)?doneSet.delete(day):doneSet.add(day);
+  localStorage.setItem('newco_done',JSON.stringify([...doneSet]));
+  render();
+}
+
+async function loadTasks(){
+  var el=document.getElementById('checklist');
+  if(!window.ZQTong){el.innerHTML='<div class="empty-state"><p>SDK未就绪</p></div>';return}
+  try{
+    allTasks=await window.ZQTong.fetchNewcoTasks()||[];
+    if(allTasks.length===0){el.innerHTML='<div class="empty-state"><p>暂无任务数据</p></div>';return}
+    allTasks.sort(function(a,b){return(a.day_num||0)-(b.day_num||0)});
+    render();
+  }catch(e){el.innerHTML='<div class="empty-state"><p>加载失败: '+esc(e.message)+'</p></div>'}
+}
+
+function render(){
+  var weeks={},total=allTasks.length;
+  allTasks.forEach(function(t){var w=getWeek(t.day_num);if(!weeks[w])weeks[w]=[];weeks[w].push(t)});
+  var html='',weekKeys=Object.keys(weeks).sort(function(a,b){return a-b});
+  var weekNames={1:'第一周：企业开办（Day 1-5）',2:'第二周：银行税务社保（Day 6-10）',3:'第三周：资质与团队（Day 11-15）',4:'第四周：品牌与运营（Day 16-21）',5:'第五周：合规与预热（Day 22-28）',6:'第六周：月度收官（Day 29-30）'};
+  weekKeys.forEach(function(w){
+    var items=weeks[w];
+    html+='<div id="w'+w+'"><div class="week-header">'+(weekNames[w]||'第'+w+'周')+'</div><div class="day-list">';
+    items.forEach(function(t){
+      var done=doneSet.has(t.day_num);
+      html+='<div class="day-item'+(done?' done':'')+'" onclick="toggleDay('+t.day_num+')"><div class="day-num '+(done?'dn-done':'dn-active')+'">'+t.day_num+'</div><div class="day-body"><div class="day-title">'+esc(t.task||'')+'</div><div class="day-desc">'+esc(t.detail||'')+'</div></div><div class="day-action"><a href="'+(t.action_url||'#')+'" class="btn'+(done?' btn-done':'')+'" onclick="event.stopPropagation()">'+(done?'已完成':'去办理')+'</a></div></div>';
+    });
+    html+='</div></div>';
+  });
+  document.getElementById('checklist').innerHTML=html||'<div class="empty-state"><p>暂无任务数据</p></div>';
+  document.getElementById('done-count').textContent=doneSet.size;
+  document.getElementById('total-count').textContent=total;
+  document.getElementById('progress-fill').style.width=total?(doneSet.size/total*100)+'%':'0%';
+}
+
+document.addEventListener('DOMContentLoaded',loadTasks);
+</script>
+</body>
+</html>
