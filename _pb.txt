@@ -1,0 +1,28 @@
+
+<div class="rh"><h2>智能匹配结果</h2><span>根据您所在地和行业推荐</span></div>
+<div class="tabs">
+<button class="tab act" onclick="sTab('tab-policy')">惠企政策</button>
+<button class="tab" onclick="sTab('tab-service')">企业服务</button>
+<button class="tab" onclick="sTab('tab-ip')">知识产权</button>
+<button class="tab" onclick="sTab('tab-software')">企业软件</button>
+<button class="tab" onclick="sTab('tab-office')">办公空间</button>
+<button class="tab" onclick="sTab('tab-guide')">办事指南</button>
+</div>
+<div id="tab-policy" class="cl">
+<div class="cd"><span class="cb bb">资金补贴</span><div class="cd-body"><div class="cd-title">专精特新中小企业认定奖励</div><div class="cd-desc">南通市对首次认定的省级专精特新中小企业给予30万元一次性奖励，国家级给予80万元。</div><div class="tags"><span class="tag">南通市</span><span class="tag">制造业</span><span class="tag">2026年度</span></div><div class="cd-bot"><span class="price">最高80万</span><span class="op">截止 2026-09-30</span></div></div></div>
+<div class="cd"><span class="cb bg">税收优惠</span><div class="cd-body"><div class="cd-title">小型微利企业所得税减按5%征收</div><div class="cd-desc">年应纳税所得额不超过300万元的部分，减按25%计入应纳税所得额，按20%税率（实际5%）。</div><div class="tags"><span class="tag">全国</span><span class="tag">小微企业</span><span class="tag">长期</span></div><div class="cd-bot"><span class="price">减税幅度75%</span><span class="op">长期有效</span></div></div></div>
+<div class="cd"><span class="cb by">技术改造</span><div class="cd-body"><div class="cd-title">南通市企业智能化改造补贴</div><div class="cd-desc">购置工业机器人、数控机床等智能设备，按设备投资额10%给予补贴，单企最高100万元。</div><div class="tags"><span class="tag">南通市</span><span class="tag">制造业</span><span class="tag">设备补贴</span></div><div class="cd-bot"><span class="price">最高100万</span><span class="op">截止 2026-12-31</span></div></div></div>
+<div class="cd"><span class="cb br">人才引进</span><div class="cd-body"><div class="cd-title">江海英才计划</div><div class="cd-desc">引进高层次人才给予50-500万元项目资助，提供人才公寓、子女入学等配套服务。</div><div class="tags"><span class="tag">南通市</span><span class="tag">科技企业</span><span class="tag">人才</span></div><div class="cd-bot"><span class="price">最高500万</span><span class="op">2026年度批次</span></div></div></div>
+<div class="cd"><span class="cb bb">贷款贴息</span><div class="cd-body"><div class="cd-title">科技型企业贷款贴息政策</div><div class="cd-desc">南通市对高新技术企业、科技型中小企业贷款给予50%贴息，单企每年最高20万元。</div><div class="tags"><span class="tag">南通市</span><span class="tag">科技企业</span><span class="tag">金融</span></div><div class="cd-bot"><span class="price">最高20万/年</span><span class="op">长期有效</span></div></div></div>
+</div>
+<div id="tab-service" class="hid cl">
+<div class="sec-tt">财税服务</div>
+<div class="cd"><span class="cb bg">推荐</span><div class="cd-body"><div class="cd-title">南通xx财税咨询有限公司</div><div class="cd-desc">专注中小企业代账报税、税务筹划，服务客户2000+，南通本地老牌财税机构。</div><div class="tags"><span class="tag">代账报税</span><span class="tag">税务筹划</span><span class="tag">工商变更</span></div><div class="cd-bot"><span class="price">代账¥200/月起</span><span class="stars">★★★★★</span><span class="rc">4.9分</span><button class="btn btn-p btn-sm">立即咨询</button></div></div></div>
+<div class="cd"><span class="cb bb">优选</span><div class="cd-body"><div class="cd-title">南通xx企业服务有限公司</div><div class="cd-desc">提供财税顾问、高新认定辅导、研发费用加计扣除等深度服务。</div><div class="tags"><span class="tag">高新认定</span><span class="tag">财税顾问</span><span class="tag">政府项目</span></div><div class="cd-bot"><span class="price">顾问¥3000/月起</span><span class="stars">★★★★★</span><span class="rc">4.8分</span><button class="btn btn-o btn-sm">查看详情</button></div></div></div>
+<div class="sec-tt">法律服务</div>
+<div class="cd"><span class="cb bg">推荐</span><div class="cd-body"><div class="cd-title">D律师事务所（南通）</div><div class="cd-desc">专注企业常年法律顾问、合同审查、劳动人事合规，南通50+企业客户。</div><div class="tags"><span class="tag">常年顾问</span><span class="tag">合同审查</span><span class="tag">劳动人事</span></div><div class="cd-bot"><span class="price">常年顾问¥8000/年起</span><span class="stars">★★★★★</span><span class="rc">4.9分</span><button class="btn btn-p btn-sm">立即咨询</button></div></div></div>
+<div class="cd"><span class="cb bp">法务</span><div class="cd-body"><div class="cd-title">E律师事务所（上海·南通）</div><div class="cd-desc">知识产权诉讼、商标侵权维权、商业秘密保护，胜诉率行业领先。</div><div class="tags"><span class="tag">知产诉讼</span><span class="tag">商标维权</span><span class="tag">商业秘密</span></div><div class="cd-bot"><span class="price">按案件收费</span><span class="stars">★★★★★</span><span class="rc">4.9分</span><button class="btn btn-o btn-sm">查看详情</button></div></div></div>
+<div class="sec-tt">审计服务</div>
+<div class="cd"><span class="cb by">审计</span><div class="cd-body"><div class="cd-title">F会计师事务所（南通）</div><div class="cd-desc">年报审计、专项审计、验资报告、内部审计，出报告快，价格透明。</div><div class="tags"><span class="tag">年报审计</span><span class="tag">专项审计</span><span class="tag">验资</span></div><div class="cd-bot"><span class="price">年报审计¥3000起</span><span class="stars">★★★★☆</span><span class="rc">4.7分</span><button class="btn btn-p btn-sm">立即咨询</button></div></div></div>
+<div class="cd"><span class="cb bo">税务</span><div class="cd-body"><div class="cd-title">G税务师事务所</div><div class="cd-desc">企业所得税汇算清缴、土地增值税清算、税务争议解决、转让定价。</div><div class="tags"><span class="tag">汇算清缴</span><span class="tag">土增清算</span><span class="tag">税务争议</span></div><div class="cd-bot"><span class="price">汇算清缴¥5000起</span><span class="stars">★★★★☆</span><span class="rc">4.6分</span><button class="btn btn-o btn-sm">查看详情</button></div></div></div>
+</div>
