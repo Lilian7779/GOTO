@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>企业软件推荐 - 政企通</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;color:#1a1a2e}
+.nav{background:linear-gradient(135deg,#1a56db,#1e40af);height:64px;display:flex;align-items:center;padding:0 24px;position:sticky;top:0;z-index:100}
+.nav a{color:#fff;text-decoration:none;font-size:15px;font-weight:600}
+.nav a:hover{opacity:.85}
+.container{max-width:1100px;margin:0 auto;padding:30px 24px}
+.page-title{font-size:26px;font-weight:800;margin-bottom:6px}
+.page-sub{color:#64748b;font-size:14px;margin-bottom:28px}
+.tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid #e2e8f0;overflow-x:auto}
+.tab{padding:10px 16px;font-size:13px;font-weight:600;color:#64748b;cursor:pointer;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;background:none;transition:.2s}
+.tab:hover{color:#1a56db}
+.tab.act{color:#1a56db;border-bottom-color:#1a56db}
+.sw-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.sw-card{background:#fff;border-radius:14px;padding:22px;box-shadow:0 2px 8px rgba(0,0,0,.04);transition:.2s}
+.sw-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.sw-top{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px}
+.sw-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.sw-info{flex:1;min-width:0}
+.sw-name{font-size:16px;font-weight:700;margin-bottom:3px}
+.sw-sub{font-size:11px;color:#64748b}
+.sw-desc{font-size:12px;color:#475569;margin-bottom:10px;line-height:1.6}
+.sw-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.sw-tag{font-size:11px;padding:3px 8px;background:#f1f5f9;border-radius:12px;color:#475569}
+.sw-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.sw-price{font-size:16px;font-weight:800;color:#1a56db}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:.2s;text-decoration:none}
+.btn-p{background:#1a56db;color:#fff}.btn-p:hover{background:#1e40af}
+.btn-o{background:#fff;color:#1a56db;border:1.5px solid #1a56db}.btn-o:hover{background:#eff6ff}
+.stat-row{display:flex;gap:10px;font-size:12px;color:#64748b;margin-bottom:16px}
+.stat-row span{background:#f1f5f9;padding:5px 10px;border-radius:8px}
+.empty-state{text-align:center;padding:60px 20px;color:#94a3b8}
+.empty-state p{font-size:14px}
+@media(max-width:768px){.sw-grid{grid-template-columns:1fr}}
+.footer{text-align:center;padding:40px;color:#94a3b8;font-size:12px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<link rel="manifest" href="manifest.json">
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      console.log('SW registered:',reg.scope);
+    }).catch(function(err){
+      console.log('SW registration failed:',err);
+    });
+  });
+}
+</script>
+
+</head>
+<body>
+<nav class="nav"><a href="index.html">&#8592; 返回首页</a></nav>
+<div class="container">
+<h1 class="page-title">企业软件推荐</h1>
+<p class="page-sub">按行业匹配最合适的SaaS软件，提升企业运营效率和数字化水平</p>
+<div class="tabs">
+<button class="tab act" onclick="filterByCat('all')">全部</button>
+<button class="tab" onclick="filterByCat('通用办公')">通用办公</button>
+<button class="tab" onclick="filterByCat('建筑施工')">建筑施工</button>
+<button class="tab" onclick="filterByCat('餐饮服务')">餐饮服务</button>
+<button class="tab" onclick="filterByCat('信息技术')">信息技术</button>
+<button class="tab" onclick="filterByCat('商贸物流')">商贸物流</button>
+<button class="tab" onclick="filterByCat('油气贸易')">油气贸易</button>
+</div>
+<div class="stat-row" id="stat-row"></div>
+<div class="sw-grid" id="sw-grid"><div style="text-align:center;padding:60px;color:#94a3b8">加载中...</div></div>
+</div>
+<div class="footer">政企通 · 南通开发区企业一站式智慧服务平台 | 软件信息来源于各SaaS服务商官网</div>
+
+<script>
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+var allSw=[],currentCat='all';
+var catIcons={通用办公:'🖥',建筑施工:'🏗',餐饮服务:'🍽',信息技术:'💻',商贸物流:'📦',油气贸易:'⛽'};
+var catColors={通用办公:'#eff6ff',建筑施工:'#fffbeb',餐饮服务:'#fef2f2',信息技术:'#f0fdf4',商贸物流:'#fff7ed',油气贸易:'#f1f5f9'};
+
+async function loadSoftware(){
+  var el=document.getElementById('sw-grid');
+  if(!window.ZQTong){el.innerHTML='<div class="empty-state"><p>SDK未就绪</p></div>';return}
+  try{
+    allSw=await window.ZQTong.fetchSoftware()||[];
+    if(allSw.length===0){el.innerHTML='<div class="empty-state"><p>暂无数据</p></div>';return}
+    filterByCat('all');
+  }catch(e){el.innerHTML='<div class="empty-state"><p>加载失败: '+esc(e.message)+'</p></div>'}
+}
+
+function filterByCat(cat){
+  currentCat=cat;
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('act')});
+  var target=document.querySelector('.tabs button[onclick="filterByCat(\''+cat+'\')"]');
+  if(target)target.classList.add('act');
+  var filtered=cat==='all'?allSw:allSw.filter(function(s){return s.category===cat});
+  document.getElementById('stat-row').innerHTML='<span>共 '+filtered.length+' 款软件</span>';
+  renderSw(filtered);
+}
+
+function renderSw(data){
+  var el=document.getElementById('sw-grid');
+  el.innerHTML=data.map(function(s){
+    var icon=catIcons[s.category]||'💻';
+    var bg=catColors[s.category]||'#eff6ff';
+    var features=(s.features||[]).map(function(f){return'<span class="sw-tag">'+esc(f)+'</span>'}).join('');
+    return'<div class="sw-card"><div class="sw-top"><div class="sw-icon" style="background:'+bg+'">'+icon+'</div><div class="sw-info"><div class="sw-name">'+esc(s.name||'')+'</div><div class="sw-sub">'+esc(s.category||'')+(s.subcategory?' · '+esc(s.subcategory):'')+'</div></div></div><div class="sw-desc">'+esc(s.description||'')+'</div><div class="sw-tags">'+features+'</div><div class="sw-bottom"><span class="sw-price">'+esc(s.pricing||'面议')+'</span><button class="btn btn-o">免费试用</button></div></div>';
+  }).join('')||'<div class="empty-state"><p>暂无该分类软件</p></div>';
+}
+
+document.addEventListener('DOMContentLoaded',loadSoftware);
+</script>
+</body>
+</html>
