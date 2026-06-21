@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>政企通管理后台</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f1f5f9;color:#1a1a2e;display:flex;min-height:100vh}
+/* Login */
+.login-wrap{position:fixed;inset:0;background:linear-gradient(135deg,#1a56db,#1e3a8a);display:flex;align-items:center;justify-content:center;z-index:9999}
+.login-card{background:#fff;border-radius:20px;padding:40px;width:420px;box-shadow:0 20px 60px rgba(0,0,0,.2);text-align:center}
+.login-card h1{font-size:28px;margin-bottom:6px;color:#1a1a2e}
+.login-card p{color:#64748b;font-size:13px;margin-bottom:28px}
+.login-card input{width:100%;padding:12px 16px;border:2px solid #e2e8f0;border-radius:10px;font-size:14px;outline:none;margin-bottom:14px}
+.login-card input:focus{border-color:#1a56db}
+.login-card .btn{width:100%;padding:12px;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;color:#fff;background:#1a56db;transition:.2s}
+.login-card .btn:hover{background:#1e40af}
+.login-card .err{color:#dc2626;font-size:12px;margin-top:8px}
+/* Sidebar */
+.sidebar{width:220px;background:#fff;border-right:1px solid #e2e8f0;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100}
+.sidebar .logo{padding:20px 18px;font-size:20px;font-weight:800;color:#1a56db;border-bottom:1px solid #e2e8f0}
+.sidebar .menu{flex:1;overflow-y:auto;padding:12px 0}
+.sidebar .menu a{display:flex;align-items:center;gap:8px;padding:10px 18px;font-size:13px;color:#475569;text-decoration:none;transition:.15s;border-left:3px solid transparent}
+.sidebar .menu a:hover{background:#f8fafc;color:#1a56db}
+.sidebar .menu a.act{background:#eff6ff;color:#1a56db;font-weight:700;border-left-color:#1a56db}
+.sidebar .logout{padding:14px 18px;border-top:1px solid #e2e8f0}
+.sidebar .logout a{color:#94a3b8;font-size:12px;text-decoration:none;display:flex;align-items:center;gap:5px}
+.main{flex:1;margin-left:220px;padding:24px}
+/* Dashboard */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.stat-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.stat-card .sc-label{font-size:11px;color:#64748b;margin-bottom:6px;font-weight:600}
+.stat-card .sc-value{font-size:28px;font-weight:800;color:#1a56db}
+.stat-card .sc-sub{font-size:11px;color:#94a3b8;margin-top:4px}
+/* Panel */
+.panel-title{font-size:20px;font-weight:700;margin-bottom:16px}
+.toolbar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.toolbar input,.toolbar select{padding:8px 12px;border:2px solid #e2e8f0;border-radius:8px;font-size:12px;outline:none;background:#fff}
+.toolbar input:focus,.toolbar select:focus{border-color:#1a56db}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:.2s}
+.btn-p{background:#1a56db;color:#fff}.btn-p:hover{background:#1e40af}
+.btn-o{background:#fff;color:#1a56db;border:1.5px solid #1a56db}.btn-o:hover{background:#eff6ff}
+.btn-r{background:#fef2f2;color:#dc2626;border:1px solid #fca5a5}.btn-r:hover{background:#fee2e2}
+.btn-g{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}.btn-g:hover{background:#dcfce7}
+.btn-sm{font-size:10px;padding:4px 8px}
+.data-table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04);font-size:12px}
+.data-table th{background:#f8fafc;padding:12px 14px;text-align:left;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0;font-size:11px;white-space:nowrap}
+.data-table td{padding:10px 14px;border-bottom:1px solid #f1f5f9;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.data-table tr:hover td{background:#f8fafc}
+.data-table .actions{display:flex;gap:6px}
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:#fff;border-radius:16px;width:560px;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-header{padding:18px 22px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center}
+.modal-header h3{font-size:16px;font-weight:700}
+.modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:#94a3b8}
+.modal-body{padding:18px 22px}
+.modal-body label{display:block;font-size:12px;font-weight:600;color:#475569;margin:10px 0 4px}
+.modal-body input,.modal-body select,.modal-body textarea{width:100%;padding:9px 12px;border:2px solid #e2e8f0;border-radius:8px;font-size:12px;outline:none;font-family:inherit}
+.modal-body input:focus,.modal-body select:focus,.modal-body textarea:focus{border-color:#1a56db}
+.modal-body textarea{resize:vertical;min-height:60px}
+.modal-body .hint{font-size:10px;color:#94a3b8;margin-top:2px}
+.modal-body .arr-hint{display:block;font-size:10px;color:#1a56db;margin-top:2px}
+.modal-footer{padding:14px 22px;border-top:1px solid #e2e8f0;display:flex;gap:10px;justify-content:flex-end}
+.panel-section{display:none}
+.panel-section.act{display:block}
+.toast{position:fixed;top:20px;right:20px;z-index:300;padding:12px 20px;border-radius:10px;color:#fff;font-size:13px;font-weight:600;box-shadow:0 4px 16px rgba(0,0,0,.15);opacity:0;transition:.3s;pointer-events:none}
+.toast.show{opacity:1}
+.toast-s{background:#16a34a}
+.toast-e{background:#dc2626}
+.hidden{display:none!important}
+.empty{text-align:center;padding:40px;color:#94a3b8;font-size:13px}
+.ld{text-align:center;padding:40px;color:#94a3b8}
+@media(max-width:900px){.sidebar{width:64px}.sidebar .logo{font-size:16px;padding:16px 12px}.sidebar .menu a span:nth-child(2){display:none}.main{margin-left:64px}.stat-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+</head>
+<body>
+<!-- Login -->
+<div class="login-wrap" id="login-wrap">
+<div class="login-card">
+<h1>政企通管理后台</h1><p>请使用管理员账号登录</p>
+<input type="email" id="login-email" placeholder="管理员邮箱">
+<input type="password" id="login-pass" placeholder="密码">
+<button class="btn" onclick="doLogin()">登 录</button>
+<div class="err" id="login-err"></div>
+<p style="margin-top:12px;font-size:11px;color:#94a3b8">需要先在 Supabase Dashboard 的 Authentication > Users 中创建用户，并将其加入 admin_users 表</p>
+</div>
+</div>
+
+<!-- Sidebar -->
+<div class="sidebar hidden" id="sidebar">
+<div class="logo">政企通</div>
+<div class="menu">
+<a href="#" class="act" data-panel="dashboard" onclick="switchPanel('dashboard')">📊 仪表盘</a>
+<a href="#" data-panel="policies" onclick="switchPanel('policies')">📋 政策管理</a>
+<a href="#" data-panel="services" onclick="switchPanel('services')">💼 服务商管理</a>
+<a href="#" data-panel="ip_items" onclick="switchPanel('ip_items')">🛡 知识产权</a>
+<a href="#" data-panel="software_list" onclick="switchPanel('software_list')">💻 软件管理</a>
+<a href="#" data-panel="offices" onclick="switchPanel('offices')">🏢 房源管理</a>
+<a href="#" data-panel="licenses" onclick="switchPanel('licenses')">📜 证照管理</a>
+<a href="#" data-panel="guide_industries" onclick="switchPanel('guide_industries')">📖 行业指南</a>
+<a href="#" data-panel="newco_tasks" onclick="switchPanel('newco_tasks')">🏆 新公司任务</a>
+<a href="#" data-panel="tickets" onclick="switchPanel('tickets')">🎫 工单管理</a>
+</div>
+<div class="logout"><a href="#" onclick="doLogout()">🚪 退出登录</a></div>
+</div>
+
+<!-- Main -->
+<div class="main hidden" id="main-wrap">
+<div id="panel-dashboard" class="panel-section act">
+<div class="panel-title">仪表盘概览</div>
+<div class="stat-grid" id="stat-grid"></div>
+</div>
+
+<div id="panel-services" class="panel-section"><div class="panel-title">服务商管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('services')">+ 新增服务商</button><input id="srv-search" placeholder="搜索服务商..." oninput="loadTable('services')"></div><table class="data-table"><thead><tr><th>名称</th><th>分类</th><th>评分</th><th>评价数</th><th>价格区间</th><th>操作</th></tr></thead><tbody id="tb-services"></tbody></table></div>
+<div id="panel-policies" class="panel-section"><div class="panel-title">政策管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('policies')">+ 新增政策</button><input id="pol-search" placeholder="搜索政策..." oninput="loadTable('policies')"></div><table class="data-table"><thead><tr><th>标题</th><th>区域</th><th>行业</th><th>类型</th><th>补贴金额</th><th>操作</th></tr></thead><tbody id="tb-policies"></tbody></table></div>
+<div id="panel-ip_items" class="panel-section"><div class="panel-title">知识产权管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('ip_items')">+ 新增IP项目</button><input id="ip-search" placeholder="搜索..." oninput="loadTable('ip_items')"></div><table class="data-table"><thead><tr><th>名称</th><th>分类</th><th>费用区间</th><th>周期(天)</th><th>操作</th></tr></thead><tbody id="tb-ip_items"></tbody></table></div>
+<div id="panel-software_list" class="panel-section"><div class="panel-title">软件管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('software_list')">+ 新增软件</button><input id="sw-search" placeholder="搜索..." oninput="loadTable('software_list')"></div><table class="data-table"><thead><tr><th>名称</th><th>分类</th><th>子分类</th><th>价格</th><th>操作</th></tr></thead><tbody id="tb-software_list"></tbody></table></div>
+<div id="panel-offices" class="panel-section"><div class="panel-title">房源管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('offices')">+ 新增房源</button><input id="of-search" placeholder="搜索..." oninput="loadTable('offices')"></div><table class="data-table"><thead><tr><th>标题</th><th>区域</th><th>面积(㎡)</th><th>月租金</th><th>类型</th><th>操作</th></tr></thead><tbody id="tb-offices"></tbody></table></div>
+<div id="panel-licenses" class="panel-section"><div class="panel-title">证照管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('licenses')">+ 新增证照</button><input id="lc-search" placeholder="搜索..." oninput="loadTable('licenses')"></div><table class="data-table"><thead><tr><th>名称</th><th>分类</th><th>办理时限</th><th>费用</th><th>操作</th></tr></thead><tbody id="tb-licenses"></tbody></table></div>
+<div id="panel-guide_industries" class="panel-section"><div class="panel-title">行业指南管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('guide_industries')">+ 新增指南</button><input id="gd-search" placeholder="搜索..." oninput="loadTable('guide_industries')"></div><table class="data-table"><thead><tr><th>行业</th><th>步骤数</th><th>主管部门</th><th>操作</th></tr></thead><tbody id="tb-guide_industries"></tbody></table></div>
+<div id="panel-newco_tasks" class="panel-section"><div class="panel-title">新公司任务管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('newco_tasks')">+ 新增任务</button><input id="nc-search" placeholder="搜索..." oninput="loadTable('newco_tasks')"></div><table class="data-table"><thead><tr><th>Day</th><th>任务</th><th>分类</th><th>排序</th><th>操作</th></tr></thead><tbody id="tb-newco_tasks"></tbody></table></div>
+<div id="panel-tickets" class="panel-section"><div class="panel-title">工单管理</div><table class="data-table"><thead><tr><th>标题</th><th>分类</th><th>状态</th><th>用户ID</th><th>操作</th></tr></thead><tbody id="tb-tickets"></tbody></table></div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-overlay"><div class="modal"><div class="modal-header"><h3 id="modal-title">编辑</h3><button class="modal-close" onclick="closeModal()">&times;</button></div><div class="modal-body" id="modal-body"></div><div class="modal-footer"><button class="btn btn-o" onclick="closeModal()">取消</button><button class="btn btn-p" id="modal-save" onclick="saveForm()">保存</button></div></div></div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Confirm Dialog -->
+<div class="modal-overlay" id="confirm-dialog"><div class="modal" style="width:360px"><div class="modal-header"><h3>确认删除</h3><button class="modal-close" onclick="closeConfirm()">&times;</button></div><div class="modal-body"><p id="confirm-msg" style="font-size:13px;color:#475569"></p></div><div class="modal-footer"><button class="btn btn-o" onclick="closeConfirm()">取消</button><button class="btn btn-r" id="confirm-btn">确认删除</button></div></div></div>
+
+<script>
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+// Auth
+async function doLogin(){
+  var email=document.getElementById('login-email').value.trim(),pass=document.getElementById('login-pass').value.trim(),err=document.getElementById('login-err');
+  if(!email||!pass){err.textContent='请输入邮箱和密码';return}
+  err.textContent='';
+  try{
+    if(!window.ZQTong||!window.ZQTong.signIn){err.textContent='SDK未就绪';return}
+    await window.ZQTong.signIn(email,pass);
+    var ok=await window.ZQTong.checkIsAdmin();
+    if(!ok){await window.ZQTong.signOut();err.textContent='该账号不是管理员，请联系超级管理员添加';return}
+    onLoginSuccess();
+  }catch(e){err.textContent='登录失败: '+(e.message||'请检查账号密码')}
+}
+
+function onLoginSuccess(){
+  document.getElementById('login-wrap').classList.add('hidden');
+  document.getElementById('sidebar').classList.remove('hidden');
+  document.getElementById('main-wrap').classList.remove('hidden');
+  loadDashboard();
+}
+
+async function doLogout(){
+  if(window.ZQTong&&window.ZQTong.signOut){await window.ZQTong.signOut()}
+  document.getElementById('login-wrap').classList.remove('hidden');
+  document.getElementById('sidebar').classList.add('hidden');
+  document.getElementById('main-wrap').classList.add('hidden');
+}
+
+// Panel switching
+function switchPanel(name){
+  document.querySelectorAll('.sidebar .menu a').forEach(function(a){a.classList.remove('act')});
+  var link=document.querySelector('.sidebar .menu a[data-panel="'+name+'"]');
+  if(link)link.classList.add('act');
+  document.querySelectorAll('.panel-section').forEach(function(p){p.classList.remove('act')});
+  var panel=document.getElementById('panel-'+name);
+  if(panel)panel.classList.add('act');
+  if(name!=='dashboard')loadTable(name);
+  else loadDashboard();
+}
+
+// Dashboard
+async function loadDashboard(){
+  var tables=['policies','services','ip_items','software_list','offices','licenses','guide_industries','newco_tasks','tickets'];
+  var names={policies:'惠企政策',services:'企业服务',ip_items:'知识产权',software_list:'企业软件',offices:'办公房源',licenses:'证照办理',guide_industries:'行业指南',newco_tasks:'新公司任务',tickets:'工单反馈'};
+  var icons={policies:'📋',services:'💼',ip_items:'🛡',software_list:'💻',offices:'🏢',licenses:'📜',guide_industries:'📖',newco_tasks:'🏆',tickets:'🎫'};
+  var html='';
+  for(var i=0;i<tables.length;i++){
+    var t=tables[i],count='--';
+    try{
+      if(window.ZQTong&&window.ZQTong.adminFetchAll){
+        var rows=await window.ZQTong.adminFetchAll(t);
+        count=(rows&&rows.data&&rows.data.length)?rows.data.length:0;
+      }
+    }catch(e){count='ERR'}
+    html+='<div class="stat-card"><div class="sc-label">'+icons[t]+' '+names[t]+'</div><div class="sc-value">'+count+'</div><div class="sc-sub">条记录</div></div>';
+  }
+  document.getElementById('stat-grid').innerHTML=html;
+}
+
+// Table loading
+var tableFields={
+  policies:{cols:['title','region','industry','policy_type','enterprise_scale','description','conditions','amount','deadline','source_dept','tags','is_active']},
+  services:{cols:['name','category','description','price_range','rating','review_count','contact','website','tags','is_active']},
+  ip_items:{cols:['name','category','description','fee_range','cycle_days','process_steps','requirements','is_active']},
+  software_list:{cols:['name','category','subcategory','description','pricing','trial_url','features','is_active']},
+  offices:{cols:['title','region','address','area_sqm','price_month','property_type','subsidy','vr_url','tags','is_active']},
+  licenses:{cols:['name','category','conditions','materials','process','duration_days','fee','dept','apply_url','is_active']},
+  guide_industries:{cols:['industry','steps','timeline','dept','forms','notes','is_active']},
+  newco_tasks:{cols:['day_num','task','category','detail','action_url','sort_order','is_active']},
+  tickets:{cols:['title','content','category','status','user_id','reply']}
+};
+
+var tableView={};
+
+async function loadTable(tableName){
+  var tbody=document.getElementById('tb-'+tableName);
+  if(!tbody)return;
+  tbody.innerHTML='<tr><td colspan="9" class="ld">加载中...</td></tr>';
+  if(!window.ZQTong||!window.ZQTong.adminFetchAll){tbody.innerHTML='<tr><td colspan="9" class="empty">SDK未就绪</td></tr>';return}
+  try{
+    var result=await window.ZQTong.adminFetchAll(tableName);
+    var rows=(result&&result.data)?result.data:[];
+    tableView[tableName]=rows;
+    renderTable(tableName,rows);
+  }catch(e){tbody.innerHTML='<tr><td colspan="9" class="empty">加载失败: '+esc(e.message)+'</td></tr>'}
+}
+
+function renderTable(tableName,rows){
+  var tbody=document.getElementById('tb-'+tableName),searchId={'policies':'pol','services':'srv','ip_items':'ip','software_list':'sw','offices':'of','licenses':'lc','guide_industries':'gd','newco_tasks':'nc','tickets':'tk'}[tableName];
+  var q=(document.getElementById((searchId||'xx')+'-search')||{}).value||'';
+  var filtered=q?rows.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(q.toLowerCase())>=0}):rows;
+  if(filtered.length===0){tbody.innerHTML='<tr><td colspan="9" class="empty">暂无数据</td></tr>';return}
+  var renders={
+    policies:function(r){return'<tr><td>'+esc(r.title||'')+'</td><td>'+esc(r.region||'')+'</td><td>'+esc(r.industry||'')+'</td><td>'+esc(r.policy_type||'')+'</td><td>'+esc(r.amount||'')+'</td><td class="actions"><button class="btn btn-o btn-sm" onclick="editRow(\'policies\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'policies\',\''+(r.id||'')+'\',\''+esc(r.title||'')+'\')">删除</button></td></tr>'},
+    services:function(r){return'<tr><td>'+esc(r.name||'')+'</td><td>'+esc(r.category||'')+'</td><td>'+(r.rating||'')+'</td><td>'+(r.review_count||0)+'</td><td>'+esc(r.price_range||'')+'</td><td class="actions"><button class="btn btn-o btn-sm" onclick="editRow(\'services\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'services\',\''+(r.id||'')+'\',\''+esc(r.name||'')+'\')">删除</button></td></tr>'},
+    ip_items:function(r){return'<tr><td>'+esc(r.name||'')+'</td><td>'+esc(r.category||'')+'</td><td>'+esc(r.fee_range||'')+'</td><td>'+(r.cycle_days||'')+'</td><td class="actions"><button class="btn btn-o btn-sm" onclick="editRow(\'ip_items\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'ip_items\',\''+(r.id||'')+'\',\''+esc(r.name||'')+'\')">删除</button></td></tr>'},
+    software_list:function(r){return'<tr><td>'+esc(r.name||'')+'</td><td>'+esc(r.category||'')+'</td><td>'+esc(r.subcategory||'')+'</td><td>'+esc(r.pricing||'')+'</td><td class="actions"><button class="btn btn-o btn-sm" onclick="editRow(\'software_list\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'software_list\',\''+(r.id||'')+'\',\''+esc(r.name||'')+'\')">删除</button></td></tr>'},
+    offices:function(r){return'<tr><td>'+esc(r.title||'')+'</td><td>'+esc(r.region||'')+'</td><td>'+(r.area_sqm||'')+'</td><td>'+esc(r.price_month||'')+'</td><td>'+esc(r.property_type||'')+'</td><td class="actions"><button class="btn btn-o btn-sm" onclick="editRow(\'offices\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'offices\',\''+(r.id||'')+'\',\''+esc(r.title||'')+'\')">删除</button></td></tr>'},
+    licenses:function(r){return'<tr><td>'+esc(r.name||'')+'</td><td>'+esc(r.category||'')+'</td><td>'+(r.duration_days||'')+'天</td><td>'+esc(r.fee||'')+'</td><td class="actions"><button class="btn btn-o btn-sm" onclick="editRow(\'licenses\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'licenses\',\''+(r.id||'')+'\',\''+esc(r.name||'')+'\')">删除</button></td></tr>'},
+    guide_industries:function(r){return'<tr><td>'+esc(r.industry||'')+'</td><td>'+((r.steps||[]).length||0)+'</td><td>'+esc(r.dept||'')+'</td><td class="actions"><button class="btn btn-o btn-sm" onclick="editRow(\'guide_industries\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'guide_industries\',\''+(r.id||'')+'\',\''+esc(r.industry||'')+'\')">删除</button></td></tr>'},
+    newco_tasks:function(r){return'<tr><td>'+r.day_num+'</td><td>'+esc(r.task||'')+'</td><td>'+esc(r.category||'')+'</td><td>'+(r.sort_order||0)+'</td><td class="actions"><button class="btn btn-o btn-sm" onclick="editRow(\'newco_tasks\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'newco_tasks\',\''+(r.id||'')+'\',\''+esc(r.task||'')+'\')">删除</button></td></tr>'},
+    tickets:function(r){return'<tr><td>'+esc(r.title||'')+'</td><td>'+esc(r.category||'')+'</td><td>'+esc(r.status||'')+'</td><td>'+esc((r.user_id||'').substring(0,8))+'</td><td class="actions"><button class="btn btn-o btn-sm" onclick="editRow(\'tickets\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">回复</button></td></tr>'}
+  };
+  tbody.innerHTML=filtered.map(renders[tableName]).join('');
+}
+
+// CRUD operations
+var editMode=null,editTable=null,editId=null;
+
+function openForm(tableName,row){
+  editTable=tableName;editMode=row?'edit':'create';editId=row?row.id:null;
+  document.getElementById('modal-title').textContent=row?'编辑':'新增';
+  var cols=tableFields[tableName].cols,html='';
+  if(row)html+='<input type="hidden" id="f-id" value="'+esc(row.id||'')+'">';
+  cols.forEach(function(c){
+    var val=row&&row[c]!==undefined?row[c]:'';
+    var isArr=c==='tags'||c==='features'||c==='materials'||c==='process'||c==='steps'||c==='process_steps';
+    if(isArr){
+      var arrStr=Array.isArray(val)?val.join(', '):(typeof val==='string'?val:'');
+      html+='<label>'+c+'</label><input id="f-'+c+'" value="'+esc(arrStr)+'"><span class="arr-hint">多条用英文逗号分隔</span>';
+    }else if(c==='timeline'||c==='forms'){
+      html+='<label>'+c+' (JSON)</label><textarea id="f-'+c+'">'+esc(typeof val==='string'?val:JSON.stringify(val||{}))+'</textarea><span class="hint">JSON格式</span>';
+    }else if(c==='description'||c==='conditions'||c==='requirements'||c==='notes'||c==='detail'||c==='reply'||c==='content'){
+      html+='<label>'+c+'</label><textarea id="f-'+c+'">'+esc(val||'')+'</textarea>';
+    }else if(c==='is_active'){
+      html+='<label>'+c+'</label><select id="f-'+c+'"><option value="true"'+(val===true||val==='true'?' selected':'')+'>是</option><option value="false"'+(val===false||val==='false'?' selected':'')+'>否</option></select>';
+    }else if(c==='rating'){
+      html+='<label>'+c+'</label><input id="f-'+c+'" type="number" step="0.1" min="1" max="5" value="'+esc(val||4.0)+'">';
+    }else if(c==='review_count'||c==='duration_days'||c==='day_num'||c==='sort_order'||c==='cycle_days'){
+      html+='<label>'+c+'</label><input id="f-'+c+'" type="number" value="'+esc(val||'')+'">';
+    }else if(c==='area_sqm'||c==='price_month'){
+      html+='<label>'+c+'</label><input id="f-'+c+'" type="number" step="0.01" value="'+esc(val||'')+'">';
+    }else{
+      html+='<label>'+c+'</label><input id="f-'+c+'" value="'+esc(val||'')+'">';
+    }
+  });
+  document.getElementById('modal-body').innerHTML=html;
+  document.getElementById('modal-overlay').classList.add('show');
+}
+
+function editRow(tableName,row){openForm(tableName,row)}
+
+function closeModal(){document.getElementById('modal-overlay').classList.remove('show');editMode=null}
+
+async function saveForm(){
+  var cols=tableFields[editTable].cols,data={};
+  cols.forEach(function(c){
+    var el=document.getElementById('f-'+c);
+    if(!el)return;
+    var isArr=c==='tags'||c==='features'||c==='materials'||c==='process'||c==='steps'||c==='process_steps';
+    var isJson=c==='timeline'||c==='forms';
+    var val=el.value||'';
+    if(isArr){
+      var parts=val.split(/[,，]/).map(function(s){return s.trim()}).filter(Boolean);
+      data[c]=parts.length?parts:null;
+    }else if(isJson){
+      try{data[c]=JSON.parse(val)}catch(e){data[c]=val||null}
+    }else if(c==='is_active'){
+      data[c]=val==='true'||val===true;
+    }else if(c==='rating'||c==='review_count'||c==='duration_days'||c==='day_num'||c==='sort_order'||c==='cycle_days'||c==='area_sqm'||c==='price_month'){
+      data[c]=val?parseFloat(val):null;
+    }else{
+      data[c]=val||null;
+    }
+  });
+  // Remove null/undefined for insert
+  Object.keys(data).forEach(function(k){if(data[k]===null||data[k]===undefined)delete data[k]});
+
+  try{
+    if(editMode==='create'){
+      await window.ZQTong.adminInsert(editTable,data);
+      showToast('新增成功','s');
+    }else{
+      await window.ZQTong.adminUpdate(editTable,editId,data);
+      showToast('更新成功','s');
+    }
+    closeModal();
+    loadTable(editTable);
+    loadDashboard();
+  }catch(e){showToast('保存失败: '+(e.message||e),'e')}
+}
+
+// Confirm dialog
+var delTable,delId,delLabel;
+function delRow(tableName,id,label){delTable=tableName;delId=id;delLabel=label;document.getElementById('confirm-msg').textContent='确定要删除 "'+label+'" 吗？此操作将软删除该记录。';document.getElementById('confirm-dialog').classList.add('show')}
+function closeConfirm(){document.getElementById('confirm-dialog').classList.remove('show')}
+
+document.getElementById('confirm-btn').addEventListener('click',async function(){
+  if(!delTable||!delId)return;
+  try{await window.ZQTong.adminSoftDelete(delTable,delId);showToast('已删除','s');closeConfirm();loadTable(delTable);loadDashboard()}catch(e){showToast('删除失败: '+(e.message||e),'e')}
+});
+
+// Toast
+function showToast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast show toast-'+(type==='e'?'e':'s');setTimeout(function(){t.classList.remove('show')},2500)}
+
+// Enter key login
+document.getElementById('login-pass').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin()});
+
+// Auto-check session on load
+window.addEventListener('load',async function(){
+  if(window.ZQTong&&window.ZQTong.checkIsAdmin){
+    try{var ok=await window.ZQTong.checkIsAdmin();if(ok){onLoginSuccess();return}}catch(e){}
+  }
+});
+</script>
+</body>
+</html>
