@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>知识产权 - 政企通</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;color:#1a1a2e}
+.nav{background:linear-gradient(135deg,#1a56db,#1e40af);height:64px;display:flex;align-items:center;padding:0 24px;position:sticky;top:0;z-index:100}
+.nav a{color:#fff;text-decoration:none;font-size:15px;font-weight:600}
+.nav a:hover{opacity:.85}
+.container{max-width:1100px;margin:0 auto;padding:30px 24px}
+.page-title{font-size:26px;font-weight:800;margin-bottom:6px}
+.page-sub{color:#64748b;font-size:14px;margin-bottom:28px}
+.ip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ip-card{background:#fff;border-radius:16px;padding:26px 22px;box-shadow:0 2px 8px rgba(0,0,0,.04);transition:.2s;display:flex;flex-direction:column}
+.ip-card:hover{box-shadow:0 6px 20px rgba(0,0,0,.1);transform:translateY(-2px)}
+.ip-icon{font-size:36px;margin-bottom:14px}
+.ip-name{font-size:17px;font-weight:700;margin-bottom:6px}
+.ip-desc{font-size:12px;color:#64748b;margin-bottom:12px;line-height:1.6;flex:1}
+.ip-fee{font-size:18px;font-weight:800;color:#1a56db;margin-bottom:6px}
+.ip-cycle{font-size:12px;color:#94a3b8;margin-bottom:12px}
+.ip-cat{font-size:10px;padding:3px 8px;border-radius:8px;font-weight:700;display:inline-block;margin-bottom:12px}
+.cat-tm{background:#fef2f2;color:#dc2626}.cat-fm{background:#eff6ff;color:#2563eb}
+.cat-sy{background:#f0fdf4;color:#16a34a}.cat-wg{background:#fffbeb;color:#d97706}
+.cat-rz{background:#faf5ff;color:#9333ea}.cat-gb{background:#fff7ed;color:#ea580c}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:.2s;text-decoration:none;justify-content:center}
+.btn-p{background:#1a56db;color:#fff}.btn-p:hover{background:#1e40af}
+.btn-o{background:#fff;color:#1a56db;border:1.5px solid #1a56db}.btn-o:hover{background:#eff6ff}
+.trademark-section{background:linear-gradient(135deg,#1a56db,#1e40af);border-radius:16px;padding:30px;color:#fff;margin-bottom:28px}
+.trademark-section h2{font-size:22px;margin-bottom:14px}
+.trademark-section .tm-steps{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.tm-step{background:rgba(255,255,255,.15);padding:8px 16px;border-radius:10px;font-size:13px;font-weight:600}
+.empty-state{text-align:center;padding:60px 20px;color:#94a3b8}
+.empty-state p{font-size:14px}
+@media(max-width:768px){.ip-grid{grid-template-columns:1fr}}
+.footer{text-align:center;padding:40px;color:#94a3b8;font-size:12px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<link rel="manifest" href="manifest.json">
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      console.log('SW registered:',reg.scope);
+    }).catch(function(err){
+      console.log('SW registration failed:',err);
+    });
+  });
+}
+</script>
+
+</head>
+<body>
+<nav class="nav"><a href="index.html">&#8592; 返回首页</a></nav>
+<div class="container">
+<h1 class="page-title">知识产权</h1>
+<p class="page-sub">商标 · 专利 · 软著 — 专业代理，从查询到拿证，全程代办</p>
+<div class="trademark-section">
+<h2>商标注册 · 全流程</h2>
+<div class="tm-steps"><span class="tm-step">01 商标查询</span><span class="tm-step">02 提交申请</span><span class="tm-step">03 形式审查</span><span class="tm-step">04 实质审查</span><span class="tm-step">05 初审公告</span><span class="tm-step">06 注册公告</span></div>
+<p style="font-size:13px;opacity:.85">国内商标注册 300-800元/类，约9-12个月拿证。专业代理机构提供查询+类别建议+全流程代办服务。</p>
+<button class="btn btn-p" style="margin-top:12px;background:#fff;color:#1a56db">立即申请商标</button>
+</div>
+<div class="ip-grid" id="ip-grid"><div style="text-align:center;padding:60px;color:#94a3b8">加载中...</div></div>
+</div>
+<div class="footer">政企通 · 南通开发区企业一站式智慧服务平台 | 知识产权服务由专业代理机构提供</div>
+
+<script>
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+var catClass={商标:'cat-tm',发明专利:'cat-fm','实用新型专利':'cat-sy',外观专利:'cat-wg',软著:'cat-rz',贯标:'cat-gb'};
+var catIcon={商标:'🏷',发明专利:'💡','实用新型专利':'🔧',外观专利:'🎨',软著:'💻',贯标:'📋'};
+
+async function loadIpItems(){
+  var el=document.getElementById('ip-grid');
+  if(!window.ZQTong){el.innerHTML='<div class="empty-state"><p>SDK未就绪</p></div>';return}
+  try{
+    var data=await window.ZQTong.fetchIpItems()||[];
+    if(data.length===0){el.innerHTML='<div class="empty-state"><p>暂无数据</p></div>';return}
+    el.innerHTML=data.map(function(item){
+      var cc=catClass[item.category]||'cat-tm';
+      var icon=catIcon[item.category]||'📄';
+      return'<div class="ip-card"><div class="ip-icon">'+icon+'</div><span class="ip-cat '+cc+'">'+esc(item.category||'')+'</span><div class="ip-name">'+esc(item.name||'')+'</div><div class="ip-desc">'+esc(item.description||'')+'</div><div class="ip-fee">'+esc(item.fee_range||'面议')+'</div><div class="ip-cycle">预计周期: '+(item.cycle_days?item.cycle_days+'天':'咨询')+'</div><button class="btn btn-p">立即申请</button></div>';
+    }).join('');
+  }catch(e){el.innerHTML='<div class="empty-state"><p>加载失败: '+esc(e.message)+'</p></div>'}
+}
+
+document.addEventListener('DOMContentLoaded',loadIpItems);
+</script>
+</body>
+</html>
