@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#1a56db">
+<title>政企通 - 企业一站式服务平台</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;color:#1a1a2e}
+.nav{background:linear-gradient(135deg,#1a56db,#1e40af);height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;position:sticky;top:0;z-index:100}
+.nav-logo{color:#fff;font-size:24px;font-weight:700;letter-spacing:2px}
+.nav-links{display:flex;gap:24px}
+.nav-links a{color:rgba(255,255,255,.85);text-decoration:none;font-size:14px;transition:.2s}
+.nav-links a:hover{color:#fff}
+.hero{background:linear-gradient(135deg,#1a56db,#1e3a8a);padding:70px 40px 90px;text-align:center;color:#fff}
+.hero h1{font-size:38px;font-weight:800;margin-bottom:8px}
+.hero p{font-size:17px;opacity:.9;margin-bottom:36px}
+.sb{max-width:740px;margin:0 auto;background:#fff;border-radius:16px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.sr{display:flex;gap:14px;margin-bottom:14px}
+.sf{flex:1;text-align:left}
+.sf label{display:block;font-size:13px;color:#64748b;margin-bottom:5px;font-weight:500}
+.sf select,.sf input{width:100%;padding:11px 14px;border:2px solid #e2e8f0;border-radius:10px;font-size:14px;color:#1a1a2e;background:#f8fafc;outline:none}
+.sf select:focus,.sf input:focus{border-color:#1a56db;background:#fff}
+.sbtn{width:100%;padding:14px;background:linear-gradient(135deg,#1a56db,#2563eb);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;margin-top:8px;transition:.2s}
+.sbtn:hover{transform:translateY(-1px);box-shadow:0 8px 25px rgba(26,86,219,.35)}
+.fts{max-width:1280px;margin:-30px auto 50px;padding:0 30px;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.fc{background:#fff;border-radius:14px;padding:26px 18px;box-shadow:0 2px 12px rgba(0,0,0,.06);text-align:center;cursor:pointer;transition:.2s}
+.fc:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+.fc .fi{font-size:32px;margin-bottom:10px}
+.fc h3{font-size:16px;margin-bottom:5px}
+.fc p{font-size:12px;color:#64748b}
+.nb{display:inline-block;background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff;font-size:10px;padding:2px 6px;border-radius:8px;margin-left:6px;vertical-align:middle}
+.rs{max-width:1280px;margin:0 auto;padding:30px}
+.rh{margin-bottom:20px}
+.rh h2{font-size:22px}
+.rh span{color:#64748b;font-size:13px}
+.tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid #e2e8f0;overflow-x:auto}
+.tab{padding:10px 16px;font-size:13px;font-weight:600;color:#64748b;cursor:pointer;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;background:none;transition:.2s}
+.tab:hover{color:#1a56db}
+.tab.act{color:#1a56db;border-bottom-color:#1a56db}
+.cl{display:flex;flex-direction:column;gap:14px}
+.cd{background:#fff;border-radius:14px;padding:20px 22px;box-shadow:0 2px 8px rgba(0,0,0,.04);display:flex;gap:16px;align-items:flex-start;transition:.2s}
+.cd:hover{box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.cb{flex-shrink:0;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
+.br{background:#fef2f2;color:#dc2626}.by{background:#fffbeb;color:#d97706}.bg{background:#f0fdf4;color:#16a34a}
+.bb{background:#eff6ff;color:#2563eb}.bp{background:#faf5ff;color:#9333ea}.bo{background:#fff7ed;color:#ea580c}
+.cd-body{flex:1;min-width:0}
+.cd-title{font-size:15px;font-weight:700;margin-bottom:5px}
+.cd-desc{font-size:12px;color:#64748b;margin-bottom:8px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tag{font-size:11px;padding:3px 8px;background:#f1f5f9;border-radius:12px;color:#475569}
+.cd-bot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.price{font-size:16px;font-weight:700;color:#1a56db}
+.op{font-size:12px;color:#94a3b8;text-decoration:line-through;margin-left:6px}
+.stars{color:#f59e0b;font-size:13px}.rc{font-size:11px;color:#94a3b8;margin-left:3px}
+.btn{display:inline-block;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;border:none;transition:.2s}
+.btn-p{background:#1a56db;color:#fff}.btn-p:hover{background:#1e40af}
+.btn-o{background:#fff;color:#1a56db;border:1.5px solid #1a56db}.btn-o:hover{background:#eff6ff}
+.btn-sm{font-size:11px;padding:5px 10px}
+.sec-tt{font-size:15px;font-weight:700;color:#475569;margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid #e2e8f0}
+.ind-guide{background:#fff;border-radius:12px;padding:16px 20px;margin-bottom:14px;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.ind-guide h4{font-size:14px;font-weight:700;margin-bottom:10px;color:#1a1a2e}
+.ind-steps{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.step-chip{display:inline-flex;align-items:center;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:5px 10px;font-size:11px;color:#1e40af;gap:5px}
+.step-chip .sn{background:#1a56db;color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.gov-info{display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:#64748b;margin-bottom:10px}
+.gov-info span{background:#f8fafc;padding:4px 8px;border-radius:6px}
+.gov-info b{color:#1a1a2e}
+.form-links{display:flex;flex-wrap:wrap;gap:6px}
+.form-link{font-size:11px;padding:4px 10px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;border-radius:6px;cursor:pointer}
+.form-link:hover{background:#dcfce7}
+.cmp{width:100%;border-collapse:collapse;margin-top:16px;font-size:12px}
+.cmp th{background:#f1f5f9;padding:10px;text-align:left;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0}
+.cmp td{padding:10px;border-bottom:1px solid #f1f5f9;vertical-align:top}
+.cmp tr:hover td{background:#f8fafc}
+.hid{display:none}
+.footer{text-align:center;padding:40px;color:#94a3b8;font-size:12px}
+.ai-btn{position:fixed;bottom:28px;right:28px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#1a56db,#7c3aed);color:#fff;font-size:24px;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(26,86,219,.35);z-index:999;transition:.2s;display:flex;align-items:center;justify-content:center}
+.ai-btn .pulse{position:absolute;width:56px;height:56px;border-radius:50%;background:rgba(26,86,219,.3);animation:pulse 2s infinite}
+@keyframes pulse{0%{transform:scale(1);opacity:.6}70%{transform:scale(1.6);opacity:0}100%{opacity:0}}
+.ai-panel{position:fixed;bottom:94px;right:28px;width:380px;max-height:520px;background:#fff;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,.15);z-index:998;display:none;flex-direction:column;overflow:hidden}
+.ai-panel.show{display:flex}
+.ai-header{background:linear-gradient(135deg,#1a56db,#7c3aed);color:#fff;padding:14px 18px;font-weight:700;font-size:14px;display:flex;justify-content:space-between;align-items:center}
+.ai-close{background:none;border:none;color:#fff;font-size:18px;cursor:pointer}
+.ai-msgs{flex:1;overflow-y:auto;padding:14px;max-height:340px;display:flex;flex-direction:column;gap:10px}
+.ai-msg{max-width:85%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.6}
+.ai-msg.bot{background:#f1f5f9;align-self:flex-start;border-bottom-left-radius:4px}
+.ai-msg.user{background:#1a56db;color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.ai-input-area{display:flex;padding:10px 14px;border-top:1px solid #e2e8f0;gap:8px}
+.ai-input-area input{flex:1;padding:10px 14px;border:2px solid #e2e8f0;border-radius:10px;font-size:13px;outline:none}
+.ai-input-area input:focus{border-color:#1a56db}
+.ai-send{background:#1a56db;color:#fff;border:none;border-radius:10px;padding:10px 16px;font-weight:600;font-size:13px;cursor:pointer}
+.hot-tags{max-width:740px;margin:8px auto 0;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.hot-tags span{font-size:12px;padding:5px 12px;background:rgba(255,255,255,.15);color:rgba(255,255,255,.9);border-radius:16px;cursor:pointer;transition:.2s;border:1px solid rgba(255,255,255,.2)}
+.hot-tags span:hover{background:rgba(255,255,255,.25);color:#fff}
+.trust-bar{max-width:1280px;margin:0 auto 16px;padding:0 30px;display:flex;gap:12px;justify-content:center}
+.tb-item{background:#fff;border-radius:12px;padding:14px 28px;box-shadow:0 2px 10px rgba(0,0,0,.05);text-align:center;flex:0 1 auto;min-width:160px}
+.tb-item .tbn{font-size:28px;font-weight:800;color:#1a56db;line-height:1.1}
+.tb-item .tbl{font-size:12px;color:#64748b;margin-top:4px}
+.tb-divider{width:1px;background:#e2e8f0;align-self:stretch;margin:8px 0}
+.license-detail{display:none;margin-top:12px;padding:14px 16px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0;font-size:12px;color:#475569;line-height:1.8}
+.license-detail.show{display:block}
+.license-detail h5{font-size:13px;font-weight:700;color:#1a1a2e;margin:10px 0 6px}
+.license-detail h5:first-child{margin-top:0}
+.license-detail ul{padding-left:18px;margin-bottom:8px}
+.license-detail ul li{margin-bottom:3px}
+.license-detail .chk-list{list-style:none;padding-left:0}
+.license-detail .chk-list li::before{content:'☐ ';color:#1a56db;font-size:13px}
+.license-detail .step-list{list-style:none;padding-left:0;counter-reset:step}
+.license-detail .step-list li{counter-increment:step;margin-bottom:4px}
+.license-detail .step-list li::before{content:counter(step)'. ';color:#1a56db;font-weight:700}
+.match-tags{display:flex;gap:4px;flex-wrap:wrap;margin-left:8px}
+.mtag{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;white-space:nowrap}
+.mt-ind{background:#eff6ff;color:#2563eb}.mt-reg{background:#faf5ff;color:#9333ea}.mt-sca{background:#f0fdf4;color:#16a34a}
+.tag-local{font-size:10px;padding:2px 8px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;border-radius:10px;font-weight:600;margin-left:6px;vertical-align:middle}
+.tag-subsidy{font-size:10px;padding:2px 8px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;border-radius:10px;font-weight:600;margin-left:4px;vertical-align:middle}
+.quick-qs{display:flex;flex-wrap:wrap;gap:6px;padding:8px 14px;border-top:1px solid #e2e8f0;background:#f8fafc}
+.quick-qs span{font-size:11px;padding:4px 10px;background:#eff6ff;color:#2563eb;border-radius:12px;cursor:pointer;transition:.2s;border:1px solid #bfdbfe;white-space:nowrap}
+.quick-qs span:hover{background:#dbeafe;color:#1d4ed8}
+.partner-bar{max-width:1280px;margin:0 auto 20px;padding:0 30px;text-align:center}
+.partner-bar .pb-inner{background:#fff;border-radius:12px;padding:16px 24px;box-shadow:0 2px 10px rgba(0,0,0,.05);display:inline-flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:12px;color:#475569}
+.partner-bar .pb-label{font-weight:700;color:#1a1a2e;margin-right:4px}
+.partner-bar .pb-unit{font-size:11px;color:#64748b;padding:3px 10px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0}
+@media(max-width:768px){.fts{grid-template-columns:repeat(2,1fr)}.sr{flex-direction:column}.nav-links{display:none}.hero h1{font-size:26px}.ai-panel{width:calc(100vw-40px);right:20px}.trust-bar{flex-direction:column;align-items:center}.tb-divider{width:60px;height:1px}.partner-bar .pb-inner{flex-direction:column}}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<link rel="manifest" href="manifest.json">
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      console.log('SW registered:',reg.scope);
+    }).catch(function(err){
+      console.log('SW registration failed:',err);
+    });
+  });
+}
+</script>
+
+</head>
+<body>
+<nav class="nav"><div class="nav-logo">政企通</div><div class="nav-links">
+<a href="policy.html">惠企政策</a>
+<a href="service.html">企业服务</a>
+<a href="ip.html">知识产权</a>
+<a href="software.html">企业软件</a>
+<a href="office.html">办公空间</a>
+<a href="license.html">证照办理</a>
+<a href="guide.html">行业指南</a>
+<a href="newco.html">新公司必做清单</a>
+</div></nav>
+<section class="hero">
+<h1>政企通 · 企业一站式智慧服务平台</h1>
+<p>精准政策匹配 · 优质服务商对接 · 证照代办 · 从注册到合规全程护航</p>
+<div class="sb"><div class="sr">
+<div class="sf"><label>所在地</label><select id="hero-region"><option value="">不限</option><option value="南通市">南通市</option><option value="崇川区">崇川区</option><option value="开发区">开发区</option><option value="通州区">通州区</option><option value="海门区">海门区</option></select></div>
+<div class="sf"><label>行业</label><select id="hero-industry"><option value="">不限</option><option value="通用">通用</option><option value="建筑施工">建筑施工</option><option value="餐饮服务">餐饮服务</option><option value="信息技术">信息技术</option><option value="商贸物流">商贸物流</option><option value="油气贸易">油气贸易</option><option value="教育培训">教育培训</option><option value="医疗器械">医疗器械</option></select></div>
+<div class="sf"><label>政策类型</label><select id="hero-type"><option value="">不限</option><option value="资金补贴">资金补贴</option><option value="税收优惠">税收优惠</option><option value="人才引进">人才引进</option><option value="资质认定">资质认定</option></select></div>
+<div class="sf"><label>企业规模</label><select id="hero-scale"><option value="">不限</option><option value="小微">小微</option><option value="中型">中型</option><option value="大型">大型</option><option value="专精特新">专精特新</option></select></div>
+</div>
+<button class="sbtn" onclick="searchPolicies()">智能匹配惠企政策</button>
+<div class="hot-tags">
+<span onclick="window.location.href='policy.html'">区域补贴政策</span>
+<span onclick="window.location.href='policy.html'">高新技术企业认定</span>
+<span onclick="window.location.href='license.html'">危化证办理</span>
+<span onclick="window.location.href='license.html'">食品经营许可证</span>
+<span onclick="window.location.href='office.html'">办公空间租赁</span>
+<span onclick="window.location.href='service.html'">财税代理</span>
+</div></div>
+</section>
+
+<div class="fts">
+<div class="fc" onclick="window.location.href='policy.html'"><div class="fi">📋</div><h3>惠企政策匹配</h3><p>所在地+行业+类型，秒级匹配</p></div>
+<div class="fc" onclick="window.location.href='service.html'"><div class="fi">💼</div><h3>企业服务<span class="nb">NEW</span></h3><p>财税 · 法律 · 审计 · 税务</p></div>
+<div class="fc" onclick="window.location.href='ip.html'"><div class="fi">🛡</div><h3>知识产权<span class="nb">NEW</span></h3><p>商标 · 专利 · 软著一站式</p></div>
+<div class="fc" onclick="window.location.href='software.html'"><div class="fi">💻</div><h3>企业软件推荐</h3><p>按行业推荐企业级SaaS</p></div>
+<div class="fc" onclick="window.location.href='office.html'"><div class="fi">🏢</div><h3>办公空间租赁</h3><p>房源对比 · 选址 · 直播带看</p></div>
+<div class="fc" onclick="window.location.href='license.html'"><div class="fi">📜</div><h3>证照办理<span class="nb">NEW</span></h3><p>危化证 · 食品经营 · 资质审批</p></div>
+<div class="fc" onclick="window.location.href='guide.html'"><div class="fi">📖</div><h3>行业办事指南<span class="nb">NEW</span></h3><p>设立变更流程 · 主管部门对接</p></div>
+<div class="fc" onclick="window.location.href='newco.html'"><div class="fi">🏆</div><h3>新公司必做清单</h3><p>注册后30天时间线指引</p></div>
+</div>
+<div class="trust-bar">
+<div class="tb-item"><div class="tbn">500<span style="font-size:16px;font-weight:600">+</span></div><div class="tbl">服务企业</div></div>
+<div class="tb-divider"></div>
+<div class="tb-item"><div class="tbn">300<span style="font-size:16px;font-weight:600">+</span></div><div class="tbl">成功办理证照（例）</div></div>
+<div class="tb-divider"></div>
+<div class="tb-item"><div class="tbn">98<span style="font-size:16px;font-weight:600">%</span></div><div class="tbl">政策匹配成功率</div></div>
+</div>
+<div class="rs" id="main-content">
+<div class="rh"><h2>智能匹配结果</h2><span>根据所在地和行业推荐</span></div>
+<div class="tabs">
+<button class="tab act" onclick="sTab('tab-policy')">惠企政策</button>
+<button class="tab" onclick="sTab('tab-service')">企业服务</button>
+<button class="tab" onclick="sTab('tab-ip')">知识产权</button>
+<button class="tab" onclick="sTab('tab-software')">企业软件</button>
+<button class="tab" onclick="sTab('tab-office')">办公空间</button>
+<button class="tab" onclick="sTab('tab-license')">证照办理</button>
+<button class="tab" onclick="sTab('tab-guide')">行业指南</button>
+</div>
+<div id="tab-policy" class="cl"><div id="policy-results"><p style="color:#94a3b8;text-align:center;padding:40px">选择条件后点击"智能匹配惠企政策"查看结果</p></div></div>
+<div id="tab-service" class="hid cl"><div id="service-results"><p style="color:#94a3b8;text-align:center;padding:40px">加载中...</p></div></div>
+<div id="tab-ip" class="hid cl"><div id="ip-results"><p style="color:#94a3b8;text-align:center;padding:40px">加载中...</p></div></div>
+<div id="tab-software" class="hid cl"><div id="sw-results"><p style="color:#94a3b8;text-align:center;padding:40px">加载中...</p></div></div>
+<div id="tab-office" class="hid cl"><div id="office-results"><p style="color:#94a3b8;text-align:center;padding:40px">加载中...</p></div></div>
+<div id="tab-license" class="hid cl"><div id="license-results"><p style="color:#94a3b8;text-align:center;padding:40px">加载中...</p></div></div>
+<div id="tab-guide" class="hid cl"><div id="guide-results"><p style="color:#94a3b8;text-align:center;padding:40px">加载中...</p></div></div>
+<div class="partner-bar">
+<div class="pb-inner">
+<span class="pb-label">合作单位：</span>
+<span class="pb-unit">南通市开发区管委会</span>
+<span class="pb-unit">南通市应急管理局</span>
+<span class="pb-unit">南通市市场监管局</span>
+<span class="pb-unit">南通市行政审批局</span>
+</div>
+</div>
+<div class="footer">政企通 · 南通开发区企业一站式智慧服务平台 | 建议 & 反馈：400-xxx-xxxx</div>
+<button class="ai-btn" onclick="toggleAI()"><span class="pulse"></span>💬</button>
+<div class="ai-panel" id="ai-panel">
+<div class="ai-header"><span>🤖 AI 智能客服</span><button class="ai-close" onclick="toggleAI()">×</button></div>
+<div class="ai-msgs" id="ai-msgs"><div class="ai-msg bot">你好！我是政企通AI智能助手，可以帮你在线搜索、匹配政策和解答问题。试试问我"南通有哪些惠企补贴"吧~</div></div>
+<div class="quick-qs">
+<span onclick="document.getElementById('ai-input').value='如何注册公司？';aiSend()">如何注册公司？</span>
+<span onclick="document.getElementById('ai-input').value='有什么补贴政策？';aiSend()">有什么补贴政策？</span>
+<span onclick="document.getElementById('ai-input').value='危化证怎么办？';aiSend()">危化证怎么办？</span>
+<span onclick="document.getElementById('ai-input').value='代账多少钱？';aiSend()">代账多少钱？</span>
+</div>
+<div class="ai-input-area"><input id="ai-input" placeholder="输入问题，AI帮你搜索..." onkeydown="if(event.key==='Enter')aiSend()"><button class="ai-send" onclick="aiSend()">发送</button></div>
+</div>
+<script>
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+var loadedTabs={};
+
+function sTab(tid){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('act')});
+  var target=document.querySelector('.tabs button[onclick*="'+tid+'"]');
+  if(target)target.classList.add('act');
+  document.querySelectorAll('#main-content>.cl,#main-content>.hid').forEach(function(d){d.classList.add('hid')});
+  document.getElementById(tid).classList.remove('hid');
+  var dataMap={
+    'tab-policy':{fn:window.ZQTong?window.ZQTong.fetchPolicies:null,container:'policy-results',render:renderPolicyCards},
+    'tab-service':{fn:window.ZQTong?window.ZQTong.fetchServices:null,container:'service-results',render:renderServiceCards},
+    'tab-ip':{fn:window.ZQTong?window.ZQTong.fetchIpItems:null,container:'ip-results',render:renderIpCards},
+    'tab-software':{fn:window.ZQTong?window.ZQTong.fetchSoftware:null,container:'sw-results',render:renderSwCards},
+    'tab-office':{fn:window.ZQTong?window.ZQTong.fetchOffices:null,container:'office-results',render:renderOfficeCards},
+    'tab-license':{fn:window.ZQTong?window.ZQTong.fetchLicenses:null,container:'license-results',render:renderLicenseCards},
+    'tab-guide':{fn:window.ZQTong?window.ZQTong.fetchGuideIndustries:null,container:'guide-results',render:renderGuideCards}
+  };
+  var cfg=dataMap[tid];
+  if(cfg&&!loadedTabs[tid]&&cfg.fn){
+    loadedTabs[tid]=true;
+    document.getElementById(cfg.container).innerHTML='<p style="color:#94a3b8;text-align:center;padding:40px">加载中...</p>';
+    cfg.fn({}).then(function(data){
+      if(!data||data.length===0){
+        document.getElementById(cfg.container).innerHTML='<p style="color:#94a3b8;text-align:center;padding:40px">暂无数据</p>';
+        return;
+      }
+      cfg.render(data,cfg.container);
+    }).catch(function(){
+      document.getElementById(cfg.container).innerHTML='<p style="color:#94a3b8;text-align:center;padding:40px">加载失败，请稍后重试</p>';
+    });
+  }
+}
+
+async function searchPolicies(){
+  var container=document.getElementById('policy-results');
+  container.innerHTML='<p style="color:#94a3b8;text-align:center;padding:40px">正在匹配政策...</p>';
+  if(!window.ZQTong){container.innerHTML='<p style="color:#94a3b8;text-align:center;padding:40px">SDK未就绪</p>';return}
+  try{
+    var filters={};
+    var region=document.getElementById('hero-region').value;
+    var industry=document.getElementById('hero-industry').value;
+    var type=document.getElementById('hero-type').value;
+    var scale=document.getElementById('hero-scale').value;
+    if(region)filters.region=region;
+    if(industry)filters.industry=industry;
+    if(type)filters.policy_type=type;
+    if(scale)filters.enterprise_scale=scale;
+    var data=await window.ZQTong.fetchPolicies(filters);
+    if(!data||data.length===0){
+      container.innerHTML='<p style="color:#94a3b8;text-align:center;padding:40px">暂无匹配政策</p>';
+      return;
+    }
+    renderPolicyCards(data,'policy-results');
+  }catch(e){
+    container.innerHTML='<p style="color:#dc2626;text-align:center;padding:40px">搜索失败: '+esc(e.message)+'</p>';
+  }
+  sTab('tab-policy');
+}
+
+function typeBadge(t){
+  var m={资金补贴:'bb',税收优惠:'bg',人才引进:'br',资质认定:'by'};
+  return m[t]||'bb';
+}
+
+function renderPolicyCards(data,containerId){
+  var html='';
+  data.forEach(function(p){
+    var b=typeBadge(p.policy_type);
+    var tags=(p.tags||[]).map(function(t){return'<span class="tag">'+esc(t)+'</span>'}).join('');
+    html+='<div class="cd"><span class="cb '+b+'">'+(p.policy_type||'')+'</span><div class="cd-body"><div class="cd-title">'+esc(p.title||'')+'</div><div class="cd-desc">'+esc((p.description||'').substring(0,100))+'</div><div class="tags">'+tags+'</div><div class="cd-bot"><span class="price">'+(p.amount||'面议')+'</span><span class="op">截止: '+(p.deadline||'长期有效')+'</span></div></div></div>';
+  });
+  document.getElementById(containerId).innerHTML=html||'<p style="color:#94a3b8;text-align:center;padding:40px">暂无数据</p>';
+}
+
+function renderServiceCards(data,containerId){
+  var html='';
+  data.forEach(function(s){
+    var stars=starsHTML(s.rating||0);
+    html+='<div class="cd"><span class="cb bg">推荐</span><div class="cd-body"><div class="cd-title">'+esc(s.name||'')+'</div><div class="cd-desc">'+esc((s.description||'').substring(0,80))+'</div><div class="tags">'+(s.tags||[]).map(function(t){return'<span class="tag">'+esc(t)+'</span>'}).join('')+'</div><div class="cd-bot"><span class="price">'+esc(s.price_range||'')+'</span><span class="stars">'+stars+'</span><span class="rc">'+(s.rating||0)+'分 ('+(s.review_count||0)+'评价)</span><button class="btn btn-p btn-sm">立即咨询</button></div></div></div>';
+  });
+  document.getElementById(containerId).innerHTML=html||'<p style="color:#94a3b8;text-align:center;padding:40px">暂无数据</p>';
+}
+
+function renderIpCards(data,containerId){
+  var html='';
+  data.forEach(function(item){
+    html+='<div class="cd"><span class="cb bg">热门</span><div class="cd-body"><div class="cd-title">'+esc(item.name||'')+'</div><div class="cd-desc">'+esc((item.description||'').substring(0,80))+'</div><div class="cd-bot"><span class="price">'+esc(item.fee_range||'面议')+'</span><span class="op">周期: '+(item.cycle_days?item.cycle_days+'天':'咨询')+'</span><button class="btn btn-p btn-sm">立即申请</button></div></div></div>';
+  });
+  document.getElementById(containerId).innerHTML=html||'<p style="color:#94a3b8;text-align:center;padding:40px">暂无数据</p>';
+}
+
+function renderSwCards(data,containerId){
+  var html='';
+  var catColors={通用办公:'bb','建筑施工':'by','餐饮服务':'bo','信息技术':'bg','商贸物流':'bp','油气贸易':'br'};
+  data.forEach(function(item){
+    var cc=catColors[item.category]||'bg';
+    html+='<div class="cd"><span class="cb '+cc+'">'+(item.category||'')+'</span><div class="cd-body"><div class="cd-title">'+esc(item.name||'')+'</div><div class="cd-desc">'+esc((item.description||'').substring(0,80))+'</div><div class="tags">'+(item.features||[]).map(function(t){return'<span class="tag">'+esc(t)+'</span>'}).join('')+'</div><div class="cd-bot"><span class="price">'+esc(item.pricing||'')+'</span><button class="btn btn-o btn-sm">免费试用</button></div></div></div>';
+  });
+  document.getElementById(containerId).innerHTML=html||'<p style="color:#94a3b8;text-align:center;padding:40px">暂无数据</p>';
+}
+
+function renderOfficeCards(data,containerId){
+  var html='<table class="cmp"><tr><th>房源</th><th>面积(m²)</th><th>月租金(元)</th><th>补贴政策</th><th>配套设施</th></tr>';
+  data.forEach(function(o){
+    var tags=(o.tags||[]).join(', ');
+    html+='<tr><td><b>'+esc(o.title||'')+'</b>'+(o.subsidy?'<span class="tag-subsidy">享补贴</span>':'')+'</td><td>'+(o.area_sqm||'')+'</td><td>'+esc('¥'+o.price_month||'面议')+'</td><td>'+esc(o.subsidy||'暂无')+'</td><td>'+esc(tags||'')+'</td></tr>';
+  });
+  html+='</table>';
+  document.getElementById(containerId).innerHTML=html||'<p style="color:#94a3b8;text-align:center;padding:40px">暂无数据</p>';
+}
+
+function renderLicenseCards(data,containerId){
+  var html='';
+  data.forEach(function(l){
+    html+='<div class="cd"><span class="cb bb">'+esc(l.category||'通用')+'</span><div class="cd-body"><div class="cd-title">'+esc(l.name||'')+'</div><div class="cd-desc">办理时限: '+(l.duration_days?l.duration_days+'个工作日':'咨询')+' | 费用: '+esc(l.fee||'面议')+'</div><div class="cd-bot"><span class="price">'+esc(l.fee||'面议')+'</span><button class="btn btn-p btn-sm">立即办理</button><button class="btn btn-o btn-sm" onclick="var d=this.parentElement.parentElement.querySelector(\'.license-detail\');d.classList.toggle(\'show\');this.textContent=d.classList.contains(\'show\')?\'收起详情\':\'查看详情\'">查看详情</button></div><div class="license-detail"><h5>办理条件</h5><p>'+esc(l.conditions||'请咨询')+'</p><h5>所需材料</h5><ul>'+(l.materials||[]).map(function(m){return'<li>'+esc(m)+'</li>'}).join('')+'</ul><h5>办理流程</h5><ul class="step-list">'+(l.process||[]).map(function(s){return'<li>'+esc(s)+'</li>'}).join('')+'</ul><h5>主管部门</h5><p>'+esc(l.dept||'请咨询')+'</p></div></div></div>';
+  });
+  document.getElementById(containerId).innerHTML=html||'<p style="color:#94a3b8;text-align:center;padding:40px">暂无数据</p>';
+}
+
+function renderGuideCards(data,containerId){
+  var html='<div class="sec-tt">新公司设立 · 30天时间线</div><div class="tl"><div class="tl-item"><div class="tl-dot rd">1</div><div class="tlc"><div class="tlt">工商营业执照</div><div class="tlm">Day 1-3</div><div class="tld">公司名称核准→提交注册材料→领取营业执照。可选择线上办理或窗口办理。</div><div class="tla"><button class="btn btn-o btn-sm">查看流程</button></div></div></div><div class="tl-item"><div class="tl-dot yl">2</div><div class="tlc"><div class="tlt">刻章备案</div><div class="tlm">Day 3-5</div><div class="tld">公章+财务章+法人章+发票章+合同章共五枚，公安备案刻章点刻制。</div><div class="tla"><button class="btn btn-o btn-sm">查看流程</button></div></div></div><div class="tl-item"><div class="tl-dot gn">3</div><div class="tlc"><div class="tlt">银行开户+税务登记</div><div class="tlm">Day 5-10</div><div class="tld">选择银行开立基本账户→税务报到→税种核定→领取发票。</div><div class="tla"><button class="btn btn-o btn-sm">查看流程</button></div></div></div><div class="tl-item"><div class="tl-dot bl">4</div><div class="tlc"><div class="tlt">社保/公积金开户</div><div class="tlm">Day 10-15</div><div class="tld">社保登记+公积金缴存登记，线上即可完成。</div><div class="tla"><button class="btn btn-o btn-sm">查看流程</button></div></div></div><div class="tl-item"><div class="tl-dot bl">5</div><div class="tlc"><div class="tlt">行业许可/资质审批</div><div class="tlm">Day 15-30</div><div class="tld">根据行业需求办理相关许可证或备案。</div><div class="tla"><button class="btn btn-o btn-sm">证照办理</button></div></div></div></div><div class="sec-tt">按行业 · 设立变更流程</div>';
+  data.forEach(function(g){
+    html+='<div class="ind-guide"><h4>'+esc(g.industry||'')+'</h4><div class="ind-steps">'+(g.steps||[]).map(function(s,i){return'<div class="step-chip"><span class="sn">'+(i+1)+'</span>'+esc(s)+'</div>'}).join('')+'</div><div class="gov-info"><span>主管部门：<b>'+esc(g.dept||'请咨询')+'</b></span></div></div>';
+  });
+  document.getElementById(containerId).innerHTML=html||'<p style="color:#94a3b8;text-align:center;padding:40px">暂无数据</p>';
+}
+
+function starsHTML(r){var s='';for(var i=1;i<=5;i++)s+=i<=Math.round(r)?'\u2605':'\u2606';return s}
+
+function toggleAI(){
+  var p=document.getElementById('ai-panel');
+  p.classList.contains('show')?p.classList.remove('show'):p.classList.add('show');
+}
+var aiReplies={
+  "政策":"目前南通市主要的惠企政策包括：专精特新奖励、智能化改造补贴（最高100万）、江海英才计划、科技贷款贴息。建议在「惠企政策」Tab查看详情。",
+  "补贴":"南通市企业可申请的补贴类型：①专精特新奖励②智能化改造补贴③人才引进补贴④贷款贴息⑤社保补贴⑥稳岗补贴。具体额度因企业类型不同而异。",
+  "注册":"新公司注册流程：①名称核准②提交注册材料③领营业执照④刻章⑤银行开户⑥税务登记⑦社保登记。南通已实现企业开办全流程半日结，详情查看「行业指南」Tab。",
+  "危化证":"危化品经营许可证办理需：①安全评价报告②应急预案备案③安全员培训合格证④经营场所达标⑤制度建立。30个工作日内拿证。",
+  "代账":"财税公司提供代账服务：小规模200元/月起，一般纳税人400元/月起。含每月记账报税+年度汇算清缴+税务咨询。详情见「企业服务」Tab。",
+  "办公室":"开发区自有办公室：独立办公室2800-6000元/月，大办公室5000-12000元/月，开放工位800-1200元/月/位。可注册公司，享受开发区租金补贴。",
+  "商标":"商标注册899元/件（含官费），包含商标查询+类别建议+全流程代办，平均8-10个月拿证。还有发明专利、实用新型、软著等。详情见「知识产权」Tab。"
+};
+function aiSend(){
+  var inp=document.getElementById('ai-input'),q=inp.value.trim();
+  if(!q)return;
+  var msgs=document.getElementById('ai-msgs');
+  msgs.innerHTML+='<div class="ai-msg user">'+esc(q)+'</div>';
+  inp.value='';
+  var reply='抱歉，这个问题我暂时无法直接回答。您可以尝试在「惠企政策」「证照办理」等Tab查看，或拨打400-xxx-xxxx咨询人工客服。';
+  if(q.indexOf('危化')>=0||q.indexOf('危险')>=0)reply=aiReplies["危化证"];
+  else if(q.indexOf('代账')>=0||q.indexOf('报税')>=0||q.indexOf('财税')>=0)reply=aiReplies["代账"];
+  else if(q.indexOf('补贴')>=0||q.indexOf('奖励')>=0)reply=aiReplies["补贴"];
+  else if(q.indexOf('政策')>=0||q.indexOf('优惠')>=0||q.indexOf('惠企')>=0)reply=aiReplies["政策"];
+  else if(q.indexOf('注册')>=0||q.indexOf('设立')>=0||q.indexOf('开办')>=0)reply=aiReplies["注册"];
+  else if(q.indexOf('办公室')>=0||q.indexOf('租房')>=0||q.indexOf('工位')>=0||q.indexOf('空间')>=0)reply=aiReplies["办公室"];
+  else if(q.indexOf('商标')>=0||q.indexOf('专利')>=0||q.indexOf('知产')>=0||q.indexOf('软著')>=0)reply=aiReplies["商标"];
+  setTimeout(function(){msgs.innerHTML+='<div class="ai-msg bot">'+reply+'</div>';msgs.scrollTop=msgs.scrollHeight;},600);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+</script>
+</body>
+</html>
