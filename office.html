@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>办公空间 - 政企通</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;color:#1a1a2e}
+.nav{background:linear-gradient(135deg,#1a56db,#1e40af);height:64px;display:flex;align-items:center;padding:0 24px;position:sticky;top:0;z-index:100}
+.nav a{color:#fff;text-decoration:none;font-size:15px;font-weight:600}
+.nav a:hover{opacity:.85}
+.container{max-width:1100px;margin:0 auto;padding:30px 24px}
+.page-title{font-size:26px;font-weight:800;margin-bottom:6px}
+.page-sub{color:#64748b;font-size:14px;margin-bottom:28px}
+.filter-bar{background:#fff;border-radius:14px;padding:18px 22px;margin-bottom:24px;box-shadow:0 2px 8px rgba(0,0,0,.04);display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.filter-bar select{padding:9px 12px;border:2px solid #e2e8f0;border-radius:8px;font-size:13px;background:#f8fafc;outline:none;min-width:130px}
+.filter-bar select:focus{border-color:#1a56db;background:#fff}
+.filter-bar label{display:block;font-size:11px;color:#64748b;margin-bottom:4px}
+.filter-bar .fg{display:flex;flex-direction:column}
+.office-table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);font-size:13px}
+.office-table th{background:#f8fafc;padding:14px 16px;text-align:left;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0;font-size:12px}
+.office-table td{padding:14px 16px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+.office-table tr:hover td{background:#f8fafc}
+.office-table .ot-name{font-weight:700;font-size:14px}
+.office-table .ot-subsidy{font-size:10px;padding:2px 8px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;border-radius:10px;font-weight:600;margin-left:6px;white-space:nowrap}
+.office-table .ot-price{font-weight:800;color:#1a56db}
+.office-table .ot-tags{display:flex;flex-wrap:wrap;gap:4px}
+.office-table .ot-tag{font-size:10px;padding:2px 6px;background:#f1f5f9;border-radius:8px;color:#475569}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:.2s;text-decoration:none}
+.btn-p{background:#1a56db;color:#fff}.btn-p:hover{background:#1e40af}
+.btn-o{background:#fff;color:#1a56db;border:1.5px solid #1a56db}.btn-o:hover{background:#eff6ff}
+.stat-row{display:flex;gap:10px;font-size:12px;color:#64748b;margin-bottom:10px}
+.stat-row span{background:#f1f5f9;padding:5px 10px;border-radius:8px}
+.empty-state{text-align:center;padding:60px 20px;color:#94a3b8}
+.empty-state p{font-size:14px}
+@media(max-width:768px){.filter-bar{flex-direction:column;align-items:stretch}.filter-bar select{width:100%}.office-table{font-size:11px}}
+.footer{text-align:center;padding:40px;color:#94a3b8;font-size:12px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<link rel="manifest" href="manifest.json">
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      console.log('SW registered:',reg.scope);
+    }).catch(function(err){
+      console.log('SW registration failed:',err);
+    });
+  });
+}
+</script>
+
+</head>
+<body>
+<nav class="nav"><a href="index.html">&#8592; 返回首页</a></nav>
+<div class="container">
+<h1 class="page-title">办公空间租赁</h1>
+<p class="page-sub">写字楼 · 产业园 · 众创空间 · 孵化器 — 在线浏览、多维对比、优享补贴</p>
+<div class="filter-bar">
+<div class="fg"><label>区域</label><select id="f-region"><option value="">不限</option><option value="崇川区">崇川区</option><option value="开发区">开发区</option><option value="通州区">通州区</option><option value="海门区">海门区</option></select></div>
+<div class="fg"><label>类型</label><select id="f-type"><option value="">不限</option><option value="写字楼">写字楼</option><option value="产业园">产业园</option><option value="众创空间">众创空间</option><option value="孵化器">孵化器</option></select></div>
+<div class="fg"><label>面积范围</label><select id="f-size"><option value="">不限</option><option value="0-100">100㎡以下</option><option value="100-200">100-200㎡</option><option value="200-999">200㎡以上</option></select></div>
+<div class="fg"><label>&nbsp;</label><button class="btn btn-p" onclick="applyFilter()">筛选</button></div>
+<div class="fg"><label>&nbsp;</label><button class="btn btn-o" onclick="resetFilter()">重置</button></div>
+</div>
+<div class="stat-row" id="stat-row"></div>
+<div style="overflow-x:auto">
+<table class="office-table"><thead><tr><th>房源名称</th><th>地址</th><th>面积(㎡)</th><th>月租金</th><th>类型</th><th>配套设施</th></tr></thead><tbody id="office-tbody"><tr><td colspan="6"><div class="empty-state"><p>加载中...</p></div></td></tr></tbody></table>
+</div>
+</div>
+<div class="footer">政企通 · 南通开发区企业一站式智慧服务平台 | 房源信息由产权方最新提供</div>
+
+<script>
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+var allOffices=[];
+async function loadOffices(){
+  var el=document.getElementById('office-tbody');
+  if(!window.ZQTong){el.innerHTML='<tr><td colspan="6"><div class="empty-state"><p>SDK未就绪</p></div></td></tr>';return}
+  try{allOffices=await window.ZQTong.fetchOffices()||[];renderOffices(allOffices)}catch(e){el.innerHTML='<tr><td colspan="6"><div class="empty-state"><p>加载失败: '+esc(e.message)+'</p></div></td></tr>'}
+}
+function renderOffices(data){
+  var el=document.getElementById('office-tbody');
+  document.getElementById('stat-row').innerHTML='<span>共 '+data.length+' 套房源</span>';
+  el.innerHTML=data.map(function(o){
+    var tags=(o.tags||[]).map(function(t){return'<span class="ot-tag">'+esc(t)+'</span>'}).join('');
+    var subsidy=o.subsidy?'<span class="ot-subsidy">享补贴</span>':'';
+    return'<tr><td><span class="ot-name">'+esc(o.title||'')+'</span>'+subsidy+'</td><td>'+esc(o.address||'')+'</td><td>'+(o.area_sqm||'')+'</td><td class="ot-price">&yen; '+(o.price_month||'面议')+'</td><td>'+esc(o.property_type||'')+'</td><td><div class="ot-tags">'+tags+'</div></td></tr>';
+  }).join('')||'<tr><td colspan="6"><div class="empty-state"><p>暂无数据</p></div></td></tr>';
+}
+function applyFilter(){
+  var r=document.getElementById('f-region').value,t=document.getElementById('f-type').value,s=document.getElementById('f-size').value;
+  var filtered=allOffices.filter(function(o){
+    if(r&&o.region!==r)return false;
+    if(t&&o.property_type!==t)return false;
+    if(s){var parts=s.split('-'),lo=parseFloat(parts[0]),hi=parseFloat(parts[1]);if(o.area_sqm<lo||o.area_sqm>hi)return false}
+    return true;
+  });
+  renderOffices(filtered);
+}
+function resetFilter(){
+  document.getElementById('f-region').value='';document.getElementById('f-type').value='';document.getElementById('f-size').value='';
+  renderOffices(allOffices);
+}
+document.addEventListener('DOMContentLoaded',loadOffices);
+</script>
+</body>
+</html>
