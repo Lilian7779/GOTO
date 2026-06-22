@@ -7,7 +7,6 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f1f5f9;color:#1a1a2e;display:flex;min-height:100vh}
-/* Login */
 .login-wrap{position:fixed;inset:0;background:linear-gradient(135deg,#1a56db,#1e3a8a);display:flex;align-items:center;justify-content:center;z-index:9999}
 .login-card{background:#fff;border-radius:20px;padding:40px;width:420px;box-shadow:0 20px 60px rgba(0,0,0,.2);text-align:center}
 .login-card h1{font-size:28px;margin-bottom:6px;color:#1a1a2e}
@@ -17,7 +16,6 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f1f5f9;c
 .login-card .btn{width:100%;padding:12px;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;color:#fff;background:#1a56db;transition:.2s}
 .login-card .btn:hover{background:#1e40af}
 .login-card .err{color:#dc2626;font-size:12px;margin-top:8px}
-/* Sidebar */
 .sidebar{width:220px;background:#fff;border-right:1px solid #e2e8f0;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100}
 .sidebar .logo{padding:20px 18px;font-size:20px;font-weight:800;color:#1a56db;border-bottom:1px solid #e2e8f0}
 .sidebar .menu{flex:1;overflow-y:auto;padding:12px 0}
@@ -27,13 +25,11 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f1f5f9;c
 .sidebar .logout{padding:14px 18px;border-top:1px solid #e2e8f0}
 .sidebar .logout a{color:#94a3b8;font-size:12px;text-decoration:none;display:flex;align-items:center;gap:5px}
 .main{flex:1;margin-left:220px;padding:24px}
-/* Dashboard */
 .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
 .stat-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
 .stat-card .sc-label{font-size:11px;color:#64748b;margin-bottom:6px;font-weight:600}
 .stat-card .sc-value{font-size:28px;font-weight:800;color:#1a56db}
 .stat-card .sc-sub{font-size:11px;color:#94a3b8;margin-top:4px}
-/* Panel */
 .panel-title{font-size:20px;font-weight:700;margin-bottom:16px}
 .toolbar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
 .toolbar input,.toolbar select{padding:8px 12px;border:2px solid #e2e8f0;border-radius:8px;font-size:12px;outline:none;background:#fff}
@@ -43,13 +39,18 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f1f5f9;c
 .btn-o{background:#fff;color:#1a56db;border:1.5px solid #1a56db}.btn-o:hover{background:#eff6ff}
 .btn-r{background:#fef2f2;color:#dc2626;border:1px solid #fca5a5}.btn-r:hover{background:#fee2e2}
 .btn-g{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}.btn-g:hover{background:#dcfce7}
+.btn-y{background:#fffbeb;color:#d97706;border:1px solid #fcd34d}.btn-y:hover{background:#fef3c7}
 .btn-sm{font-size:10px;padding:4px 8px}
 .data-table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04);font-size:12px}
 .data-table th{background:#f8fafc;padding:12px 14px;text-align:left;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0;font-size:11px;white-space:nowrap}
 .data-table td{padding:10px 14px;border-bottom:1px solid #f1f5f9;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .data-table tr:hover td{background:#f8fafc}
-.data-table .actions{display:flex;gap:6px}
-/* Modal */
+.data-table .actions{display:flex;gap:4px;flex-wrap:wrap}
+.status-badge{font-size:10px;padding:3px 8px;border-radius:10px;font-weight:600;white-space:nowrap}
+.st-draft{background:#f1f5f9;color:#64748b}
+.st-pending{background:#fffbeb;color:#d97706}
+.st-published{background:#f0fdf4;color:#16a34a}
+.st-rejected{background:#fef2f2;color:#dc2626}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;display:none;align-items:center;justify-content:center}
 .modal-overlay.show{display:flex}
 .modal{background:#fff;border-radius:16px;width:560px;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
@@ -79,7 +80,6 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f1f5f9;c
 <script src="supabase-client.js"></script>
 </head>
 <body>
-<!-- Login -->
 <div class="login-wrap" id="login-wrap">
 <div class="login-card">
 <h1>政企通管理后台</h1><p>请使用管理员账号登录</p>
@@ -91,53 +91,61 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f1f5f9;c
 </div>
 </div>
 
-<!-- Sidebar -->
 <div class="sidebar hidden" id="sidebar">
 <div class="logo">政企通</div>
 <div class="menu">
-<a href="#" class="act" data-panel="dashboard" onclick="switchPanel('dashboard')">📊 仪表盘</a>
-<a href="#" data-panel="policies" onclick="switchPanel('policies')">📋 政策管理</a>
-<a href="#" data-panel="services" onclick="switchPanel('services')">💼 服务商管理</a>
-<a href="#" data-panel="ip_items" onclick="switchPanel('ip_items')">🛡 知识产权</a>
-<a href="#" data-panel="software_list" onclick="switchPanel('software_list')">💻 软件管理</a>
-<a href="#" data-panel="offices" onclick="switchPanel('offices')">🏢 房源管理</a>
-<a href="#" data-panel="licenses" onclick="switchPanel('licenses')">📜 证照管理</a>
-<a href="#" data-panel="guide_industries" onclick="switchPanel('guide_industries')">📖 行业指南</a>
-<a href="#" data-panel="newco_tasks" onclick="switchPanel('newco_tasks')">🏆 新公司任务</a>
-<a href="#" data-panel="tickets" onclick="switchPanel('tickets')">🎫 工单管理</a>
+<a href="#" class="act" data-panel="dashboard" onclick="switchPanel('dashboard')">&#128202; 仪表盘</a>
+<a href="#" data-panel="policies" onclick="switchPanel('policies')">&#128203; 政策管理</a>
+<a href="#" data-panel="services" onclick="switchPanel('services')">&#128188; 服务商管理</a>
+<a href="#" data-panel="ip_items" onclick="switchPanel('ip_items')">&#128737; 知识产权</a>
+<a href="#" data-panel="software_list" onclick="switchPanel('software_list')">&#128187; 软件管理</a>
+<a href="#" data-panel="offices" onclick="switchPanel('offices')">&#127970; 房源管理</a>
+<a href="#" data-panel="licenses" onclick="switchPanel('licenses')">&#128196; 证照管理</a>
+<a href="#" data-panel="guide_industries" onclick="switchPanel('guide_industries')">&#128214; 行业指南</a>
+<a href="#" data-panel="newco_tasks" onclick="switchPanel('newco_tasks')">&#127942; 新公司任务</a>
+<a href="#" data-panel="tickets" onclick="switchPanel('tickets')">&#127903; 工单管理</a>
 </div>
-<div class="logout"><a href="#" onclick="doLogout()">🚪 退出登录</a></div>
+<div class="logout"><a href="#" onclick="doLogout()">&#128682; 退出登录</a></div>
 </div>
 
-<!-- Main -->
 <div class="main hidden" id="main-wrap">
 <div id="panel-dashboard" class="panel-section act">
 <div class="panel-title">仪表盘概览</div>
 <div class="stat-grid" id="stat-grid"></div>
 </div>
 
-<div id="panel-services" class="panel-section"><div class="panel-title">服务商管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('services')">+ 新增服务商</button><input id="srv-search" placeholder="搜索服务商..." oninput="loadTable('services')"></div><table class="data-table"><thead><tr><th>名称</th><th>分类</th><th>评分</th><th>评价数</th><th>价格区间</th><th>操作</th></tr></thead><tbody id="tb-services"></tbody></table></div>
-<div id="panel-policies" class="panel-section"><div class="panel-title">政策管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('policies')">+ 新增政策</button><input id="pol-search" placeholder="搜索政策..." oninput="loadTable('policies')"></div><table class="data-table"><thead><tr><th>标题</th><th>区域</th><th>行业</th><th>类型</th><th>补贴金额</th><th>实施日期</th><th>来源</th><th>操作</th></tr></thead><tbody id="tb-policies"></tbody></table></div>
-<div id="panel-ip_items" class="panel-section"><div class="panel-title">知识产权管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('ip_items')">+ 新增IP项目</button><input id="ip-search" placeholder="搜索..." oninput="loadTable('ip_items')"></div><table class="data-table"><thead><tr><th>名称</th><th>分类</th><th>费用区间</th><th>周期(天)</th><th>操作</th></tr></thead><tbody id="tb-ip_items"></tbody></table></div>
-<div id="panel-software_list" class="panel-section"><div class="panel-title">软件管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('software_list')">+ 新增软件</button><input id="sw-search" placeholder="搜索..." oninput="loadTable('software_list')"></div><table class="data-table"><thead><tr><th>名称</th><th>分类</th><th>子分类</th><th>价格</th><th>操作</th></tr></thead><tbody id="tb-software_list"></tbody></table></div>
-<div id="panel-offices" class="panel-section"><div class="panel-title">房源管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('offices')">+ 新增房源</button><input id="of-search" placeholder="搜索..." oninput="loadTable('offices')"></div><table class="data-table"><thead><tr><th>标题</th><th>区域</th><th>面积(㎡)</th><th>月租金</th><th>类型</th><th>操作</th></tr></thead><tbody id="tb-offices"></tbody></table></div>
-<div id="panel-licenses" class="panel-section"><div class="panel-title">证照管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('licenses')">+ 新增证照</button><input id="lc-search" placeholder="搜索..." oninput="loadTable('licenses')"></div><table class="data-table"><thead><tr><th>名称</th><th>分类</th><th>办理时限</th><th>费用</th><th>操作</th></tr></thead><tbody id="tb-licenses"></tbody></table></div>
-<div id="panel-guide_industries" class="panel-section"><div class="panel-title">行业指南管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('guide_industries')">+ 新增指南</button><input id="gd-search" placeholder="搜索..." oninput="loadTable('guide_industries')"></div><table class="data-table"><thead><tr><th>行业</th><th>步骤数</th><th>主管部门</th><th>操作</th></tr></thead><tbody id="tb-guide_industries"></tbody></table></div>
-<div id="panel-newco_tasks" class="panel-section"><div class="panel-title">新公司任务管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('newco_tasks')">+ 新增任务</button><input id="nc-search" placeholder="搜索..." oninput="loadTable('newco_tasks')"></div><table class="data-table"><thead><tr><th>Day</th><th>任务</th><th>分类</th><th>排序</th><th>操作</th></tr></thead><tbody id="tb-newco_tasks"></tbody></table></div>
-<div id="panel-tickets" class="panel-section"><div class="panel-title">工单管理</div><table class="data-table"><thead><tr><th>标题</th><th>分类</th><th>状态</th><th>用户ID</th><th>操作</th></tr></thead><tbody id="tb-tickets"></tbody></table></div>
+<div id="panel-policies" class="panel-section"><div class="panel-title">政策管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('policies')">+ 新增政策</button><input id="pol-search" placeholder="搜索政策..." oninput="renderFiltered('policies')"><select id="pol-status" onchange="renderFiltered('policies')"><option value="">全部状态</option><option value="draft">草稿</option><option value="pending_review">待审核</option><option value="published">已发布</option><option value="rejected">已驳回</option></select></div><table class="data-table"><thead><tr><th>标题</th><th>区域</th><th>行业</th><th>类型</th><th>状态</th><th>实施日期</th><th>操作</th></tr></thead><tbody id="tb-policies"></tbody></table></div>
+
+<div id="panel-services" class="panel-section"><div class="panel-title">服务商管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('services')">+ 新增服务商</button><input id="srv-search" placeholder="搜索服务商..." oninput="renderFiltered('services')"><select id="srv-status" onchange="renderFiltered('services')"><option value="">全部状态</option><option value="draft">草稿</option><option value="pending_review">待审核</option><option value="published">已发布</option><option value="rejected">已驳回</option></select></div><table class="data-table"><thead><tr><th>名称</th><th>分类</th><th>评分</th><th>评价数</th><th>状态</th><th>操作</th></tr></thead><tbody id="tb-services"></tbody></table></div>
+
+<div id="panel-ip_items" class="panel-section"><div class="panel-title">知识产权管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('ip_items')">+ 新增IP项目</button><input id="ip-search" placeholder="搜索..." oninput="renderFiltered('ip_items')"><select id="ip-status" onchange="renderFiltered('ip_items')"><option value="">全部状态</option><option value="draft">草稿</option><option value="pending_review">待审核</option><option value="published">已发布</option><option value="rejected">已驳回</option></select></div><table class="data-table"><thead><tr><th>名称</th><th>分类</th><th>费用区间</th><th>周期(天)</th><th>状态</th><th>操作</th></tr></thead><tbody id="tb-ip_items"></tbody></table></div>
+
+<div id="panel-software_list" class="panel-section"><div class="panel-title">软件管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('software_list')">+ 新增软件</button><input id="sw-search" placeholder="搜索..." oninput="renderFiltered('software_list')"><select id="sw-status" onchange="renderFiltered('software_list')"><option value="">全部状态</option><option value="draft">草稿</option><option value="pending_review">待审核</option><option value="published">已发布</option><option value="rejected">已驳回</option></select></div><table class="data-table"><thead><tr><th>名称</th><th>分类</th><th>子分类</th><th>价格</th><th>状态</th><th>操作</th></tr></thead><tbody id="tb-software_list"></tbody></table></div>
+
+<div id="panel-offices" class="panel-section"><div class="panel-title">房源管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('offices')">+ 新增房源</button><input id="of-search" placeholder="搜索..." oninput="renderFiltered('offices')"><select id="of-status" onchange="renderFiltered('offices')"><option value="">全部状态</option><option value="draft">草稿</option><option value="pending_review">待审核</option><option value="published">已发布</option><option value="rejected">已驳回</option></select></div><table class="data-table"><thead><tr><th>标题</th><th>区域</th><th>面积(㎡)</th><th>月租金</th><th>状态</th><th>操作</th></tr></thead><tbody id="tb-offices"></tbody></table></div>
+
+<div id="panel-licenses" class="panel-section"><div class="panel-title">证照管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('licenses')">+ 新增证照</button><input id="lc-search" placeholder="搜索..." oninput="renderFiltered('licenses')"><select id="lc-status" onchange="renderFiltered('licenses')"><option value="">全部状态</option><option value="draft">草稿</option><option value="pending_review">待审核</option><option value="published">已发布</option><option value="rejected">已驳回</option></select></div><table class="data-table"><thead><tr><th>名称</th><th>分类</th><th>办理时限</th><th>费用</th><th>状态</th><th>操作</th></tr></thead><tbody id="tb-licenses"></tbody></table></div>
+
+<div id="panel-guide_industries" class="panel-section"><div class="panel-title">行业指南管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('guide_industries')">+ 新增指南</button><input id="gd-search" placeholder="搜索..." oninput="renderFiltered('guide_industries')"><select id="gd-status" onchange="renderFiltered('guide_industries')"><option value="">全部状态</option><option value="draft">草稿</option><option value="pending_review">待审核</option><option value="published">已发布</option><option value="rejected">已驳回</option></select></div><table class="data-table"><thead><tr><th>行业</th><th>时期</th><th>步骤数</th><th>主管部门</th><th>状态</th><th>操作</th></tr></thead><tbody id="tb-guide_industries"></tbody></table></div>
+
+<div id="panel-newco_tasks" class="panel-section"><div class="panel-title">新公司任务管理</div><div class="toolbar"><button class="btn btn-p" onclick="openForm('newco_tasks')">+ 新增任务</button><input id="nc-search" placeholder="搜索..." oninput="renderFiltered('newco_tasks')"><select id="nc-status" onchange="renderFiltered('newco_tasks')"><option value="">全部状态</option><option value="draft">草稿</option><option value="pending_review">待审核</option><option value="published">已发布</option><option value="rejected">已驳回</option></select></div><table class="data-table"><thead><tr><th>Day</th><th>任务</th><th>分类</th><th>排序</th><th>状态</th><th>操作</th></tr></thead><tbody id="tb-newco_tasks"></tbody></table></div>
+
+<div id="panel-tickets" class="panel-section"><div class="panel-title">工单管理</div><div class="toolbar"><select id="tk-status" onchange="renderFiltered('tickets')"><option value="">全部状态</option><option value="open">待处理</option><option value="in_progress">处理中</option><option value="closed">已关闭</option></select></div><table class="data-table"><thead><tr><th>标题</th><th>分类</th><th>状态</th><th>用户ID</th><th>操作</th></tr></thead><tbody id="tb-tickets"></tbody></table></div>
 </div>
 
-<!-- Modal -->
 <div class="modal-overlay" id="modal-overlay"><div class="modal"><div class="modal-header"><h3 id="modal-title">编辑</h3><button class="modal-close" onclick="closeModal()">&times;</button></div><div class="modal-body" id="modal-body"></div><div class="modal-footer"><button class="btn btn-o" onclick="closeModal()">取消</button><button class="btn btn-p" id="modal-save" onclick="saveForm()">保存</button></div></div></div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<!-- Confirm Dialog -->
 <div class="modal-overlay" id="confirm-dialog"><div class="modal" style="width:360px"><div class="modal-header"><h3>确认删除</h3><button class="modal-close" onclick="closeConfirm()">&times;</button></div><div class="modal-body"><p id="confirm-msg" style="font-size:13px;color:#475569"></p></div><div class="modal-footer"><button class="btn btn-o" onclick="closeConfirm()">取消</button><button class="btn btn-r" id="confirm-btn">确认删除</button></div></div></div>
 
 <script>
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function statusBadge(s){
+  var map={draft:'<span class="status-badge st-draft">草稿</span>',pending_review:'<span class="status-badge st-pending">待审核</span>',published:'<span class="status-badge st-published">已发布</span>',rejected:'<span class="status-badge st-rejected">已驳回</span>',open:'<span class="status-badge st-pending">待处理</span>',in_progress:'<span class="status-badge st-published">处理中</span>',closed:'<span class="status-badge st-draft">已关闭</span>'};
+  return map[s]||'<span class="status-badge st-draft">'+(s||'草稿')+'</span>';
+}
 
 // Auth
 async function doLogin(){
@@ -167,7 +175,6 @@ async function doLogout(){
   document.getElementById('main-wrap').classList.add('hidden');
 }
 
-// Panel switching
 function switchPanel(name){
   document.querySelectorAll('.sidebar .menu a').forEach(function(a){a.classList.remove('act')});
   var link=document.querySelector('.sidebar .menu a[data-panel="'+name+'"]');
@@ -179,35 +186,36 @@ function switchPanel(name){
   else loadDashboard();
 }
 
-// Dashboard
 async function loadDashboard(){
   var tables=['policies','services','ip_items','software_list','offices','licenses','guide_industries','newco_tasks','tickets'];
   var names={policies:'惠企政策',services:'企业服务',ip_items:'知识产权',software_list:'企业软件',offices:'办公房源',licenses:'证照办理',guide_industries:'行业指南',newco_tasks:'新公司任务',tickets:'工单反馈'};
-  var icons={policies:'📋',services:'💼',ip_items:'🛡',software_list:'💻',offices:'🏢',licenses:'📜',guide_industries:'📖',newco_tasks:'🏆',tickets:'🎫'};
+  var icons={policies:'\uD83D\uDCCB',services:'\uD83D\uDCBC',ip_items:'\uD83D\uDEE1',software_list:'\uD83D\uDCBB',offices:'\uD83C\uDFE2',licenses:'\uD83D\uDCDC',guide_industries:'\uD83D\uDCD6',newco_tasks:'\uD83C\uDFC6',tickets:'\uD83C\uDFAB'};
   var html='';
   for(var i=0;i<tables.length;i++){
-    var t=tables[i],count='--';
+    var t=tables[i],count='--',pending=0;
     try{
       if(window.ZQTong&&window.ZQTong.adminFetchAll){
         var rows=await window.ZQTong.adminFetchAll(t);
         count=(rows&&rows.data&&rows.data.length)?rows.data.length:0;
+        if(rows&&rows.data){
+          pending=rows.data.filter(function(r){return r.status==='pending_review'}).length;
+        }
       }
     }catch(e){count='ERR'}
-    html+='<div class="stat-card"><div class="sc-label">'+icons[t]+' '+names[t]+'</div><div class="sc-value">'+count+'</div><div class="sc-sub">条记录</div></div>';
+    html+='<div class="stat-card"><div class="sc-label">'+icons[t]+' '+names[t]+'</div><div class="sc-value">'+count+'</div><div class="sc-sub">'+(pending>0?'待审核 '+pending+' 条':'')+'</div></div>';
   }
   document.getElementById('stat-grid').innerHTML=html;
 }
 
-// Table loading
 var tableFields={
-  policies:{cols:['title','region','industry','policy_type','enterprise_scale','description','conditions','amount','deadline','source_dept','effective_date','source_url','tags','is_active']},
-  services:{cols:['name','category','description','price_range','rating','review_count','contact','website','tags','is_active']},
-  ip_items:{cols:['name','category','description','fee_range','cycle_days','process_steps','requirements','is_active']},
-  software_list:{cols:['name','category','subcategory','description','pricing','trial_url','features','is_active']},
-  offices:{cols:['title','region','address','area_sqm','price_month','property_type','subsidy','vr_url','tags','is_active']},
-  licenses:{cols:['name','category','conditions','materials','process','duration_days','fee','dept','apply_url','is_active']},
-  guide_industries:{cols:['industry','steps','timeline','dept','forms','notes','is_active']},
-  newco_tasks:{cols:['day_num','task','category','detail','action_url','sort_order','is_active']},
+  policies:{cols:['title','region','industry','policy_type','enterprise_scale','description','conditions','amount','deadline','source_dept','effective_date','source_url','tags','status','is_active']},
+  services:{cols:['name','category','description','price_range','rating','review_count','contact','website','tags','status','is_active']},
+  ip_items:{cols:['name','category','description','fee_range','cycle_days','process_steps','requirements','status','is_active']},
+  software_list:{cols:['name','category','subcategory','description','pricing','trial_url','features','status','is_active']},
+  offices:{cols:['title','region','address','area_sqm','price_month','property_type','subsidy','vr_url','tags','status','is_active']},
+  licenses:{cols:['name','category','conditions','materials','process','duration_days','fee','dept','apply_url','status','is_active']},
+  guide_industries:{cols:['industry','period','steps','timeline','dept','forms','notes','status','is_active']},
+  newco_tasks:{cols:['day_num','task','category','detail','action_url','sort_order','status','is_active']},
   tickets:{cols:['title','content','category','status','user_id','reply']}
 };
 
@@ -226,26 +234,54 @@ async function loadTable(tableName){
   }catch(e){tbody.innerHTML='<tr><td colspan="9" class="empty">加载失败: '+esc(e.message)+'</td></tr>'}
 }
 
+function renderFiltered(tableName){
+  var rows=tableView[tableName]||[];
+  renderTable(tableName,rows);
+}
+
 function renderTable(tableName,rows){
-  var tbody=document.getElementById('tb-'+tableName),searchId={'policies':'pol','services':'srv','ip_items':'ip','software_list':'sw','offices':'of','licenses':'lc','guide_industries':'gd','newco_tasks':'nc','tickets':'tk'}[tableName];
+  var tbody=document.getElementById('tb-'+tableName);
+  if(!tbody)return;
+  var searchId={'policies':'pol','services':'srv','ip_items':'ip','software_list':'sw','offices':'of','licenses':'lc','guide_industries':'gd','newco_tasks':'nc','tickets':'tk'}[tableName];
   var q=(document.getElementById((searchId||'xx')+'-search')||{}).value||'';
-  var filtered=q?rows.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(q.toLowerCase())>=0}):rows;
+  var statusFilter=(document.getElementById((searchId||'xx')+'-status')||{}).value||'';
+  
+  var filtered=rows;
+  if(q)filtered=filtered.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(q.toLowerCase())>=0});
+  if(statusFilter)filtered=filtered.filter(function(r){return r.status===statusFilter});
+  
   if(filtered.length===0){tbody.innerHTML='<tr><td colspan="9" class="empty">暂无数据</td></tr>';return}
+  
   var renders={
-    policies:function(r){return'<tr><td>'+esc(r.title||'')+'</td><td>'+esc(r.region||'')+'</td><td>'+esc(r.industry||'')+'</td><td>'+esc(r.policy_type||'')+'</td><td>'+esc(r.amount||'')+'</td><td>'+esc(r.effective_date||'')+'</td><td>'+esc((r.source_url||'').substring(0,30))+'</td><td class="actions"><button class="btn btn-o btn-sm" onclick="editRow(\'policies\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'policies\',\''+(r.id||'')+'\',\''+esc(r.title||'')+'\')">删除</button></td></tr>'},
-    services:function(r){return'<tr><td>'+esc(r.name||'')+'</td><td>'+esc(r.category||'')+'</td><td>'+(r.rating||'')+'</td><td>'+(r.review_count||0)+'</td><td>'+esc(r.price_range||'')+'</td><td class="actions"><button class="btn btn-o btn-sm" onclick="editRow(\'services\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'services\',\''+(r.id||'')+'\',\''+esc(r.name||'')+'\')">删除</button></td></tr>'},
-    ip_items:function(r){return'<tr><td>'+esc(r.name||'')+'</td><td>'+esc(r.category||'')+'</td><td>'+esc(r.fee_range||'')+'</td><td>'+(r.cycle_days||'')+'</td><td class="actions"><button class="btn btn-o btn-sm" onclick="editRow(\'ip_items\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'ip_items\',\''+(r.id||'')+'\',\''+esc(r.name||'')+'\')">删除</button></td></tr>'},
-    software_list:function(r){return'<tr><td>'+esc(r.name||'')+'</td><td>'+esc(r.category||'')+'</td><td>'+esc(r.subcategory||'')+'</td><td>'+esc(r.pricing||'')+'</td><td class="actions"><button class="btn btn-o btn-sm" onclick="editRow(\'software_list\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'software_list\',\''+(r.id||'')+'\',\''+esc(r.name||'')+'\')">删除</button></td></tr>'},
-    offices:function(r){return'<tr><td>'+esc(r.title||'')+'</td><td>'+esc(r.region||'')+'</td><td>'+(r.area_sqm||'')+'</td><td>'+esc(r.price_month||'')+'</td><td>'+esc(r.property_type||'')+'</td><td class="actions"><button class="btn btn-o btn-sm" onclick="editRow(\'offices\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'offices\',\''+(r.id||'')+'\',\''+esc(r.title||'')+'\')">删除</button></td></tr>'},
-    licenses:function(r){return'<tr><td>'+esc(r.name||'')+'</td><td>'+esc(r.category||'')+'</td><td>'+(r.duration_days||'')+'天</td><td>'+esc(r.fee||'')+'</td><td class="actions"><button class="btn btn-o btn-sm" onclick="editRow(\'licenses\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'licenses\',\''+(r.id||'')+'\',\''+esc(r.name||'')+'\')">删除</button></td></tr>'},
-    guide_industries:function(r){return'<tr><td>'+esc(r.industry||'')+'</td><td>'+((r.steps||[]).length||0)+'</td><td>'+esc(r.dept||'')+'</td><td class="actions"><button class="btn btn-o btn-sm" onclick="editRow(\'guide_industries\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'guide_industries\',\''+(r.id||'')+'\',\''+esc(r.industry||'')+'\')">删除</button></td></tr>'},
-    newco_tasks:function(r){return'<tr><td>'+r.day_num+'</td><td>'+esc(r.task||'')+'</td><td>'+esc(r.category||'')+'</td><td>'+(r.sort_order||0)+'</td><td class="actions"><button class="btn btn-o btn-sm" onclick="editRow(\'newco_tasks\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'newco_tasks\',\''+(r.id||'')+'\',\''+esc(r.task||'')+'\')">删除</button></td></tr>'},
-    tickets:function(r){return'<tr><td>'+esc(r.title||'')+'</td><td>'+esc(r.category||'')+'</td><td>'+esc(r.status||'')+'</td><td>'+esc((r.user_id||'').substring(0,8))+'</td><td class="actions"><button class="btn btn-o btn-sm" onclick="editRow(\'tickets\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">回复</button></td></tr>'}
+    policies:function(r){return'<tr><td>'+esc(r.title||'')+'</td><td>'+esc(r.region||'')+'</td><td>'+esc(r.industry||'')+'</td><td>'+esc(r.policy_type||'')+'</td><td>'+statusBadge(r.status)+'</td><td>'+esc(r.effective_date||'')+'</td><td class="actions">'+reviewBtns('policies',r)+'<button class="btn btn-o btn-sm" onclick="editRow(\'policies\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'policies\',\''+(r.id||'')+'\',\''+esc(r.title||'')+'\')">删除</button></td></tr>'},
+    services:function(r){return'<tr><td>'+esc(r.name||'')+'</td><td>'+esc(r.category||'')+'</td><td>'+(r.rating||'')+'</td><td>'+(r.review_count||0)+'</td><td>'+statusBadge(r.status)+'</td><td class="actions">'+reviewBtns('services',r)+'<button class="btn btn-o btn-sm" onclick="editRow(\'services\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'services\',\''+(r.id||'')+'\',\''+esc(r.name||'')+'\')">删除</button></td></tr>'},
+    ip_items:function(r){return'<tr><td>'+esc(r.name||'')+'</td><td>'+esc(r.category||'')+'</td><td>'+esc(r.fee_range||'')+'</td><td>'+(r.cycle_days||'')+'</td><td>'+statusBadge(r.status)+'</td><td class="actions">'+reviewBtns('ip_items',r)+'<button class="btn btn-o btn-sm" onclick="editRow(\'ip_items\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'ip_items\',\''+(r.id||'')+'\',\''+esc(r.name||'')+'\')">删除</button></td></tr>'},
+    software_list:function(r){return'<tr><td>'+esc(r.name||'')+'</td><td>'+esc(r.category||'')+'</td><td>'+esc(r.subcategory||'')+'</td><td>'+esc(r.pricing||'')+'</td><td>'+statusBadge(r.status)+'</td><td class="actions">'+reviewBtns('software_list',r)+'<button class="btn btn-o btn-sm" onclick="editRow(\'software_list\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'software_list\',\''+(r.id||'')+'\',\''+esc(r.name||'')+'\')">删除</button></td></tr>'},
+    offices:function(r){return'<tr><td>'+esc(r.title||'')+'</td><td>'+esc(r.region||'')+'</td><td>'+(r.area_sqm||'')+'</td><td>'+esc(r.price_month||'')+'</td><td>'+statusBadge(r.status)+'</td><td class="actions">'+reviewBtns('offices',r)+'<button class="btn btn-o btn-sm" onclick="editRow(\'offices\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'offices\',\''+(r.id||'')+'\',\''+esc(r.title||'')+'\')">删除</button></td></tr>'},
+    licenses:function(r){return'<tr><td>'+esc(r.name||'')+'</td><td>'+esc(r.category||'')+'</td><td>'+(r.duration_days||'')+'天</td><td>'+esc(r.fee||'')+'</td><td>'+statusBadge(r.status)+'</td><td class="actions">'+reviewBtns('licenses',r)+'<button class="btn btn-o btn-sm" onclick="editRow(\'licenses\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'licenses\',\''+(r.id||'')+'\',\''+esc(r.name||'')+'\')">删除</button></td></tr>'},
+    guide_industries:function(r){return'<tr><td>'+esc(r.industry||'')+'</td><td>'+esc(r.period||'设立期')+'</td><td>'+((r.steps||[]).length||0)+'</td><td>'+esc(r.dept||'')+'</td><td>'+statusBadge(r.status)+'</td><td class="actions">'+reviewBtns('guide_industries',r)+'<button class="btn btn-o btn-sm" onclick="editRow(\'guide_industries\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'guide_industries\',\''+(r.id||'')+'\',\''+esc(r.industry||'')+'\')">删除</button></td></tr>'},
+    newco_tasks:function(r){return'<tr><td>'+r.day_num+'</td><td>'+esc(r.task||'')+'</td><td>'+esc(r.category||'')+'</td><td>'+(r.sort_order||0)+'</td><td>'+statusBadge(r.status)+'</td><td class="actions">'+reviewBtns('newco_tasks',r)+'<button class="btn btn-o btn-sm" onclick="editRow(\'newco_tasks\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">编辑</button><button class="btn btn-r btn-sm" onclick="delRow(\'newco_tasks\',\''+(r.id||'')+'\',\''+esc(r.task||'')+'\')">删除</button></td></tr>'},
+    tickets:function(r){return'<tr><td>'+esc(r.title||'')+'</td><td>'+esc(r.category||'')+'</td><td>'+statusBadge(r.status)+'</td><td>'+esc((r.user_id||'').substring(0,8))+'</td><td class="actions"><button class="btn btn-o btn-sm" onclick="editRow(\'tickets\','+JSON.stringify(r).replace(/"/g,'&quot;')+')">回复</button></td></tr>'}
   };
   tbody.innerHTML=filtered.map(renders[tableName]).join('');
 }
 
-// CRUD operations
+function reviewBtns(tableName,r){
+  if(r.status==='pending_review'){
+    return '<button class="btn btn-g btn-sm" onclick="reviewAction(\''+tableName+'\',\''+(r.id||'')+'\',\'published\')">\u2713 通过</button><button class="btn btn-y btn-sm" onclick="reviewAction(\''+tableName+'\',\''+(r.id||'')+'\',\'rejected\')">\u2717 驳回</button>';
+  }
+  return '';
+}
+
+async function reviewAction(tableName,id,newStatus){
+  try{
+    await window.ZQTong.adminUpdate(tableName,id,{status:newStatus});
+    showToast(newStatus==='published'?'已通过审核':'已驳回','s');
+    loadTable(tableName);
+  }catch(e){showToast('操作失败: '+(e.message||e),'e')}
+}
+
+// CRUD
 var editMode=null,editTable=null,editId=null;
 
 function openForm(tableName,row){
@@ -263,6 +299,8 @@ function openForm(tableName,row){
       html+='<label>'+c+' (JSON)</label><textarea id="f-'+c+'">'+esc(typeof val==='string'?val:JSON.stringify(val||{}))+'</textarea><span class="hint">JSON格式</span>';
     }else if(c==='description'||c==='conditions'||c==='requirements'||c==='notes'||c==='detail'||c==='reply'||c==='content'){
       html+='<label>'+c+'</label><textarea id="f-'+c+'">'+esc(val||'')+'</textarea>';
+    }else if(c==='status'){
+      html+='<label>'+c+'</label><select id="f-'+c+'"><option value="draft"'+(val==='draft'||!val?' selected':'')+'>草稿</option><option value="pending_review"'+(val==='pending_review'?' selected':'')+'>待审核</option><option value="published"'+(val==='published'?' selected':'')+'>已发布</option><option value="rejected"'+(val==='rejected'?' selected':'')+'>已驳回</option></select>';
     }else if(c==='is_active'){
       html+='<label>'+c+'</label><select id="f-'+c+'"><option value="true"'+(val===true||val==='true'?' selected':'')+'>是</option><option value="false"'+(val===false||val==='false'?' selected':'')+'>否</option></select>';
     }else if(c==='rating'){
@@ -271,6 +309,8 @@ function openForm(tableName,row){
       html+='<label>'+c+'</label><input id="f-'+c+'" type="number" value="'+esc(val||'')+'">';
     }else if(c==='area_sqm'||c==='price_month'){
       html+='<label>'+c+'</label><input id="f-'+c+'" type="number" step="0.01" value="'+esc(val||'')+'">';
+    }else if(c==='period'){
+      html+='<label>'+c+'</label><select id="f-'+c+'"><option value="设立期"'+(val==='设立期'||!val?' selected':'')+'>设立期</option><option value="营运期"'+(val==='营运期'?' selected':'')+'>营运期</option><option value="注销期"'+(val==='注销期'?' selected':'')+'>注销期</option></select>';
     }else{
       html+='<label>'+c+'</label><input id="f-'+c+'" value="'+esc(val||'')+'">';
     }
@@ -304,8 +344,9 @@ async function saveForm(){
       data[c]=val||null;
     }
   });
-  // Remove null/undefined for insert
   Object.keys(data).forEach(function(k){if(data[k]===null||data[k]===undefined)delete data[k]});
+
+  if(!data.status)data.status='draft';
 
   try{
     if(editMode==='create'){
@@ -321,7 +362,6 @@ async function saveForm(){
   }catch(e){showToast('保存失败: '+(e.message||e),'e')}
 }
 
-// Confirm dialog
 var delTable,delId,delLabel;
 function delRow(tableName,id,label){delTable=tableName;delId=id;delLabel=label;document.getElementById('confirm-msg').textContent='确定要删除 "'+label+'" 吗？此操作将软删除该记录。';document.getElementById('confirm-dialog').classList.add('show')}
 function closeConfirm(){document.getElementById('confirm-dialog').classList.remove('show')}
@@ -331,13 +371,10 @@ document.getElementById('confirm-btn').addEventListener('click',async function()
   try{await window.ZQTong.adminSoftDelete(delTable,delId);showToast('已删除','s');closeConfirm();loadTable(delTable);loadDashboard()}catch(e){showToast('删除失败: '+(e.message||e),'e')}
 });
 
-// Toast
 function showToast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast show toast-'+(type==='e'?'e':'s');setTimeout(function(){t.classList.remove('show')},2500)}
 
-// Enter key login
 document.getElementById('login-pass').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin()});
 
-// Auto-check session on load
 window.addEventListener('load',async function(){
   if(window.ZQTong&&window.ZQTong.checkIsAdmin){
     try{var ok=await window.ZQTong.checkIsAdmin();if(ok){onLoginSuccess();return}}catch(e){}
