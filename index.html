@@ -76,6 +76,13 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;c
 .cmp tr:hover td{background:#f8fafc}
 .hid{display:none}
 .footer{text-align:center;padding:40px;color:#94a3b8;font-size:12px}
+.ds-section{max-width:1280px;margin:0 auto;padding:0 30px 30px}
+.ds-tt{font-size:15px;font-weight:700;color:#475569;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #e2e8f0}
+.ds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.ds-item{background:#fff;border-radius:10px;padding:11px 14px;box-shadow:0 1px 4px rgba(0,0,0,.04);display:flex;align-items:center;gap:10px;transition:.2s;text-decoration:none;color:inherit}
+.ds-item:hover{box-shadow:0 4px 12px rgba(0,0,0,.08);transform:translateY(-1px)}
+.ds-item .tag{flex-shrink:0}
+.ds-name{font-size:13px;color:#1a1a2e;font-weight:500;line-height:1.4}
 .ai-btn{position:fixed;bottom:28px;right:28px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#1a56db,#7c3aed);color:#fff;font-size:24px;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(26,86,219,.35);z-index:999;transition:.2s;display:flex;align-items:center;justify-content:center}
 .ai-btn .pulse{position:absolute;width:56px;height:56px;border-radius:50%;background:rgba(26,86,219,.3);animation:pulse 2s infinite}
 @keyframes pulse{0%{transform:scale(1);opacity:.6}70%{transform:scale(1.6);opacity:0}100%{opacity:0}}
@@ -206,6 +213,7 @@ if('serviceWorker' in navigator){
 <div id="tab-office" class="hid cl"><div id="office-results"><p style="color:#94a3b8;text-align:center;padding:40px">加载中...</p></div></div>
 <div id="tab-license" class="hid cl"><div id="license-results"><p style="color:#94a3b8;text-align:center;padding:40px">加载中...</p></div></div>
 <div id="tab-guide" class="hid cl"><div id="guide-results"><p style="color:#94a3b8;text-align:center;padding:40px">加载中...</p></div></div>
+<div class="ds-section"><div class="ds-tt">数据来源 · 主管部门</div><div class="ds-grid" id="ds-grid"></div></div>
 <div class="footer">政企通 · 南通开发区企业一站式智慧服务平台 | 建议 & 反馈：400-xxx-xxxx</div>
 <button class="ai-btn" onclick="toggleAI()"><span class="pulse"></span>💬</button>
 <div class="ai-panel" id="ai-panel">
@@ -381,6 +389,18 @@ function aiSend(){
   setTimeout(function(){msgs.innerHTML+='<div class="ai-msg bot">'+reply+'</div>';msgs.scrollTop=msgs.scrollHeight;},600);
   msgs.scrollTop=msgs.scrollHeight;
 }
+var catColors={"政策发布":"bg","安全生产":"br","市场监管":"bb","行政审批":"by","产业政策":"bo","科技创新":"bp","人才社保":"bg","商务外贸":"bb","省级政策":"br","国家政策":"by"};
+function loadDataSources(){
+  fetch('data-sources.json').then(function(r){return r.json()}).then(function(d){
+    var html='';
+    d.sources.forEach(function(s){
+      var cc=catColors[s.category]||'bg';
+      html+='<a class="ds-item" href="'+s.url+'" target="_blank" rel="noopener"><span class="tag '+cc+'">'+s.category+'</span><span class="ds-name">'+s.name+'</span></a>';
+    });
+    document.getElementById('ds-grid').innerHTML=html;
+  }).catch(function(){document.getElementById('ds-grid').innerHTML='<span style="color:#94a3b8;font-size:12px">数据来源加载中...</span>';});
+}
+loadDataSources();
 </script>
 </body>
 </html>
