@@ -8,11 +8,19 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;color:#1a1a2e}
-.nav{background:linear-gradient(135deg,#1a56db,#1e40af);height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;position:sticky;top:0;z-index:100}
-.nav-logo{color:#fff;font-size:24px;font-weight:700;letter-spacing:2px}
-.nav-links{display:flex;gap:24px}
-.nav-links a{color:rgba(255,255,255,.85);text-decoration:none;font-size:14px;transition:.2s}
+.nav{background:linear-gradient(135deg,#1a56db,#1e40af);height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:100}
+.nav-logo{color:#fff;font-size:22px;font-weight:700;letter-spacing:2px;flex-shrink:0}
+.nav-links{display:flex;gap:14px;overflow-x:auto;white-space:nowrap;scrollbar-width:none;flex:1;justify-content:center}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{color:rgba(255,255,255,.85);text-decoration:none;font-size:13px;transition:.2s}
 .nav-links a:hover{color:#fff}
+.nav-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.nav-actions .user-name{color:#fff;font-size:13px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-btn{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:6px 14px;border-radius:8px;font-size:12px;cursor:pointer;transition:.2s;white-space:nowrap}
+.nav-btn:hover{background:rgba(255,255,255,.25)}
+.nav-btn-o{background:#fff;color:#1a56db;border:none;font-weight:600}
+.nav-btn-o:hover{background:#f0f4ff}
+
 .hero{background:linear-gradient(135deg,#1a56db,#1e3a8a);padding:70px 40px 90px;text-align:center;color:#fff}
 .hero h1{font-size:38px;font-weight:800;margin-bottom:8px}
 .hero p{font-size:17px;opacity:.9;margin-bottom:36px}
@@ -24,21 +32,30 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;c
 .sf select:focus,.sf input:focus{border-color:#1a56db;background:#fff}
 .sbtn{width:100%;padding:14px;background:linear-gradient(135deg,#1a56db,#2563eb);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;margin-top:8px;transition:.2s}
 .sbtn:hover{transform:translateY(-1px);box-shadow:0 8px 25px rgba(26,86,219,.35)}
-.fts{max-width:1280px;margin:-30px auto 50px;padding:0 30px;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.fc{background:#fff;border-radius:14px;padding:26px 18px;box-shadow:0 2px 12px rgba(0,0,0,.06);text-align:center;cursor:pointer;transition:.2s}
-.fc:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
-.fc .fi{font-size:32px;margin-bottom:10px}
-.fc h3{font-size:16px;margin-bottom:5px}
-.fc p{font-size:12px;color:#64748b}
-.nb{display:inline-block;background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff;font-size:10px;padding:2px 6px;border-radius:8px;margin-left:6px;vertical-align:middle}
+.hot-tags{max-width:740px;margin:8px auto 0;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.hot-tags span{font-size:12px;padding:5px 12px;background:rgba(255,255,255,.15);color:rgba(255,255,255,.9);border-radius:16px;cursor:pointer;transition:.2s;border:1px solid rgba(255,255,255,.2)}
+.hot-tags span:hover{background:rgba(255,255,255,.25);color:#fff}
+
+/* 10-service grid */
+.svc-grid{max-width:1280px;margin:-30px auto 30px;padding:0 30px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.svc-card{background:#fff;border-radius:14px;padding:22px 12px;box-shadow:0 2px 12px rgba(0,0,0,.06);text-align:center;cursor:pointer;transition:.2s;text-decoration:none;color:inherit}
+.svc-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+.svc-card .svc-icon{font-size:36px;margin-bottom:8px;display:block}
+.svc-card h3{font-size:15px;font-weight:700;margin-bottom:4px}
+.svc-card p{font-size:11px;color:#64748b;line-height:1.4}
+
+/* Trust bar */
+.trust-bar{max-width:1280px;margin:0 auto 16px;padding:0 30px;display:flex;gap:12px;justify-content:center}
+.tb-item{background:#fff;border-radius:12px;padding:14px 28px;box-shadow:0 2px 10px rgba(0,0,0,.05);text-align:center;flex:0 1 auto;min-width:160px}
+.tb-item .tbn{font-size:28px;font-weight:800;color:#1a56db;line-height:1.1}
+.tb-item .tbl{font-size:12px;color:#64748b;margin-top:4px}
+.tb-divider{width:1px;background:#e2e8f0;align-self:stretch;margin:8px 0}
+
+/* Results */
 .rs{max-width:1280px;margin:0 auto;padding:30px}
 .rh{margin-bottom:20px}
 .rh h2{font-size:22px}
 .rh span{color:#64748b;font-size:13px}
-.tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid #e2e8f0;overflow-x:auto}
-.tab{padding:10px 16px;font-size:13px;font-weight:600;color:#64748b;cursor:pointer;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;background:none;transition:.2s}
-.tab:hover{color:#1a56db}
-.tab.act{color:#1a56db;border-bottom-color:#1a56db}
 .cl{display:flex;flex-direction:column;gap:14px}
 .cd{background:#fff;border-radius:14px;padding:20px 22px;box-shadow:0 2px 8px rgba(0,0,0,.04);display:flex;gap:16px;align-items:flex-start;transition:.2s}
 .cd:hover{box-shadow:0 4px 16px rgba(0,0,0,.08)}
@@ -67,15 +84,25 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;c
 .gov-info{display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:#64748b;margin-bottom:10px}
 .gov-info span{background:#f8fafc;padding:4px 8px;border-radius:6px}
 .gov-info b{color:#1a1a2e}
-.form-links{display:flex;flex-wrap:wrap;gap:6px}
-.form-link{font-size:11px;padding:4px 10px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;border-radius:6px;cursor:pointer}
-.form-link:hover{background:#dcfce7}
 .cmp{width:100%;border-collapse:collapse;margin-top:16px;font-size:12px}
 .cmp th{background:#f1f5f9;padding:10px;text-align:left;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0}
 .cmp td{padding:10px;border-bottom:1px solid #f1f5f9;vertical-align:top}
 .cmp tr:hover td{background:#f8fafc}
 .hid{display:none}
-.footer{text-align:center;padding:40px;color:#94a3b8;font-size:12px}
+
+/* Smart recs */
+.smart-rec{max-width:1280px;margin:0 auto 20px;padding:0 30px}
+.smart-rec-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.smart-rec-header h3{font-size:16px;font-weight:700;color:#1a1a2e}
+.smart-rec-badge{font-size:11px;padding:3px 10px;background:#eff6ff;color:#2563eb;border-radius:12px;font-weight:600}
+.smart-rec-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.smart-rec-card{background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.04);display:flex;align-items:center;gap:10px;transition:.2s;cursor:pointer;border:1px solid #e2e8f0}
+.smart-rec-card:hover{border-color:#bfdbfe;box-shadow:0 2px 8px rgba(26,86,219,.1)}
+.smart-rec-card .sr-badge{flex-shrink:0}
+.smart-rec-card .sr-body{flex:1;min-width:0}
+.smart-rec-card .sr-title{font-size:13px;font-weight:600;color:#1a1a2e;margin-bottom:2px}
+.smart-rec-card .sr-desc{font-size:11px;color:#64748b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
 .ds-section{max-width:1280px;margin:0 auto;padding:0 30px 30px}
 .ds-tt{font-size:15px;font-weight:700;color:#475569;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #e2e8f0}
 .ds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
@@ -83,6 +110,8 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;c
 .ds-item:hover{box-shadow:0 4px 12px rgba(0,0,0,.08);transform:translateY(-1px)}
 .ds-item .tag{flex-shrink:0}
 .ds-name{font-size:13px;color:#1a1a2e;font-weight:500;line-height:1.4}
+
+/* AI */
 .ai-btn{position:fixed;bottom:28px;right:28px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#1a56db,#7c3aed);color:#fff;font-size:24px;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(26,86,219,.35);z-index:999;transition:.2s;display:flex;align-items:center;justify-content:center}
 .ai-btn .pulse{position:absolute;width:56px;height:56px;border-radius:50%;background:rgba(26,86,219,.3);animation:pulse 2s infinite}
 @keyframes pulse{0%{transform:scale(1);opacity:.6}70%{transform:scale(1.6);opacity:0}100%{opacity:0}}
@@ -98,14 +127,15 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;c
 .ai-input-area input{flex:1;padding:10px 14px;border:2px solid #e2e8f0;border-radius:10px;font-size:13px;outline:none}
 .ai-input-area input:focus{border-color:#1a56db}
 .ai-send{background:#1a56db;color:#fff;border:none;border-radius:10px;padding:10px 16px;font-weight:600;font-size:13px;cursor:pointer}
-.hot-tags{max-width:740px;margin:8px auto 0;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-.hot-tags span{font-size:12px;padding:5px 12px;background:rgba(255,255,255,.15);color:rgba(255,255,255,.9);border-radius:16px;cursor:pointer;transition:.2s;border:1px solid rgba(255,255,255,.2)}
-.hot-tags span:hover{background:rgba(255,255,255,.25);color:#fff}
-.trust-bar{max-width:1280px;margin:0 auto 16px;padding:0 30px;display:flex;gap:12px;justify-content:center}
-.tb-item{background:#fff;border-radius:12px;padding:14px 28px;box-shadow:0 2px 10px rgba(0,0,0,.05);text-align:center;flex:0 1 auto;min-width:160px}
-.tb-item .tbn{font-size:28px;font-weight:800;color:#1a56db;line-height:1.1}
-.tb-item .tbl{font-size:12px;color:#64748b;margin-top:4px}
-.tb-divider{width:1px;background:#e2e8f0;align-self:stretch;margin:8px 0}
+.quick-qs{display:flex;flex-wrap:wrap;gap:6px;padding:8px 14px;border-top:1px solid #e2e8f0;background:#f8fafc}
+.quick-qs span{font-size:11px;padding:4px 10px;background:#eff6ff;color:#2563eb;border-radius:12px;cursor:pointer;transition:.2s;border:1px solid #bfdbfe;white-space:nowrap}
+.quick-qs span:hover{background:#dbeafe;color:#1d4ed8}
+
+.match-tags{display:flex;gap:4px;flex-wrap:wrap;margin-left:8px}
+.mtag{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;white-space:nowrap}
+.mt-ind{background:#eff6ff;color:#2563eb}.mt-reg{background:#faf5ff;color:#9333ea}.mt-sca{background:#f0fdf4;color:#16a34a}
+.tag-local{font-size:10px;padding:2px 8px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;border-radius:10px;font-weight:600;margin-left:6px;vertical-align:middle}
+.tag-subsidy{font-size:10px;padding:2px 8px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;border-radius:10px;font-weight:600;margin-left:4px;vertical-align:middle}
 .license-detail{display:none;margin-top:12px;padding:14px 16px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0;font-size:12px;color:#475569;line-height:1.8}
 .license-detail.show{display:block}
 .license-detail h5{font-size:13px;font-weight:700;color:#1a1a2e;margin:10px 0 6px}
@@ -113,23 +143,57 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;c
 .license-detail ul{padding-left:18px;margin-bottom:8px}
 .license-detail ul li{margin-bottom:3px}
 .license-detail .chk-list{list-style:none;padding-left:0}
-.license-detail .chk-list li::before{content:'☐ ';color:#1a56db;font-size:13px}
+.license-detail .chk-list li::before{content:'\2610 ';color:#1a56db;font-size:13px}
 .license-detail .step-list{list-style:none;padding-left:0;counter-reset:step}
 .license-detail .step-list li{counter-increment:step;margin-bottom:4px}
 .license-detail .step-list li::before{content:counter(step)'. ';color:#1a56db;font-weight:700}
-.match-tags{display:flex;gap:4px;flex-wrap:wrap;margin-left:8px}
-.mtag{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;white-space:nowrap}
-.mt-ind{background:#eff6ff;color:#2563eb}.mt-reg{background:#faf5ff;color:#9333ea}.mt-sca{background:#f0fdf4;color:#16a34a}
-.tag-local{font-size:10px;padding:2px 8px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;border-radius:10px;font-weight:600;margin-left:6px;vertical-align:middle}
-.tag-subsidy{font-size:10px;padding:2px 8px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;border-radius:10px;font-weight:600;margin-left:4px;vertical-align:middle}
-.quick-qs{display:flex;flex-wrap:wrap;gap:6px;padding:8px 14px;border-top:1px solid #e2e8f0;background:#f8fafc}
-.quick-qs span{font-size:11px;padding:4px 10px;background:#eff6ff;color:#2563eb;border-radius:12px;cursor:pointer;transition:.2s;border:1px solid #bfdbfe;white-space:nowrap}
-.quick-qs span:hover{background:#dbeafe;color:#1d4ed8}
 
+/* Auth Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1100;display:none;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.auth-modal{background:#fff;border-radius:16px;width:420px;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);padding:36px 32px}
+.auth-modal h2{font-size:22px;font-weight:800;text-align:center;margin-bottom:4px}
+.auth-modal .auth-sub{text-align:center;color:#64748b;font-size:13px;margin-bottom:24px}
+.auth-tabs{display:flex;margin-bottom:24px;border-bottom:2px solid #e2e8f0}
+.auth-tab{flex:1;padding:10px;text-align:center;font-size:14px;font-weight:600;color:#64748b;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.2s}
+.auth-tab.act{color:#1a56db;border-bottom-color:#1a56db}
+.auth-form{display:none}
+.auth-form.act{display:block}
+.auth-form label{display:block;font-size:12px;font-weight:600;color:#475569;margin:12px 0 4px}
+.auth-form input,.auth-form select{width:100%;padding:10px 14px;border:2px solid #e2e8f0;border-radius:10px;font-size:14px;outline:none;background:#f8fafc}
+.auth-form input:focus,.auth-form select:focus{border-color:#1a56db;background:#fff}
+.auth-form .err{color:#dc2626;font-size:12px;margin-top:6px}
+.auth-form .btn{width:100%;padding:12px;margin-top:16px;font-size:15px}
+.auth-close{position:absolute;top:12px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8}
+.auth-switch{text-align:center;margin-top:14px;font-size:12px;color:#64748b}
+.auth-switch a{color:#1a56db;cursor:pointer;font-weight:600;text-decoration:none}
 
+/* Profile Modal */
+.profile-modal{background:#fff;border-radius:16px;width:520px;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);padding:28px 32px}
+.profile-modal h2{font-size:20px;font-weight:800;margin-bottom:4px}
+.profile-modal .profile-sub{color:#64748b;font-size:12px;margin-bottom:20px}
+.profile-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.profile-fields label{display:block;font-size:11px;font-weight:600;color:#475569;margin-bottom:3px}
+.profile-fields input,.profile-fields select{width:100%;padding:8px 12px;border:2px solid #e2e8f0;border-radius:8px;font-size:13px;outline:none;background:#f8fafc}
+.profile-fields input:focus,.profile-fields select:focus{border-color:#1a56db;background:#fff}
+.profile-fields .full{grid-column:1/-1}
+.profile-modal .btn{width:100%;padding:12px;margin-top:20px;font-size:15px;background:#1a56db;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:700}
+.profile-modal .skip-btn{width:100%;padding:10px;margin-top:8px;font-size:12px;background:none;color:#94a3b8;border:none;cursor:pointer;text-align:center}
 
+.footer{text-align:center;padding:40px;color:#94a3b8;font-size:12px}
 
-@media(max-width:768px){.fts{grid-template-columns:repeat(2,1fr)}.sr{flex-direction:column}.nav-links{display:none}.hero h1{font-size:26px}.ai-panel{width:calc(100vw-40px);right:20px}.trust-bar{flex-direction:column;align-items:center}.tb-divider{width:60px;height:1px}}
+@media(max-width:768px){
+  .svc-grid{grid-template-columns:repeat(2,1fr)}
+  .sr{flex-direction:column}
+  .nav-links{display:none}
+  .hero h1{font-size:26px}
+  .ai-panel{width:calc(100vw-40px);right:20px}
+  .trust-bar{flex-direction:column;align-items:center}
+  .tb-divider{width:60px;height:1px}
+  .auth-modal,.profile-modal{width:calc(100vw-40px)}
+  .profile-fields{grid-template-columns:1fr}
+  .smart-rec-list{grid-template-columns:1fr}
+}
 </style>
 
 <script src="supabase-client.js"></script>
@@ -148,16 +212,30 @@ if('serviceWorker' in navigator){
 
 </head>
 <body>
-<nav class="nav"><div class="nav-logo">政企通</div><div class="nav-links">
+<nav class="nav">
+<div class="nav-logo">政企通</div>
+<div class="nav-links">
+<a href="office.html">空间租赁</a>
 <a href="policy.html">惠企政策</a>
-<a href="service.html">企业服务</a>
+<a href="license.html">资质证照</a>
 <a href="ip.html">知识产权</a>
-<a href="software.html">企业软件</a>
-<a href="office.html">办公空间</a>
-<a href="license.html">证照办理</a>
-<a href="guide.html">行业指南</a>
-<a href="newco.html">公司设立工作清单</a>
-</div></nav>
+<a href="software.html">软件推荐</a>
+<a href="hr.html">人力资源</a>
+<a href="marketing.html">营销宣传</a>
+<a href="finance.html">财税审计</a>
+<a href="legal.html">法律服务</a>
+<a href="industry.html">行业交流</a>
+<a href="checklist.html">筹建清单</a>
+</div>
+<div class="nav-actions" id="nav-actions">
+<button class="nav-btn" id="nav-login-btn" onclick="openAuth()">登录/注册</button>
+<span id="nav-user-area" class="hid">
+<span class="user-name" id="nav-user-name"></span>
+<button class="nav-btn" onclick="doLogout()">退出</button>
+</span>
+</div>
+</nav>
+
 <section class="hero">
 <h1>政企通 · 企业一站式智慧服务平台</h1>
 <p>精准政策匹配 · 优质服务商对接 · 证照代办 · 从注册到合规全程护航</p>
@@ -174,20 +252,30 @@ if('serviceWorker' in navigator){
 <span onclick="window.location.href='license.html'">危化证办理</span>
 <span onclick="window.location.href='license.html'">食品经营许可证</span>
 <span onclick="window.location.href='office.html'">空间租赁</span>
-<span onclick="window.location.href='service.html'">财税代理</span>
+<span onclick="window.location.href='finance.html'">财税代理</span>
 </div></div>
 </section>
 
-<div class="fts">
-<div class="fc" onclick="window.location.href='policy.html'"><div class="fi">📋</div><h3>惠企政策匹配</h3><p>所在地+行业+类型，秒级匹配</p></div>
-<div class="fc" onclick="window.location.href='service.html'"><div class="fi">💼</div><h3>企业服务<span class="nb">NEW</span></h3><p>财税 · 法律 · 审计 · 税务</p></div>
-<div class="fc" onclick="window.location.href='ip.html'"><div class="fi">🛡</div><h3>知识产权<span class="nb">NEW</span></h3><p>商标 · 专利 · 软著一站式</p></div>
-<div class="fc" onclick="window.location.href='software.html'"><div class="fi">💻</div><h3>企业软件推荐</h3><p>按行业推荐企业级SaaS</p></div>
-<div class="fc" onclick="window.location.href='office.html'"><div class="fi">🏢</div><h3>空间租赁</h3><p>房源对比 · 选址 · 直播带看</p></div>
-<div class="fc" onclick="window.location.href='license.html'"><div class="fi">📜</div><h3>证照办理<span class="nb">NEW</span></h3><p>危化证 · 食品经营 · 资质审批</p></div>
-<div class="fc" onclick="window.location.href='guide.html'"><div class="fi">📖</div><h3>行业办事指南<span class="nb">NEW</span></h3><p>设立变更流程 · 主管部门对接</p></div>
-<div class="fc" onclick="window.location.href='newco.html'"><div class="fi">🏆</div><h3>公司设立工作清单</h3><p>注册后30天时间线指引</p></div>
+<!-- 10-Service Grid -->
+<div class="svc-grid">
+<a href="office.html" class="svc-card"><span class="svc-icon">&#127970;</span><h3>空间租赁</h3><p>房源对比·选址·直播带看</p></a>
+<a href="policy.html" class="svc-card"><span class="svc-icon">&#128203;</span><h3>惠企政策</h3><p>所在地+行业+类型秒级匹配</p></a>
+<a href="license.html" class="svc-card"><span class="svc-icon">&#128196;</span><h3>资质证照</h3><p>危化证·食品经营·资质审批</p></a>
+<a href="ip.html" class="svc-card"><span class="svc-icon">&#128737;</span><h3>知识产权</h3><p>商标·专利·软著一站式</p></a>
+<a href="software.html" class="svc-card"><span class="svc-icon">&#128187;</span><h3>软件推荐</h3><p>按行业推荐企业级SaaS</p></a>
+<a href="hr.html" class="svc-card"><span class="svc-icon">&#128101;</span><h3>人力资源</h3><p>招聘·社保·薪酬·培训</p></a>
+<a href="marketing.html" class="svc-card"><span class="svc-icon">&#128240;</span><h3>营销宣传</h3><p>品牌·新媒体·广告投放</p></a>
+<a href="finance.html" class="svc-card"><span class="svc-icon">&#128176;</span><h3>财税审计</h3><p>代账·税务筹划·审计</p></a>
+<a href="legal.html" class="svc-card"><span class="svc-icon">&#9878;</span><h3>法律服务</h3><p>合同·法律咨询·诉讼代理</p></a>
+<a href="industry.html" class="svc-card"><span class="svc-icon">&#129309;</span><h3>行业交流</h3><p>峰会·参访·资源对接</p></a>
 </div>
+
+<!-- Smart Recommendations (shown after login+profile) -->
+<div class="smart-rec hid" id="smart-rec">
+<div class="smart-rec-header"><h3>智能推荐</h3><span class="smart-rec-badge">智能推荐</span></div>
+<div class="smart-rec-list" id="smart-rec-list"></div>
+</div>
+
 <div class="trust-bar">
 <div class="tb-item"><div class="tbn">500<span style="font-size:16px;font-weight:600">+</span></div><div class="tbl">服务企业</div></div>
 <div class="tb-divider"></div>
@@ -195,29 +283,19 @@ if('serviceWorker' in navigator){
 <div class="tb-divider"></div>
 <div class="tb-item"><div class="tbn">98<span style="font-size:16px;font-weight:600">%</span></div><div class="tbl">政策匹配成功率</div></div>
 </div>
+
 <div class="rs" id="main-content">
 <div class="rh"><h2>智能匹配结果</h2><span>根据所在地和行业推荐</span></div>
-<div class="tabs">
-<button class="tab act" onclick="sTab('tab-policy')">惠企政策</button>
-<button class="tab" onclick="sTab('tab-service')">企业服务</button>
-<button class="tab" onclick="sTab('tab-ip')">知识产权</button>
-<button class="tab" onclick="sTab('tab-software')">企业软件</button>
-<button class="tab" onclick="sTab('tab-office')">办公空间</button>
-<button class="tab" onclick="sTab('tab-license')">证照办理</button>
-<button class="tab" onclick="sTab('tab-guide')">行业指南</button>
+<div id="policy-results"><p style="color:#94a3b8;text-align:center;padding:40px">选择条件后点击"智能匹配惠企政策"查看结果</p></div>
 </div>
-<div id="tab-policy" class="cl"><div id="policy-results"><p style="color:#94a3b8;text-align:center;padding:40px">选择条件后点击"智能匹配惠企政策"查看结果</p></div></div>
-<div id="tab-service" class="hid cl"><div id="service-results"><p style="color:#94a3b8;text-align:center;padding:40px">加载中...</p></div></div>
-<div id="tab-ip" class="hid cl"><div id="ip-results"><p style="color:#94a3b8;text-align:center;padding:40px">加载中...</p></div></div>
-<div id="tab-software" class="hid cl"><div id="sw-results"><p style="color:#94a3b8;text-align:center;padding:40px">加载中...</p></div></div>
-<div id="tab-office" class="hid cl"><div id="office-results"><p style="color:#94a3b8;text-align:center;padding:40px">加载中...</p></div></div>
-<div id="tab-license" class="hid cl"><div id="license-results"><p style="color:#94a3b8;text-align:center;padding:40px">加载中...</p></div></div>
-<div id="tab-guide" class="hid cl"><div id="guide-results"><p style="color:#94a3b8;text-align:center;padding:40px">加载中...</p></div></div>
+
 <div class="ds-section"><div class="ds-tt">数据来源 · 主管部门</div><div class="ds-grid" id="ds-grid"></div></div>
 <div class="footer">政企通 · 南通开发区企业一站式智慧服务平台 | 建议 & 反馈：400-xxx-xxxx</div>
-<button class="ai-btn" onclick="toggleAI()"><span class="pulse"></span>💬</button>
+
+<!-- AI Button -->
+<button class="ai-btn" onclick="toggleAI()"><span class="pulse"></span>&#128172;</button>
 <div class="ai-panel" id="ai-panel">
-<div class="ai-header"><span>🤖 AI 智能客服</span><button class="ai-close" onclick="toggleAI()">×</button></div>
+<div class="ai-header"><span>&#129302; AI 智能客服</span><button class="ai-close" onclick="toggleAI()">\u00d7</button></div>
 <div class="ai-msgs" id="ai-msgs"><div class="ai-msg bot">你好！我是政企通AI智能助手，可以帮你在线搜索、匹配政策和解答问题。试试问我"南通有哪些惠企补贴"吧~</div></div>
 <div class="quick-qs">
 <span onclick="document.getElementById('ai-input').value='如何注册公司？';aiSend()">如何注册公司？</span>
@@ -227,151 +305,275 @@ if('serviceWorker' in navigator){
 </div>
 <div class="ai-input-area"><input id="ai-input" placeholder="输入问题，AI帮你搜索..." onkeydown="if(event.key==='Enter')aiSend()"><button class="ai-send" onclick="aiSend()">发送</button></div>
 </div>
+
+<!-- Auth Modal -->
+<div class="modal-overlay" id="auth-modal-overlay">
+<div class="auth-modal" style="position:relative">
+<button class="auth-close" onclick="closeAuth()">\u00d7</button>
+<h2>欢迎使用政企通</h2>
+<p class="auth-sub">登录后可享受智能推荐与个性化服务</p>
+<div class="auth-tabs">
+<button class="auth-tab act" id="auth-tab-login" onclick="switchAuthTab('login')">登录</button>
+<button class="auth-tab" id="auth-tab-register" onclick="switchAuthTab('register')">注册</button>
+</div>
+
+<form class="auth-form act" id="auth-form-login" onsubmit="event.preventDefault();doSignIn()">
+<label>邮箱</label><input type="email" id="login-email" placeholder="your@email.com" required>
+<label>密码</label><input type="password" id="login-pass" placeholder="输入密码" required>
+<div class="err" id="login-err"></div>
+<button type="submit" class="btn btn-p">登 录</button>
+</form>
+
+<form class="auth-form" id="auth-form-register" onsubmit="event.preventDefault();doSignUp()">
+<label>邮箱</label><input type="email" id="reg-email" placeholder="your@email.com" required>
+<label>密码</label><input type="password" id="reg-pass" placeholder="至少6位密码" required minlength="6">
+<label>确认密码</label><input type="password" id="reg-pass-confirm" placeholder="再次输入密码" required minlength="6">
+<div class="err" id="reg-err"></div>
+<button type="submit" class="btn btn-p">注 册</button>
+</form>
+
+<p class="auth-switch" id="auth-switch-login">还没有账号？<a onclick="switchAuthTab('register')">立即注册</a></p>
+<p class="auth-switch hid" id="auth-switch-register">已有账号？<a onclick="switchAuthTab('login')">立即登录</a></p>
+</div>
+</div>
+
+<!-- Profile Modal -->
+<div class="modal-overlay" id="profile-modal-overlay">
+<div class="profile-modal">
+<h2>&#127970; 完善企业信息</h2>
+<p class="profile-sub">填写企业信息以获得精准的政策匹配与服务推荐</p>
+<form id="profile-form" onsubmit="event.preventDefault();saveProfile()">
+<div class="profile-fields">
+<div class="full"><label>企业名称</label><input id="pf-name" placeholder="如：南通XX科技有限公司" required></div>
+<div class="full"><label>统一社会信用代码</label><input id="pf-code" placeholder="18位信用代码"></div>
+<div><label>所在地（省市区）</label><select id="pf-region"><option value="">请选择</option><option value="江苏南通开发区">江苏南通开发区</option><option value="江苏南通崇川区">江苏南通崇川区</option><option value="江苏南通通州区">江苏南通通州区</option><option value="江苏南通海门区">江苏南通海门区</option><option value="江苏南通启东市">江苏南通启东市</option><option value="江苏南通如皋市">江苏南通如皋市</option><option value="江苏南通海安市">江苏南通海安市</option><option value="江苏南通如东县">江苏南通如东县</option></select></div>
+<div><label>行业</label><select id="pf-industry"><option value="">请选择</option><option value="制造业">制造业</option><option value="信息技术">信息技术</option><option value="商贸">商贸</option><option value="服务业">服务业</option><option value="建筑业">建筑业</option><option value="农林牧渔">农林牧渔</option><option value="其他">其他</option></select></div>
+<div><label>企业规模</label><select id="pf-scale"><option value="">请选择</option><option value="小微">小微</option><option value="中小">中小</option><option value="规上">规上</option><option value="大型">大型</option></select></div>
+<div><label>社保人数</label><select id="pf-social"><option value="">请选择</option><option value="0">0</option><option value="1-10">1-10</option><option value="11-50">11-50</option><option value="51-200">51-200</option><option value="200+">200+</option></select></div>
+<div><label>年营业额</label><select id="pf-revenue"><option value="">请选择</option><option value="<100万">&lt;100万</option><option value="100-500万">100-500万</option><option value="500-2000万">500-2000万</option><option value="2000万-1亿">2000万-1亿</option><option value=">1亿">&gt;1亿</option></select></div>
+</div>
+<button type="submit" class="btn">保存企业信息</button>
+</form>
+<button class="skip-btn" onclick="skipProfile()">跳过，稍后填写</button>
+</div>
+</div>
+
 <script>
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
-var loadedTabs={};
+// === Auth ===
+function openAuth(){document.getElementById('auth-modal-overlay').classList.add('show')}
+function closeAuth(){document.getElementById('auth-modal-overlay').classList.remove('show')}
 
-function sTab(tid){
-  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('act')});
-  var target=document.querySelector('.tabs button[onclick*="'+tid+'"]');
-  if(target)target.classList.add('act');
-  document.querySelectorAll('#main-content>.cl,#main-content>.hid').forEach(function(d){d.classList.add('hid')});
-  document.getElementById(tid).classList.remove('hid');
-  var dataMap={
-    'tab-policy':{fn:window.ZQTong?window.ZQTong.fetchPolicies:null,container:'policy-results',render:renderPolicyCards},
-    'tab-service':{fn:window.ZQTong?window.ZQTong.fetchServices:null,container:'service-results',render:renderServiceCards},
-    'tab-ip':{fn:window.ZQTong?window.ZQTong.fetchIpItems:null,container:'ip-results',render:renderIpCards},
-    'tab-software':{fn:window.ZQTong?window.ZQTong.fetchSoftware:null,container:'sw-results',render:renderSwCards},
-    'tab-office':{fn:window.ZQTong?window.ZQTong.fetchOffices:null,container:'office-results',render:renderOfficeCards},
-    'tab-license':{fn:window.ZQTong?window.ZQTong.fetchLicenses:null,container:'license-results',render:renderLicenseCards},
-    'tab-guide':{fn:window.ZQTong?window.ZQTong.fetchGuideIndustries:null,container:'guide-results',render:renderGuideCards}
-  };
-  var cfg=dataMap[tid];
-  if(cfg&&!loadedTabs[tid]&&cfg.fn){
-    loadedTabs[tid]=true;
-    document.getElementById(cfg.container).innerHTML='<p style="color:#94a3b8;text-align:center;padding:40px">加载中...</p>';
-    cfg.fn({}).then(function(data){
-      if(!data||data.length===0){
-        document.getElementById(cfg.container).innerHTML='<p style="color:#94a3b8;text-align:center;padding:40px">暂无数据</p>';
-        return;
-      }
-      cfg.render(data,cfg.container);
-    }).catch(function(){
-      document.getElementById(cfg.container).innerHTML='<p style="color:#94a3b8;text-align:center;padding:40px">加载失败，请稍后重试</p>';
-    });
-  }
+function switchAuthTab(tab){
+  document.querySelectorAll('.auth-tab').forEach(function(t){t.classList.remove('act')});
+  document.getElementById('auth-tab-'+tab).classList.add('act');
+  document.querySelectorAll('.auth-form').forEach(function(f){f.classList.remove('act')});
+  document.getElementById('auth-form-'+tab).classList.add('act');
+  document.getElementById('auth-switch-login').classList.toggle('hid',tab!=='login');
+  document.getElementById('auth-switch-register').classList.toggle('hid',tab!=='register');
+  document.getElementById('login-err').textContent='';
+  document.getElementById('reg-err').textContent='';
 }
 
+async function doSignIn(){
+  var err=document.getElementById('login-err'),email=document.getElementById('login-email').value.trim(),pass=document.getElementById('login-pass').value;
+  if(!email||!pass){err.textContent='请输入邮箱和密码';return}
+  err.textContent='';
+  if(!window.ZQTong||!window.ZQTong.signIn){err.textContent='SDK未就绪';return}
+  try{
+    var result=await window.ZQTong.signIn(email,pass);
+    if(result.error){err.textContent='登录失败: '+(result.error.message||'请检查账号密码');return}
+    closeAuth();
+    onLoginSuccess(result);
+  }catch(e){err.textContent='登录失败: '+(e.message||'网络错误')}
+}
+
+async function doSignUp(){
+  var err=document.getElementById('reg-err'),email=document.getElementById('reg-email').value.trim(),pass=document.getElementById('reg-pass').value,pass2=document.getElementById('reg-pass-confirm').value;
+  if(!email||!pass){err.textContent='请输入邮箱和密码';return}
+  if(pass!==pass2){err.textContent='两次密码不一致';return}
+  if(pass.length<6){err.textContent='密码至少6位';return}
+  err.textContent='';
+  if(!window.ZQTong||!window.ZQTong.signUp){err.textContent='SDK未就绪';return}
+  try{
+    var result=await window.ZQTong.signUp(email,pass);
+    if(result.error){err.textContent='注册失败: '+(result.error.message||'请检查邮箱是否已被注册');return}
+    if(!result.data.session){
+      err.textContent='注册成功！请查收验证邮件后登录。';
+      return;
+    }
+    closeAuth();
+    onLoginSuccess(result);
+  }catch(e){err.textContent='注册失败: '+(e.message||'网络错误')}
+}
+
+function onLoginSuccess(result){
+  var user=(result.data&&result.data.user)?result.data.user:null;
+  var email=user?user.email:'';
+  document.getElementById('nav-login-btn').classList.add('hid');
+  document.getElementById('nav-user-area').classList.remove('hid');
+  document.getElementById('nav-user-name').textContent=email;
+  localStorage.setItem('zqtong_email',email);
+  
+  // Check if profile exists
+  checkAndShowProfile();
+}
+
+async function doLogout(){
+  if(window.ZQTong&&window.ZQTong.signOut){await window.ZQTong.signOut()}
+  document.getElementById('nav-login-btn').classList.remove('hid');
+  document.getElementById('nav-user-area').classList.add('hid');
+  document.getElementById('nav-user-name').textContent='';
+  localStorage.removeItem('zqtong_email');
+  localStorage.removeItem('zqtong_profile');
+  document.getElementById('smart-rec').classList.add('hid');
+}
+
+async function checkAndShowProfile(){
+  try{
+    var profile=JSON.parse(localStorage.getItem('zqtong_profile')||'null');
+    if(profile){
+      loadSmartRecs(profile);
+      return;
+    }
+    // Try fetch from Supabase company_profiles
+    if(window.ZQTong&&window.ZQTong.supabase){
+      var userResult=await window.ZQTong.supabase.auth.getUser();
+      var userId=userResult.data&&userResult.data.user?userResult.data.user.id:null;
+      if(userId){
+        var dbResult=await window.ZQTong.supabase.from('company_profiles').select('*').eq('user_id',userId).single();
+        if(dbResult.data){
+          localStorage.setItem('zqtong_profile',JSON.stringify(dbResult.data));
+          loadSmartRecs(dbResult.data);
+          return;
+        }
+      }
+    }
+    // No profile, show form
+    document.getElementById('profile-modal-overlay').classList.add('show');
+  }catch(e){}
+}
+
+async function saveProfile(){
+  var data={
+    company_name: document.getElementById('pf-name').value.trim(),
+    credit_code: document.getElementById('pf-code').value.trim(),
+    region: document.getElementById('pf-region').value,
+    industry: document.getElementById('pf-industry').value,
+    scale: document.getElementById('pf-scale').value,
+    social_insurance: document.getElementById('pf-social').value,
+    annual_revenue: document.getElementById('pf-revenue').value
+  };
+  if(!data.company_name){alert('请输入企业名称');return}
+  
+  document.getElementById('profile-modal-overlay').classList.remove('show');
+  localStorage.setItem('zqtong_profile',JSON.stringify(data));
+  
+  // Save to Supabase
+  try{
+    if(window.ZQTong&&window.ZQTong.supabase){
+      var userResult=await window.ZQTong.supabase.auth.getUser();
+      var userId=userResult.data&&userResult.data.user?userResult.data.user.id:null;
+      if(userId){
+        data.user_id=userId;
+        await window.ZQTong.supabase.from('company_profiles').upsert(data,{onConflict:'user_id'});
+      }
+    }
+  }catch(e){console.error('Profile save error:',e)}
+  
+  loadSmartRecs(data);
+}
+
+function skipProfile(){
+  document.getElementById('profile-modal-overlay').classList.remove('show');
+}
+
+async function loadSmartRecs(profile){
+  var list=[];
+  try{
+    if(window.ZQTong){
+      if(profile.region&&window.ZQTong.fetchPolicies){
+        var policies=await window.ZQTong.fetchPolicies({region:profile.region});
+        if(policies&&policies.length){
+          policies.slice(0,3).forEach(function(p){
+            list.push({title:p.title,desc:(p.description||'').substring(0,40),type:'policy',href:'policy.html',badge:'惠企政策'});
+          });
+        }
+      }
+      if(profile.industry&&window.ZQTong.fetchGuideIndustries){
+        var guides=await window.ZQTong.fetchGuideIndustries({industry:profile.industry});
+        if(guides&&guides.length){
+          guides.slice(0,2).forEach(function(g){
+            list.push({title:g.industry+'行业指南',desc:(g.dept||''),type:'guide',href:'checklist.html',badge:'行业指南'});
+          });
+        }
+      }
+      if(profile.scale&&window.ZQTong.fetchServices){
+        var services=await window.ZQTong.fetchServices({});
+        if(services&&services.length){
+          services.slice(0,2).forEach(function(s){
+            list.push({title:s.name,desc:(s.description||'').substring(0,40),type:'service',href:'service.html',badge:'企业服务'});
+          });
+        }
+      }
+    }
+  }catch(e){}
+  
+  if(list.length===0)return;
+  
+  var html=list.map(function(item){
+    var bg='bg';
+    if(item.type==='policy')bg='bb';
+    else if(item.type==='guide')bg='bp';
+    return'<div class="smart-rec-card" onclick="window.location.href=\''+item.href+'\'"><span class="cb '+bg+' sr-badge">'+item.badge+'</span><div class="sr-body"><div class="sr-title">'+esc(item.title)+'</div><div class="sr-desc">'+esc(item.desc)+'</div></div></div>';
+  }).join('');
+  document.getElementById('smart-rec-list').innerHTML=html;
+  document.getElementById('smart-rec').classList.remove('hid');
+}
+
+// === Search ===
 async function searchPolicies(){
   var container=document.getElementById('policy-results');
   container.innerHTML='<p style="color:#94a3b8;text-align:center;padding:40px">正在匹配政策...</p>';
   if(!window.ZQTong){container.innerHTML='<p style="color:#94a3b8;text-align:center;padding:40px">SDK未就绪</p>';return}
   try{
-    var filters={};
-    var region=document.getElementById('hero-region').value;
-    var industry=document.getElementById('hero-industry').value;
-    var type=document.getElementById('hero-type').value;
-    var scale=document.getElementById('hero-scale').value;
+    var filters={},region=document.getElementById('hero-region').value,industry=document.getElementById('hero-industry').value,type=document.getElementById('hero-type').value,scale=document.getElementById('hero-scale').value;
     if(region)filters.region=region;
     if(industry)filters.industry=industry;
     if(type)filters.policy_type=type;
     if(scale)filters.enterprise_scale=scale;
     var data=await window.ZQTong.fetchPolicies(filters);
-    if(!data||data.length===0){
-      container.innerHTML='<p style="color:#94a3b8;text-align:center;padding:40px">暂无匹配政策</p>';
-      return;
-    }
+    if(!data||data.length===0){container.innerHTML='<p style="color:#94a3b8;text-align:center;padding:40px">暂无匹配政策</p>';return}
     renderPolicyCards(data,'policy-results');
-  }catch(e){
-    container.innerHTML='<p style="color:#dc2626;text-align:center;padding:40px">搜索失败: '+esc(e.message)+'</p>';
-  }
-  sTab('tab-policy');
+  }catch(e){container.innerHTML='<p style="color:#dc2626;text-align:center;padding:40px">搜索失败: '+esc(e.message)+'</p>'}
 }
 
-function typeBadge(t){
-  var m={资金补贴:'bb',税收优惠:'bg',人才引进:'br',资质认定:'by'};
-  return m[t]||'bb';
-}
+function typeBadge(t){var m={资金补贴:'bb',税收优惠:'bg',人才引进:'br',资质认定:'by'};return m[t]||'bb'}
 
 function renderPolicyCards(data,containerId){
   var html='';
   data.forEach(function(p){
     var b=typeBadge(p.policy_type);
     var tags=(p.tags||[]).map(function(t){return'<span class="tag">'+esc(t)+'</span>'}).join('');
-    html+='<div class="cd"><span class="cb '+b+'">'+(p.policy_type||'')+'</span><div class="cd-body"><div class="cd-title">'+esc(p.title||'')+'</div><div class="cd-desc">'+esc((p.description||'').substring(0,100))+'</div><div class="tags">'+tags+'</div><div class="cd-bot"><span class="price">'+(p.amount||'面议')+'</span><span class="op">'+(p.effective_date?'实施: '+p.effective_date+' | ':'')+'截止: '+(p.deadline||'长期有效')+'</span>'+(p.source_url?'<a class="btn btn-p btn-sm" href="'+esc(p.source_url)+'" target="_blank" rel="noopener" style="font-size:10px;margin-left:6px">原文 &rarr;</a>':'')+'</div></div></div>';
+    html+='<div class="cd"><span class="cb '+b+'">'+(p.policy_type||'')+'</span><div class="cd-body"><div class="cd-title">'+esc(p.title||'')+'</div><div class="cd-desc">'+esc((p.description||'').substring(0,100))+'</div><div class="tags">'+tags+'</div><div class="cd-bot"><span class="price">'+(p.amount||'面议')+'</span><span class="op">'+(p.effective_date?'实施: '+p.effective_date+' | ':'')+'截止: '+(p.deadline||'长期有效')+'</span>'+(p.source_url?'<a class="btn btn-p btn-sm" href="'+esc(p.source_url)+'" target="_blank" rel="noopener" style="font-size:10px;margin-left:6px">原文 \u2192</a>':'')+'</div></div></div>';
   });
   document.getElementById(containerId).innerHTML=html||'<p style="color:#94a3b8;text-align:center;padding:40px">暂无数据</p>';
 }
 
-function renderServiceCards(data,containerId){
-  var html='';
-  data.forEach(function(s){
-    var stars=starsHTML(s.rating||0);
-    html+='<div class="cd"><span class="cb bg">推荐</span><div class="cd-body"><div class="cd-title">'+esc(s.name||'')+'</div><div class="cd-desc">'+esc((s.description||'').substring(0,80))+'</div><div class="tags">'+(s.tags||[]).map(function(t){return'<span class="tag">'+esc(t)+'</span>'}).join('')+'</div><div class="cd-bot"><span class="price">'+esc(s.price_range||'')+'</span><span class="stars">'+stars+'</span><span class="rc">'+(s.rating||0)+'分 ('+(s.review_count||0)+'评价)</span><button class="btn btn-p btn-sm">立即咨询</button></div></div></div>';
-  });
-  document.getElementById(containerId).innerHTML=html||'<p style="color:#94a3b8;text-align:center;padding:40px">暂无数据</p>';
-}
+// === AI ===
+function toggleAI(){var p=document.getElementById('ai-panel');p.classList.contains('show')?p.classList.remove('show'):p.classList.add('show')}
 
-function renderIpCards(data,containerId){
-  var html='';
-  data.forEach(function(item){
-    html+='<div class="cd"><span class="cb bg">热门</span><div class="cd-body"><div class="cd-title">'+esc(item.name||'')+'</div><div class="cd-desc">'+esc((item.description||'').substring(0,80))+'</div><div class="cd-bot"><span class="price">'+esc(item.fee_range||'面议')+'</span><span class="op">周期: '+(item.cycle_days?item.cycle_days+'天':'咨询')+'</span><button class="btn btn-p btn-sm">立即申请</button></div></div></div>';
-  });
-  document.getElementById(containerId).innerHTML=html||'<p style="color:#94a3b8;text-align:center;padding:40px">暂无数据</p>';
-}
-
-function renderSwCards(data,containerId){
-  var html='';
-  var catColors={通用办公:'bb','建筑施工':'by','餐饮服务':'bo','信息技术':'bg','商贸物流':'bp','油气贸易':'br'};
-  data.forEach(function(item){
-    var cc=catColors[item.category]||'bg';
-    html+='<div class="cd"><span class="cb '+cc+'">'+(item.category||'')+'</span><div class="cd-body"><div class="cd-title">'+esc(item.name||'')+'</div><div class="cd-desc">'+esc((item.description||'').substring(0,80))+'</div><div class="tags">'+(item.features||[]).map(function(t){return'<span class="tag">'+esc(t)+'</span>'}).join('')+'</div><div class="cd-bot"><span class="price">'+esc(item.pricing||'')+'</span><button class="btn btn-o btn-sm">免费试用</button></div></div></div>';
-  });
-  document.getElementById(containerId).innerHTML=html||'<p style="color:#94a3b8;text-align:center;padding:40px">暂无数据</p>';
-}
-
-function renderOfficeCards(data,containerId){
-  var html='<table class="cmp"><tr><th>房源</th><th>面积(m²)</th><th>月租金(元)</th><th>补贴政策</th><th>配套设施</th></tr>';
-  data.forEach(function(o){
-    var tags=(o.tags||[]).join(', ');
-    html+='<tr><td><b>'+esc(o.title||'')+'</b>'+(o.subsidy?'<span class="tag-subsidy">享补贴</span>':'')+'</td><td>'+(o.area_sqm||'')+'</td><td>'+esc('¥'+o.price_month||'面议')+'</td><td>'+esc(o.subsidy||'暂无')+'</td><td>'+esc(tags||'')+'</td></tr>';
-  });
-  html+='</table>';
-  document.getElementById(containerId).innerHTML=html||'<p style="color:#94a3b8;text-align:center;padding:40px">暂无数据</p>';
-}
-
-function renderLicenseCards(data,containerId){
-  var html='';
-  data.forEach(function(l){
-    html+='<div class="cd"><span class="cb bb">'+esc(l.category||'通用')+'</span><div class="cd-body"><div class="cd-title">'+esc(l.name||'')+'</div><div class="cd-desc">办理时限: '+(l.duration_days?l.duration_days+'个工作日':'咨询')+' | 费用: '+esc(l.fee||'面议')+'</div><div class="cd-bot"><span class="price">'+esc(l.fee||'面议')+'</span><button class="btn btn-p btn-sm">立即办理</button><button class="btn btn-o btn-sm" onclick="var d=this.parentElement.parentElement.querySelector(\'.license-detail\');d.classList.toggle(\'show\');this.textContent=d.classList.contains(\'show\')?\'收起详情\':\'查看详情\'">查看详情</button></div><div class="license-detail"><h5>办理条件</h5><p>'+esc(l.conditions||'请咨询')+'</p><h5>所需材料</h5><ul>'+(l.materials||[]).map(function(m){return'<li>'+esc(m)+'</li>'}).join('')+'</ul><h5>办理流程</h5><ul class="step-list">'+(l.process||[]).map(function(s){return'<li>'+esc(s)+'</li>'}).join('')+'</ul><h5>主管部门</h5><p>'+esc(l.dept||'请咨询')+'</p></div></div></div>';
-  });
-  document.getElementById(containerId).innerHTML=html||'<p style="color:#94a3b8;text-align:center;padding:40px">暂无数据</p>';
-}
-
-function renderGuideCards(data,containerId){
-  var html='<div class="sec-tt">新公司设立 · 30天时间线</div><div class="tl"><div class="tl-item"><div class="tl-dot rd">1</div><div class="tlc"><div class="tlt">工商营业执照</div><div class="tlm">Day 1-3</div><div class="tld">公司名称核准→提交注册材料→领取营业执照。可选择线上办理或窗口办理。</div><div class="tla"><button class="btn btn-o btn-sm">查看流程</button></div></div></div><div class="tl-item"><div class="tl-dot yl">2</div><div class="tlc"><div class="tlt">刻章备案</div><div class="tlm">Day 3-5</div><div class="tld">公章+财务章+法人章+发票章+合同章共五枚，公安备案刻章点刻制。</div><div class="tla"><button class="btn btn-o btn-sm">查看流程</button></div></div></div><div class="tl-item"><div class="tl-dot gn">3</div><div class="tlc"><div class="tlt">银行开户+税务登记</div><div class="tlm">Day 5-10</div><div class="tld">选择银行开立基本账户→税务报到→税种核定→领取发票。</div><div class="tla"><button class="btn btn-o btn-sm">查看流程</button></div></div></div><div class="tl-item"><div class="tl-dot bl">4</div><div class="tlc"><div class="tlt">社保/公积金开户</div><div class="tlm">Day 10-15</div><div class="tld">社保登记+公积金缴存登记，线上即可完成。</div><div class="tla"><button class="btn btn-o btn-sm">查看流程</button></div></div></div><div class="tl-item"><div class="tl-dot bl">5</div><div class="tlc"><div class="tlt">行业许可/资质审批</div><div class="tlm">Day 15-30</div><div class="tld">根据行业需求办理相关许可证或备案。</div><div class="tla"><button class="btn btn-o btn-sm">证照办理</button></div></div></div></div><div class="sec-tt">按行业 · 设立变更流程</div>';
-  data.forEach(function(g){
-    html+='<div class="ind-guide"><h4>'+esc(g.industry||'')+'</h4><div class="ind-steps">'+(g.steps||[]).map(function(s,i){return'<div class="step-chip"><span class="sn">'+(i+1)+'</span>'+esc(s)+'</div>'}).join('')+'</div><div class="gov-info"><span>主管部门：<b>'+esc(g.dept||'请咨询')+'</b></span></div></div>';
-  });
-  document.getElementById(containerId).innerHTML=html||'<p style="color:#94a3b8;text-align:center;padding:40px">暂无数据</p>';
-}
-
-function starsHTML(r){var s='';for(var i=1;i<=5;i++)s+=i<=Math.round(r)?'\u2605':'\u2606';return s}
-
-function toggleAI(){
-  var p=document.getElementById('ai-panel');
-  p.classList.contains('show')?p.classList.remove('show'):p.classList.add('show');
-}
 var aiReplies={
   "政策":"目前南通市主要的惠企政策包括：专精特新奖励、智能化改造补贴（最高100万）、江海英才计划、科技贷款贴息。建议在「惠企政策」Tab查看详情。",
-  "补贴":"南通市企业可申请的补贴类型：①专精特新奖励②智能化改造补贴③人才引进补贴④贷款贴息⑤社保补贴⑥稳岗补贴。具体额度因企业类型不同而异。",
-  "注册":"新公司注册流程：①名称核准②提交注册材料③领营业执照④刻章⑤银行开户⑥税务登记⑦社保登记。南通已实现企业开办全流程半日结，详情查看「行业指南」Tab。",
-  "危化证":"危化品经营许可证办理需：①安全评价报告②应急预案备案③安全员培训合格证④经营场所达标⑤制度建立。30个工作日内拿证。",
+  "补贴":"南通市企业可申请的补贴类型：\u2460专精特新奖励\u2461智能化改造补贴\u2462人才引进补贴\u2463贷款贴息\u2464社保补贴\u2465稳岗补贴。具体额度因企业类型不同而异。",
+  "注册":"新公司注册流程：\u2460名称核准\u2461提交注册材料\u2462领营业执照\u2463刻章\u2464银行开户\u2465税务登记\u2466社保登记。南通已实现企业开办全流程半日结，详情查看「行业指南」。",
+  "危化证":"危化品经营许可证办理需：\u2460安全评价报告\u2461应急预案备案\u2462安全员培训合格证\u2463经营场所达标\u2464制度建立。30个工作日内拿证。",
   "代账":"财税公司提供代账服务：小规模200元/月起，一般纳税人400元/月起。含每月记账报税+年度汇算清缴+税务咨询。详情见「企业服务」Tab。",
   "办公室":"开发区自有办公室：独立办公室2800-6000元/月，大办公室5000-12000元/月，开放工位800-1200元/月/位。可注册公司，享受开发区租金补贴。",
   "商标":"商标注册899元/件（含官费），包含商标查询+类别建议+全流程代办，平均8-10个月拿证。还有发明专利、实用新型、软著等。详情见「知识产权」Tab。"
 };
+
 function aiSend(){
   var inp=document.getElementById('ai-input'),q=inp.value.trim();
   if(!q)return;
@@ -389,6 +591,8 @@ function aiSend(){
   setTimeout(function(){msgs.innerHTML+='<div class="ai-msg bot">'+reply+'</div>';msgs.scrollTop=msgs.scrollHeight;},600);
   msgs.scrollTop=msgs.scrollHeight;
 }
+
+// === Data sources ===
 var catColors={"政策发布":"bg","安全生产":"br","市场监管":"bb","行政审批":"by","产业政策":"bo","科技创新":"bp","人才社保":"bg","商务外贸":"bb","省级政策":"br","国家政策":"by"};
 function loadDataSources(){
   fetch('data-sources.json').then(function(r){return r.json()}).then(function(d){
@@ -398,9 +602,27 @@ function loadDataSources(){
       html+='<a class="ds-item" href="'+s.url+'" target="_blank" rel="noopener"><span class="tag '+cc+'">'+s.category+'</span><span class="ds-name">'+s.name+'</span></a>';
     });
     document.getElementById('ds-grid').innerHTML=html;
-  }).catch(function(){document.getElementById('ds-grid').innerHTML='<span style="color:#94a3b8;font-size:12px">数据来源加载中...</span>';});
+  }).catch(function(){document.getElementById('ds-grid').innerHTML='<span style="color:#94a3b8;font-size:12px">数据来源加载中...</span>'});
 }
-loadDataSources();
+
+// === Init ===
+window.addEventListener('load',function(){
+  loadDataSources();
+  // Check auto-login
+  try{
+    var email=localStorage.getItem('zqtong_email');
+    if(email&&window.ZQTong&&window.ZQTong.getSession){
+      window.ZQTong.getSession().then(function(session){
+        if(session){
+          document.getElementById('nav-login-btn').classList.add('hid');
+          document.getElementById('nav-user-area').classList.remove('hid');
+          document.getElementById('nav-user-name').textContent=email;
+          checkAndShowProfile();
+        }
+      });
+    }
+  }catch(e){}
+});
 </script>
 </body>
 </html>
