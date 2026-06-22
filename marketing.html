@@ -11,22 +11,72 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;c
 .nav{background:linear-gradient(135deg,#1a56db,#1e40af);height:64px;display:flex;align-items:center;padding:0 24px;position:sticky;top:0;z-index:100}
 .nav a{color:#fff;text-decoration:none;font-size:15px;font-weight:600}
 .nav a:hover{opacity:.85}
-.container{max-width:960px;margin:0 auto;padding:60px 24px;text-align:center}
-.icon{font-size:72px;margin-bottom:24px}
-h1{font-size:28px;font-weight:800;margin-bottom:12px;color:#1a1a2e}
-p{font-size:16px;color:#64748b;line-height:1.8;max-width:600px;margin:0 auto}
-.coming-soon{display:inline-block;margin-top:30px;padding:10px 28px;background:linear-gradient(135deg,#1a56db,#2563eb);color:#fff;border-radius:24px;font-size:14px;font-weight:600;letter-spacing:2px}
+.container{max-width:1200px;margin:0 auto;padding:30px 24px}
+.page-title{font-size:26px;font-weight:800;margin-bottom:6px;color:#1a1a2e}
+.page-sub{color:#64748b;font-size:14px;margin-bottom:28px}
+.svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+.svc-card{background:#fff;border-radius:14px;padding:24px 22px;box-shadow:0 2px 8px rgba(0,0,0,.04);transition:.2s;border:1px solid #e2e8f0}
+.svc-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(26,86,219,.1);border-color:#bfdbfe}
+.svc-card .svc-icon{font-size:36px;margin-bottom:12px;display:block}
+.svc-card h3{font-size:17px;font-weight:700;color:#1a1a2e;margin-bottom:6px}
+.svc-card p{font-size:13px;color:#64748b;line-height:1.7;margin-bottom:12px}
+.svc-card .svc-tags{display:flex;flex-wrap:wrap;gap:6px}
+.svc-tag{font-size:11px;padding:3px 10px;background:#eff6ff;color:#2563eb;border-radius:12px;font-weight:500}
+.intro-banner{background:linear-gradient(135deg,#1a56db,#1e40af);border-radius:14px;padding:28px 30px;margin-bottom:24px;color:#fff;display:flex;align-items:center;gap:20px}
+.intro-banner .ib-icon{font-size:48px;flex-shrink:0}
+.intro-banner .ib-text h2{font-size:20px;font-weight:700;margin-bottom:4px}
+.intro-banner .ib-text p{font-size:13px;opacity:.9;line-height:1.6}
+@media(max-width:768px){.svc-grid{grid-template-columns:1fr}.intro-banner{flex-direction:column;text-align:center}}
 .footer{text-align:center;padding:40px;color:#94a3b8;font-size:12px}
 </style>
 </head>
 <body>
 <nav class="nav"><a href="index.html">&#8592; 返回首页</a></nav>
 <div class="container">
-<div class="icon">&#128640;</div>
-<h1>营销宣传</h1>
-<p>品牌策划、新媒体运营、广告投放、SEO优化等营销推广服务，即将上线。</p>
-<div class="coming-soon">即 将 上 线</div>
+<h1 class="page-title">营销宣传</h1>
+<p class="page-sub">从品牌策略到执行落地，全链路营销推广服务助力企业提升市场影响力</p>
+
+<div class="intro-banner">
+<div class="ib-icon">&#128240;</div>
+<div class="ib-text">
+<h2>专业营销服务商对接</h2>
+<p>汇聚品牌策划、新媒体运营、广告投放等领域优质服务商，按企业需求精准匹配，提供可量化效果的营销解决方案。</p>
 </div>
-<div class="footer">政企通 · 南通开发区企业一站式智慧服务平台</div>
+</div>
+
+<div class="svc-grid">
+<div class="svc-card">
+<span class="svc-icon">&#128161;</span>
+<h3>品牌策划</h3>
+<p>品牌定位与战略、VI视觉设计、品牌故事打造、企业画册与宣传片制作，塑造差异化品牌形象。</p>
+<div class="svc-tags"><span class="svc-tag">品牌定位</span><span class="svc-tag">VI设计</span><span class="svc-tag">宣传片</span></div>
+</div>
+<div class="svc-card">
+<span class="svc-icon">&#128241;</span>
+<h3>新媒体运营</h3>
+<p>微信公众号/抖音/小红书代运营、内容策划与创作、粉丝增长与互动、短视频拍摄剪辑一站式服务。</p>
+<div class="svc-tags"><span class="svc-tag">公众号</span><span class="svc-tag">抖音</span><span class="svc-tag">短视频</span></div>
+</div>
+<div class="svc-card">
+<span class="svc-icon">&#128225;</span>
+<h3>广告投放</h3>
+<p>百度SEM/信息流广告、腾讯广点通、抖音巨量引擎投放优化，精准获客、降低CPA成本。</p>
+<div class="svc-tags"><span class="svc-tag">SEM</span><span class="svc-tag">信息流</span><span class="svc-tag">巨量引擎</span></div>
+</div>
+<div class="svc-card">
+<span class="svc-icon">&#128269;</span>
+<h3>SEO优化</h3>
+<p>企业官网SEO诊断、关键词策略、内外链建设、百度SEO快排，提升搜索排名和自然流量。</p>
+<div class="svc-tags"><span class="svc-tag">关键词优化</span><span class="svc-tag">站内优化</span><span class="svc-tag">外链建设</span></div>
+</div>
+<div class="svc-card">
+<span class="svc-icon">&#127902;</span>
+<h3>活动策划</h3>
+<p>开业庆典、产品发布会、展会参展、客户答谢会、线上直播活动等全案策划与落地执行。</p>
+<div class="svc-tags"><span class="svc-tag">开业庆典</span><span class="svc-tag">发布会</span><span class="svc-tag">展会参展</span></div>
+</div>
+</div>
+</div>
+<div class="footer">政企通 · 南通开发区企业一站式智慧服务平台 | 服务商信息由入驻机构提供</div>
 </body>
 </html>

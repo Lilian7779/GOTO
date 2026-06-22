@@ -11,22 +11,72 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;c
 .nav{background:linear-gradient(135deg,#1a56db,#1e40af);height:64px;display:flex;align-items:center;padding:0 24px;position:sticky;top:0;z-index:100}
 .nav a{color:#fff;text-decoration:none;font-size:15px;font-weight:600}
 .nav a:hover{opacity:.85}
-.container{max-width:960px;margin:0 auto;padding:60px 24px;text-align:center}
-.icon{font-size:72px;margin-bottom:24px}
-h1{font-size:28px;font-weight:800;margin-bottom:12px;color:#1a1a2e}
-p{font-size:16px;color:#64748b;line-height:1.8;max-width:600px;margin:0 auto}
-.coming-soon{display:inline-block;margin-top:30px;padding:10px 28px;background:linear-gradient(135deg,#1a56db,#2563eb);color:#fff;border-radius:24px;font-size:14px;font-weight:600;letter-spacing:2px}
+.container{max-width:1200px;margin:0 auto;padding:30px 24px}
+.page-title{font-size:26px;font-weight:800;margin-bottom:6px;color:#1a1a2e}
+.page-sub{color:#64748b;font-size:14px;margin-bottom:28px}
+.svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+.svc-card{background:#fff;border-radius:14px;padding:24px 22px;box-shadow:0 2px 8px rgba(0,0,0,.04);transition:.2s;border:1px solid #e2e8f0}
+.svc-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(26,86,219,.1);border-color:#bfdbfe}
+.svc-card .svc-icon{font-size:36px;margin-bottom:12px;display:block}
+.svc-card h3{font-size:17px;font-weight:700;color:#1a1a2e;margin-bottom:6px}
+.svc-card p{font-size:13px;color:#64748b;line-height:1.7;margin-bottom:12px}
+.svc-card .svc-tags{display:flex;flex-wrap:wrap;gap:6px}
+.svc-tag{font-size:11px;padding:3px 10px;background:#eff6ff;color:#2563eb;border-radius:12px;font-weight:500}
+.intro-banner{background:linear-gradient(135deg,#1a56db,#1e40af);border-radius:14px;padding:28px 30px;margin-bottom:24px;color:#fff;display:flex;align-items:center;gap:20px}
+.intro-banner .ib-icon{font-size:48px;flex-shrink:0}
+.intro-banner .ib-text h2{font-size:20px;font-weight:700;margin-bottom:4px}
+.intro-banner .ib-text p{font-size:13px;opacity:.9;line-height:1.6}
+@media(max-width:768px){.svc-grid{grid-template-columns:1fr}.intro-banner{flex-direction:column;text-align:center}}
 .footer{text-align:center;padding:40px;color:#94a3b8;font-size:12px}
 </style>
 </head>
 <body>
 <nav class="nav"><a href="index.html">&#8592; 返回首页</a></nav>
 <div class="container">
-<div class="icon">&#128640;</div>
-<h1>行业交流</h1>
-<p>行业峰会、企业参访、资源对接、政策解读沙龙等交流活动，即将上线。</p>
-<div class="coming-soon">即 将 上 线</div>
+<h1 class="page-title">行业交流</h1>
+<p class="page-sub">商会协会、行业展会、培训讲座、政策宣讲、供需对接，拓展企业资源圈层</p>
+
+<div class="intro-banner">
+<div class="ib-icon">&#129309;</div>
+<div class="ib-text">
+<h2>行业交流活动对接</h2>
+<p>汇聚南通及长三角地区商会协会、行业展会、培训讲座、政策宣讲、供需对接等活动信息，帮助企业拓展资源、获取前沿信息。</p>
 </div>
-<div class="footer">政企通 · 南通开发区企业一站式智慧服务平台</div>
+</div>
+
+<div class="svc-grid">
+<div class="svc-card">
+<span class="svc-icon">&#127970;</span>
+<h3>商会协会</h3>
+<p>南通各行业商协会名录与入会指南，涵盖制造业、建筑业、商贸、信息技术等领域，助力企业融入行业生态。</p>
+<div class="svc-tags"><span class="svc-tag">商协会名录</span><span class="svc-tag">入会指南</span><span class="svc-tag">行业联谊</span></div>
+</div>
+<div class="svc-card">
+<span class="svc-icon">&#127903;</span>
+<h3>行业展会</h3>
+<p>长三角及全国重点行业展会信息汇总，含智能制造、装备制造、新材料、电子信息等南通优势产业展会。</p>
+<div class="svc-tags"><span class="svc-tag">长三角展会</span><span class="svc-tag">行业专题展</span><span class="svc-tag">参展对接</span></div>
+</div>
+<div class="svc-card">
+<span class="svc-icon">&#127891;</span>
+<h3>培训讲座</h3>
+<p>企业管理、财税合规、劳动用工、数字化转型等专题培训，线上+线下灵活参与，提升企业经营管理能力。</p>
+<div class="svc-tags"><span class="svc-tag">管理培训</span><span class="svc-tag">专题讲座</span><span class="svc-tag">线上直播</span></div>
+</div>
+<div class="svc-card">
+<span class="svc-icon">&#128227;</span>
+<h3>政策宣讲</h3>
+<p>各级政府惠企政策解读会，含专项资金申报、税收优惠认定、人才引进计划等，"面对面"解答申报疑问。</p>
+<div class="svc-tags"><span class="svc-tag">政策解读</span><span class="svc-tag">申报指导</span><span class="svc-tag">现场答疑</span></div>
+</div>
+<div class="svc-card">
+<span class="svc-icon">&#129309;</span>
+<h3>供需对接</h3>
+<p>产业链上下游供需对接会、采购洽谈会、产学研合作对接，帮助企业拓展客户与合作伙伴资源。</p>
+<div class="svc-tags"><span class="svc-tag">供需匹配</span><span class="svc-tag">采购洽谈</span><span class="svc-tag">产研合作</span></div>
+</div>
+</div>
+</div>
+<div class="footer">政企通 · 南通开发区企业一站式智慧服务平台 | 活动信息由各主办方提供</div>
 </body>
 </html>
