@@ -196,15 +196,24 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;c
 }
 </style>
 
-<script src="supabase-client.js"></script>
+<script src="supabase-client.js?v=2"></script>
 <link rel="manifest" href="manifest.json">
 <script>
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('sw.js').then(function(reg){
       console.log('SW registered:',reg.scope);
+      reg.addEventListener('updatefound',function(){
+        var nw=reg.installing;
+        nw.addEventListener('statechange',function(){
+          if(nw.state==='activated'&&navigator.serviceWorker.controller)window.location.reload();
+        });
+      });
     }).catch(function(err){
       console.log('SW registration failed:',err);
+    });
+    navigator.serviceWorker.addEventListener('message',function(e){
+      if(e.data&&e.data.type==='UPDATE_READY')window.location.reload();
     });
   });
 }
