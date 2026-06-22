@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#1a56db">
+<title>筹建清单 & 行业办事指南 - 政企通</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;color:#1a1a2e}
+.nav{background:linear-gradient(135deg,#1a56db,#1e40af);height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:100}
+.nav a{color:#fff;text-decoration:none;font-size:15px;font-weight:600}
+.nav a:hover{opacity:.85}
+.nav .nav-title{color:#fff;font-size:17px;font-weight:700}
+.container{max-width:960px;margin:0 auto;padding:30px 24px}
+.page-title{font-size:26px;font-weight:800;margin-bottom:6px}
+.page-sub{color:#64748b;font-size:14px;margin-bottom:28px}
+
+/* Progress bar */
+.progress-bar{background:#e2e8f0;border-radius:10px;height:10px;margin-bottom:8px;overflow:hidden}
+.progress-fill{background:linear-gradient(90deg,#1a56db,#2563eb);height:100%;border-radius:10px;transition:width .3s}
+.progress-text{font-size:12px;color:#64748b;margin-bottom:24px;text-align:right}
+
+/* Checklist items */
+.section-title{font-size:20px;font-weight:700;margin:32px 0 16px;padding-bottom:8px;border-bottom:2px solid #1a56db;color:#1a1a2e}
+.week-header{font-size:18px;font-weight:700;margin:30px 0 14px;padding:8px 14px;background:#1a56db;color:#fff;border-radius:10px;display:inline-block}
+.day-list{display:flex;flex-direction:column;gap:8px}
+.day-item{background:#fff;border-radius:12px;padding:14px 18px;box-shadow:0 1px 4px rgba(0,0,0,.04);display:flex;align-items:center;gap:12px;transition:.2s;cursor:pointer}
+.day-item:hover{box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.day-item.done{opacity:.6}
+.day-item.done .day-title{text-decoration:line-through}
+.day-num{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;flex-shrink:0}
+.dn-active{background:#1a56db}.dn-done{background:#16a34a}.dn-future{background:#cbd5e1}
+.day-body{flex:1;min-width:0}
+.day-title{font-size:14px;font-weight:700;margin-bottom:3px}
+.day-desc{font-size:12px;color:#64748b;line-height:1.5}
+.day-action{flex-shrink:0}
+.btn{display:inline-block;padding:7px 14px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;border:none;text-decoration:none;transition:.2s;white-space:nowrap;background:#fff;color:#1a56db;border:1.5px solid #1a56db}
+.btn:hover{background:#eff6ff}
+.btn-done{background:#16a34a;color:#fff;border-color:#16a34a}.btn-done:hover{background:#15803d}
+.empty-state{text-align:center;padding:60px 20px;color:#94a3b8}
+.empty-state p{font-size:14px}
+
+/* Guide tabs */
+.guide-tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid #e2e8f0}
+.guide-tab{padding:10px 20px;font-size:14px;font-weight:600;color:#64748b;cursor:pointer;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;background:none;transition:.2s}
+.guide-tab:hover{color:#1a56db}
+.guide-tab.act{color:#1a56db;border-bottom-color:#1a56db}
+.guide-panel{display:none}
+.guide-panel.act{display:block}
+
+/* Guide items */
+.guide-step{background:#fff;border-radius:10px;padding:12px 16px;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,.03);display:flex;align-items:flex-start;gap:10px}
+.guide-step .gs-num{background:#eff6ff;color:#1a56db;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.guide-step .gs-body{flex:1}
+.guide-step .gs-title{font-size:13px;font-weight:600;margin-bottom:2px}
+.guide-step .gs-desc{font-size:11px;color:#64748b}
+.guide-step .gs-dept{font-size:10px;color:#94a3b8;margin-top:4px}
+.guide-step .gs-links{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.guide-step .gs-link{font-size:10px;padding:2px 8px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;border-radius:4px;cursor:pointer;text-decoration:none}
+.guide-step .gs-link:hover{background:#dcfce7}
+
+/* Industry selector */
+.industry-select{margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.industry-select label{font-size:13px;font-weight:600;color:#475569}
+.industry-select select{padding:8px 14px;border:2px solid #e2e8f0;border-radius:8px;font-size:13px;outline:none;background:#fff;color:#1a1a2e}
+.industry-select select:focus{border-color:#1a56db}
+
+.ld{text-align:center;padding:40px;color:#94a3b8}
+
+@media(max-width:768px){.day-item{flex-wrap:wrap}.day-action{width:100%}.day-action .btn{width:100%;text-align:center}}
+.footer{text-align:center;padding:40px;color:#94a3b8;font-size:12px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<link rel="manifest" href="manifest.json">
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      console.log('SW registered:',reg.scope);
+    }).catch(function(err){
+      console.log('SW registration failed:',err);
+    });
+  });
+}
+</script>
+</head>
+<body>
+<nav class="nav">
+<a href="index.html">&#8592; 返回首页</a>
+<span class="nav-title">筹建清单 & 行业办事指南</span>
+<span></span>
+</nav>
+<div class="container">
+<h1 class="page-title">筹建清单 & 行业办事指南</h1>
+<p class="page-sub">从公司注册到合规运营 — 分阶段指引，不遗漏任何关键步骤</p>
+
+<!-- Industry selector -->
+<div class="industry-select">
+<label>选择行业：</label>
+<select id="industry-filter" onchange="filterByIndustry()">
+<option value="">通用清单（全行业）</option>
+<option value="建筑施工">建筑施工</option>
+<option value="餐饮服务">餐饮服务</option>
+<option value="信息技术">信息技术</option>
+<option value="商贸物流">商贸物流</option>
+<option value="油气贸易">油气贸易</option>
+<option value="教育培训">教育培训</option>
+<option value="医疗器械">医疗器械</option>
+<option value="制造业">制造业</option>
+</select>
+</div>
+
+<!-- Section 1: Checklist -->
+<div class="section-title">&#128204; 筹建任务清单</div>
+<div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+<div class="progress-text"><span id="done-count">0</span> / <span id="total-count">0</span> 项已完成</div>
+<div id="checklist"><div class="ld">加载中...</div></div>
+
+<!-- Section 2: Industry Guide -->
+<div class="section-title" style="margin-top:40px">&#128214; 行业办事指南</div>
+<div class="guide-tabs">
+<button class="guide-tab act" onclick="switchGuide('setup')">&#127970; 设立期</button>
+<button class="guide-tab" onclick="switchGuide('operation')">&#128188; 营运期</button>
+<button class="guide-tab" onclick="switchGuide('cancel')">&#128682; 注销期</button>
+</div>
+
+<div id="guide-setup" class="guide-panel act"><div class="ld">加载中...</div></div>
+<div id="guide-operation" class="guide-panel"><div class="ld">加载中...</div></div>
+<div id="guide-cancel" class="guide-panel"><div class="ld">加载中...</div></div>
+
+</div>
+<div class="footer">政企通 · 南通开发区企业一站式智慧服务平台</div>
+<script>
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+var allTasks=[],allGuides=[],doneSet=new Set(JSON.parse(localStorage.getItem('newco_done')||'[]'));
+
+function getWeek(day){
+  if(day<=5)return 1;
+  if(day<=10)return 2;
+  if(day<=15)return 3;
+  if(day<=21)return 4;
+  if(day<=28)return 5;
+  return 6;
+}
+
+function toggleDay(day){
+  doneSet.has(day)?doneSet.delete(day):doneSet.add(day);
+  localStorage.setItem('newco_done',JSON.stringify([...doneSet]));
+  renderChecklist();
+}
+
+async function loadAll(){
+  var el=document.getElementById('checklist');
+  if(!window.ZQTong){el.innerHTML='<div class="empty-state"><p>SDK未就绪</p></div>';return}
+  try{
+    // Load tasks
+    allTasks=await window.ZQTong.fetchNewcoTasks()||[];
+    // Load guides
+    allGuides=await window.ZQTong.fetchGuideIndustries()||[];
+    allGuides.sort(function(a,b){return(a.day_num||0)-(b.day_num||0)});
+    renderChecklist();
+    renderGuides();
+  }catch(e){
+    el.innerHTML='<div class="empty-state"><p>加载失败: '+esc(e.message)+'</p></div>';
+  }
+}
+
+function filterByIndustry(){
+  renderChecklist();
+  renderGuides();
+}
+
+function renderChecklist(){
+  var industry=document.getElementById('industry-filter').value;
+  var tasks=allTasks;
+  // If logged in and industry selected, filter
+  try{
+    var profile=JSON.parse(localStorage.getItem('zqtong_profile')||'null');
+    if(!industry&&profile&&profile.industry)industry=profile.industry;
+  }catch(e){}
+  
+  if(industry){
+    tasks=allTasks.filter(function(t){
+      return (!t.industry||t.industry===industry||t.industry==='通用');
+    });
+  }
+  
+  tasks.sort(function(a,b){return(a.day_num||0)-(b.day_num||0)});
+  
+  if(tasks.length===0){
+    document.getElementById('checklist').innerHTML='<div class="empty-state"><p>暂无'+industry+'相关任务数据</p></div>';
+    document.getElementById('done-count').textContent=0;
+    document.getElementById('total-count').textContent=0;
+    document.getElementById('progress-fill').style.width='0%';
+    return;
+  }
+  
+  var weeks={};
+  tasks.forEach(function(t){var w=getWeek(t.day_num);if(!weeks[w])weeks[w]=[];weeks[w].push(t)});
+  var html='',weekKeys=Object.keys(weeks).sort(function(a,b){return a-b});
+  var weekNames={1:'第一周：企业开办（Day 1-5）',2:'第二周：银行税务社保（Day 6-10）',3:'第三周：资质与团队（Day 11-15）',4:'第四周：品牌与运营（Day 16-21）',5:'第五周：合规与预热（Day 22-28）',6:'第六周：月度收官（Day 29-30）'};
+  
+  weekKeys.forEach(function(w){
+    var items=weeks[w];
+    html+='<div class="week-header">'+(weekNames[w]||'第'+w+'周')+'</div><div class="day-list">';
+    items.forEach(function(t){
+      var done=doneSet.has(t.day_num);
+      html+='<div class="day-item'+(done?' done':'')+'" onclick="toggleDay('+t.day_num+')"><div class="day-num '+(done?'dn-done':'dn-active')+'">'+t.day_num+'</div><div class="day-body"><div class="day-title">'+esc(t.task||'')+'</div><div class="day-desc">'+esc(t.detail||'')+'</div></div><div class="day-action"><a href="'+(t.action_url||'#')+'" class="btn'+(done?' btn-done':'')+'" onclick="event.stopPropagation()">'+(done?'已完成':'去办理')+'</a></div></div>';
+    });
+    html+='</div>';
+  });
+  document.getElementById('checklist').innerHTML=html;
+  document.getElementById('done-count').textContent=doneSet.size;
+  document.getElementById('total-count').textContent=tasks.length;
+  document.getElementById('progress-fill').style.width=(doneSet.size/tasks.length*100)+'%';
+}
+
+function renderGuides(){
+  var industry=document.getElementById('industry-filter').value;
+  try{
+    var profile=JSON.parse(localStorage.getItem('zqtong_profile')||'null');
+    if(!industry&&profile&&profile.industry)industry=profile.industry;
+  }catch(e){}
+  
+  var guides=allGuides;
+  if(industry){
+    guides=allGuides.filter(function(g){return g.industry===industry||g.industry==='通用'});
+  }
+  
+  var periods={setup:[],operation:[],cancel:[]};
+  guides.forEach(function(g){
+    var p=(g.period||'').toLowerCase();
+    if(p==='cancel'||p==='注销期'||p.indexOf('注销')>=0)periods.cancel.push(g);
+    else if(p==='operation'||p==='营运期'||p.indexOf('营运')>=0||p.indexOf('运营')>=0)periods.operation.push(g);
+    else periods.setup.push(g);
+  });
+  
+  ['setup','operation','cancel'].forEach(function(key){
+    var items=periods[key];
+    var el=document.getElementById('guide-'+key);
+    if(!items.length){
+      el.innerHTML='<div class="empty-state"><p>暂无'+{setup:'设立期',operation:'营运期',cancel:'注销期'}[key]+'指南数据</p></div>';
+      return;
+    }
+    var html='';
+    items.forEach(function(g,i){
+      var steps=g.steps||[];
+      var stepHtml=Array.isArray(steps)?steps.map(function(s,j){
+        return'<div class="guide-step"><div class="gs-num">'+(j+1)+'</div><div class="gs-body"><div class="gs-title">'+esc(typeof s==='string'?s:(s.title||s.step||''))+'</div><div class="gs-desc">'+esc(typeof s==='string'?'':(s.desc||s.description||''))+'</div></div></div>';
+      }).join(''):'';
+      
+      var forms=Array.isArray(g.forms)?g.forms.map(function(f){
+        return'<a class="gs-link" href="'+esc(f.url||'#')+'" target="_blank">'+esc(f.name||f.title||'表单链接')+'</a>';
+      }).join(''):'';
+      
+      html+='<div class="ind-guide" style="background:#fff;border-radius:12px;padding:16px 20px;margin-bottom:14px;box-shadow:0 2px 6px rgba(0,0,0,.04)"><h4 style="font-size:14px;font-weight:700;margin-bottom:10px;color:#1a1a2e">'+esc(g.industry||'')+'</h4>'+stepHtml+'<div class="gov-info" style="display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:#64748b;margin-top:10px"><span>主管部门：<b>'+esc(g.dept||'请咨询')+'</b></span>'+(g.timeline?'<span>办理时限：<b>'+esc(g.timeline)+'</b></span>':'')+'</div>'+(forms?'<div class="gs-links" style="margin-top:8px">'+forms+'</div>':'')+'</div>';
+    });
+    el.innerHTML=html;
+  });
+}
+
+function switchGuide(period){
+  document.querySelectorAll('.guide-tab').forEach(function(t){t.classList.remove('act')});
+  var tabEl=document.querySelector('.guide-tab[onclick*="'+period+'"]');
+  if(tabEl)tabEl.classList.add('act');
+  document.querySelectorAll('.guide-panel').forEach(function(p){p.classList.remove('act')});
+  document.getElementById('guide-'+period).classList.add('act');
+}
+
+document.addEventListener('DOMContentLoaded',loadAll);
+</script>
+</body>
+</html>
