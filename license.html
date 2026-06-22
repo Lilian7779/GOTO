@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>证照办理 - 政企通</title>
+<title>资质证照 - 政企通</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;color:#1a1a2e}
@@ -13,6 +13,11 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;c
 .container{max-width:1100px;margin:0 auto;padding:30px 24px}
 .page-title{font-size:26px;font-weight:800;margin-bottom:6px}
 .page-sub{color:#64748b;font-size:14px;margin-bottom:28px}
+
+.section-title{font-size:20px;font-weight:700;color:#1a1a2e;margin:32px 0 16px;padding-bottom:10px;border-bottom:3px solid #1a56db}
+.section-desc{color:#64748b;font-size:13px;margin-bottom:20px}
+
+/* License cards */
 .license-list{display:flex;flex-direction:column;gap:14px}
 .l-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);transition:.2s}
 .l-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08)}
@@ -23,6 +28,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;c
 .lb-build{background:#eff6ff;color:#2563eb}.lb-med{background:#f0fdf4;color:#16a34a}
 .lb-trade{background:#fff7ed;color:#ea580c}.lb-edu{background:#faf5ff;color:#9333ea}
 .lb-general{background:#f1f5f9;color:#475569}.lb-special{background:#fef2f2;color:#dc2626}
+.lb-ip{background:#e0e7ff;color:#4338ca}
 .l-header h3{font-size:16px;font-weight:700}
 .l-header .l-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .l-price{font-size:16px;font-weight:700;color:#1a56db}
@@ -34,7 +40,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;c
 .l-detail h5{font-size:13px;font-weight:700;color:#1a1a2e;margin:14px 0 8px}
 .l-detail ul{padding-left:18px;margin-bottom:8px;font-size:12px;color:#475569;line-height:2}
 .l-detail .chk-list{list-style:none;padding-left:0}
-.l-detail .chk-list li::before{content:'☐ ';color:#1a56db;font-size:13px}
+.l-detail .chk-list li::before{content:'\2610 ';color:#1a56db;font-size:13px}
 .l-detail .step-list{list-style:none;padding-left:0;counter-reset:step}
 .l-detail .step-list li{counter-increment:step;margin-bottom:4px}
 .l-detail .step-list li::before{content:counter(step)'. ';color:#1a56db;font-weight:700}
@@ -45,7 +51,21 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;c
 .btn-o{background:#fff;color:#1a56db;border:1.5px solid #1a56db}.btn-o:hover{background:#eff6ff}
 .empty-state{text-align:center;padding:60px 20px;color:#94a3b8}
 .empty-state p{font-size:14px}
-@media(max-width:768px){.l-header{flex-direction:column;align-items:flex-start}.l-header .l-meta{width:100%;justify-content:space-between}}
+
+/* IP cards grid */
+.ip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.ip-card{background:#fff;border-radius:14px;padding:24px 20px;box-shadow:0 2px 8px rgba(0,0,0,.04);transition:.2s;text-align:center}
+.ip-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+.ip-icon{font-size:40px;margin-bottom:12px;display:block}
+.ip-card h3{font-size:16px;font-weight:700;margin-bottom:8px;color:#1a1a2e}
+.ip-card p{font-size:12px;color:#64748b;line-height:1.6;margin-bottom:16px}
+.ip-card .btn{display:inline-block}
+
+@media(max-width:768px){
+  .l-header{flex-direction:column;align-items:flex-start}
+  .l-header .l-meta{width:100%;justify-content:space-between}
+  .ip-grid{grid-template-columns:1fr}
+}
 .footer{text-align:center;padding:40px;color:#94a3b8;font-size:12px}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -67,9 +87,49 @@ if('serviceWorker' in navigator){
 <body>
 <nav class="nav"><a href="index.html">&#8592; 返回首页</a></nav>
 <div class="container">
-<h1 class="page-title">证照办理</h1>
-<p class="page-sub">企业证照一站代办 — 条件审查 · 材料准备 · 流程跟进 · 快速拿证</p>
+<h1 class="page-title">资质证照</h1>
+<p class="page-sub">企业证照一站代办 + 知识产权全链条服务 — 从注册到维权全程护航</p>
+
+<!-- ===== Section 1: 证照办理 ===== -->
+<h2 class="section-title">&#128196; 证照办理</h2>
+<p class="section-desc">条件审查 · 材料准备 · 流程跟进 · 快速拿证</p>
 <div class="license-list" id="license-list"><div style="text-align:center;padding:60px;color:#94a3b8">加载中...</div></div>
+
+<!-- ===== Section 2: 知识产权 ===== -->
+<h2 class="section-title">&#128737; 知识产权</h2>
+<p class="section-desc">商标注册 · 专利申请 · 版权登记 · 软件著作权 · 专利维权</p>
+<div class="ip-grid" id="ip-grid">
+<div class="ip-card">
+<span class="ip-icon">&#127991;</span>
+<h3>商标注册</h3>
+<p>商标查询 + 类别建议 + 全流程代办<br>899元/件（含官费），平均8-10个月拿证<br>提供商标异议、复审、续展等后续服务</p>
+<button class="btn btn-p">立即办理</button>
+</div>
+<div class="ip-card">
+<span class="ip-icon">&#128736;</span>
+<h3>专利申请</h3>
+<p>发明专利 · 实用新型 · 外观设计<br>专业代理撰写 + 审查意见答复<br>发明申请代理 4500元起，实用新型 1500元起</p>
+<button class="btn btn-p">立即办理</button>
+</div>
+<div class="ip-card">
+<span class="ip-icon">&#128214;</span>
+<h3>版权登记</h3>
+<p>作品著作权登记（文字/美术/音乐/影视等）<br>国家版权局认证，15-30个工作日拿证<br>著作权转让、许可备案一站式服务</p>
+<button class="btn btn-p">立即办理</button>
+</div>
+<div class="ip-card">
+<span class="ip-icon">&#128187;</span>
+<h3>软件著作权</h3>
+<p>计算机软件著作权登记<br>源代码 + 文档整理辅导，通过率高<br>普通办理 800元/件，加急 1500元/件（5工作日）</p>
+<button class="btn btn-p">立即办理</button>
+</div>
+<div class="ip-card">
+<span class="ip-icon">&#9878;</span>
+<h3>专利维权</h3>
+<p>侵权调查 · 证据固定 · 行政投诉 · 司法诉讼<br>专利无效宣告请求代理<br>与多家律所合作，覆盖全国主要城市</p>
+<button class="btn btn-p">立即办理</button>
+</div>
+</div>
 </div>
 <div class="footer">政企通 · 南通开发区企业一站式智慧服务平台 | 证照办理时限以主管部门实际审批为准</div>
 <script>
