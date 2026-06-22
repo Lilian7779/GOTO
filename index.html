@@ -36,8 +36,24 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f7fa;c
 .hot-tags span{font-size:12px;padding:5px 12px;background:rgba(255,255,255,.15);color:rgba(255,255,255,.9);border-radius:16px;cursor:pointer;transition:.2s;border:1px solid rgba(255,255,255,.2)}
 .hot-tags span:hover{background:rgba(255,255,255,.25);color:#fff}
 
+/* Guide banner */
+.guide-banner{max-width:1280px;margin:-25px auto 25px;padding:0 30px}
+.guide-banner a{display:flex;align-items:center;gap:20px;background:linear-gradient(135deg,#1a56db,#4338ca);color:#fff;border-radius:16px;padding:24px 32px;text-decoration:none;box-shadow:0 8px 30px rgba(26,86,219,.25);transition:.2s}
+.guide-banner a:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(26,86,219,.35)}
+.guide-banner .gb-icon{font-size:48px;flex-shrink:0}
+.guide-banner .gb-body{flex:1}
+.guide-banner .gb-body h2{font-size:22px;font-weight:800;margin-bottom:4px}
+.guide-banner .gb-body p{font-size:14px;opacity:.9}
+.guide-banner .gb-arrow{font-size:28px;flex-shrink:0;opacity:.8}
+@media(max-width:768px){
+  .guide-banner a{flex-direction:column;text-align:center;gap:12px;padding:20px}
+  .guide-banner .gb-icon{font-size:36px}
+  .guide-banner .gb-body h2{font-size:18px}
+  .guide-banner .gb-arrow{display:none}
+}
+
 /* 9-service grid */
-.svc-grid{max-width:1280px;margin:-30px auto 30px;padding:0 30px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.svc-grid{max-width:1280px;margin:-30px auto 30px;padding:0 30px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .svc-card{background:#fff;border-radius:14px;padding:22px 12px;box-shadow:0 2px 12px rgba(0,0,0,.06);text-align:center;cursor:pointer;transition:.2s;text-decoration:none;color:inherit}
 .svc-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
 .svc-card .svc-icon{font-size:36px;margin-bottom:8px;display:block}
@@ -225,16 +241,15 @@ if('serviceWorker' in navigator){
 <nav class="nav">
 <div class="nav-logo">政企通</div>
 <div class="nav-links">
-<a href="office.html">空间租赁</a>
-<a href="policy.html">惠企政策</a>
 <a href="license.html">资质证照</a>
-<a href="software.html">软件推荐</a>
+<a href="policy.html">惠企政策</a>
 <a href="hr.html">人力资源</a>
+<a href="software.html">软件推荐</a>
 <a href="marketing.html">营销宣传</a>
 <a href="finance.html">财税审计</a>
-<a href="legal.html">法律服务</a>
+<a href="legal.html">法律咨询</a>
 <a href="industry.html">行业交流</a>
-<a href="checklist.html">筹建清单</a>
+<a href="office.html">空间租赁</a>
 </div>
 <div class="nav-actions" id="nav-actions">
 <button class="nav-btn" id="nav-login-btn" onclick="openAuth()">登录/注册</button>
@@ -264,18 +279,27 @@ if('serviceWorker' in navigator){
 <span onclick="window.location.href='finance.html'">财税代理</span>
 </div></div>
 </section>
+<!-- 筹建指南独立入口 -->
+<div class="guide-banner">
+<a href="checklist.html">
+<span class="gb-icon">&#128640;</span>
+<div class="gb-body"><h2>筹 建 指 南</h2><p>从注册到开业，手把手一站式指南</p></div>
+<span class="gb-arrow">&#8594;</span>
+</a>
+</div>
 
-<!-- 10-Service Grid -->
+
+<!-- 9-Service Grid -->
 <div class="svc-grid">
-<a href="office.html" class="svc-card"><span class="svc-icon">&#127970;</span><h3>空间租赁</h3><p>房源对比·选址·直播带看</p></a>
-<a href="policy.html" class="svc-card"><span class="svc-icon">&#128203;</span><h3>惠企政策</h3><p>所在地+行业+类型秒级匹配</p></a>
 <a href="license.html" class="svc-card"><span class="svc-icon">&#128196;</span><h3>资质证照</h3><p>危化证·食品经营·资质审批</p></a>
-<a href="software.html" class="svc-card"><span class="svc-icon">&#128187;</span><h3>软件推荐</h3><p>按行业推荐企业级SaaS</p></a>
+<a href="policy.html" class="svc-card"><span class="svc-icon">&#128203;</span><h3>惠企政策</h3><p>所在地+行业+类型秒级匹配</p></a>
 <a href="hr.html" class="svc-card"><span class="svc-icon">&#128101;</span><h3>人力资源</h3><p>招聘·社保·薪酬·培训</p></a>
+<a href="software.html" class="svc-card"><span class="svc-icon">&#128187;</span><h3>软件推荐</h3><p>按行业推荐企业级SaaS</p></a>
 <a href="marketing.html" class="svc-card"><span class="svc-icon">&#128240;</span><h3>营销宣传</h3><p>品牌·新媒体·广告投放</p></a>
 <a href="finance.html" class="svc-card"><span class="svc-icon">&#128176;</span><h3>财税审计</h3><p>代账·税务筹划·审计</p></a>
-<a href="legal.html" class="svc-card"><span class="svc-icon">&#9878;</span><h3>法律服务</h3><p>合同·法律咨询·诉讼代理</p></a>
+<a href="legal.html" class="svc-card"><span class="svc-icon">&#9878;</span><h3>法律咨询</h3><p>合同·法律咨询·诉讼代理</p></a>
 <a href="industry.html" class="svc-card"><span class="svc-icon">&#129309;</span><h3>行业交流</h3><p>峰会·参访·资源对接</p></a>
+<a href="office.html" class="svc-card"><span class="svc-icon">&#127970;</span><h3>空间租赁</h3><p>房源对比·选址·直播带看</p></a>
 </div>
 
 <!-- Smart Recommendations (shown after login+profile) -->
