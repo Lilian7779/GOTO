@@ -1,72 +1,29 @@
-const CACHE_NAME = 'zqtong-v2';
-const STATIC_ASSETS = [
-  '/',
-  'index.html',
-  'policy.html',
-  'service.html',
-  'ip.html',
-  'software.html',
-  'office.html',
-  'license.html',
-  'guide.html',
-  'newco.html',
-  'admin.html',
-  'supabase-client.js',
-  'manifest.json'
-];
+const CACHE_NAME = 'zqtong-v3';
+const urlsToCache = ['/','/index.html','/policy.html','/office.html','/license.html','/ip.html','/software.html','/admin.html','/newco.html','/supabase-client.js','/data-sources.json','/manifest.json'];
 
-// Install: precache all static assets
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(STATIC_ASSETS).catch(err => {
-        console.warn('Precache failed for some assets:', err);
-      });
-    })
-  );
+  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache)));
   self.skipWaiting();
 });
 
-// Activate: clean old caches
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys => {
-      return Promise.all(
-        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
-      );
+    caches.keys().then(cacheNames => Promise.all(
+      cacheNames.map(c => c !== CACHE_NAME ? caches.delete(c) : null)
+    )).then(() => {
+      self.clients.matchAll().then(clients => {
+        clients.forEach(client => client.postMessage({type: 'UPDATE_READY'}));
+      });
     })
   );
   self.clients.claim();
 });
 
-// Fetch: network-first for all static assets (includes supabase-client.js)
 self.addEventListener('fetch', event => {
-  const url = new URL(event.request.url);
-  const isHTML = event.request.headers.get('accept') && event.request.headers.get('accept').includes('text/html');
-
-  // Network first for HTML
-  if (isHTML) {
-    event.respondWith(
-      fetch(event.request)
-        .then(response => {
-          const cloned = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, cloned));
-          return response;
-        })
-        .catch(() => caches.match(event.request))
-    );
-  } else {
-    // Network first for all static assets (JS, CSS, JSON, images, etc.)
-    event.respondWith(
-      fetch(event.request)
-        .then(response => {
-          if (response.ok && event.request.method === 'GET') {
-            const cloned = response.clone();
-            caches.open(CACHE_NAME).then(cache => cache.put(event.request, cloned));
-          }
-          return response;
-        })
-        .catch(() => caches.match(event.request))
-    );
-  }
+  const respond = (req) => fetch(req).then(resp => {
+    let clone = resp.clone();
+    caches.open(CACHE_NAME).then(c => c.put(req, clone));
+    return resp;
+  }).catch(() => caches.match(req));
+  event.respondWith(respond(event.request));
 });
