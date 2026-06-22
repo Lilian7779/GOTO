@@ -299,7 +299,7 @@ function renderPolicyCards(data,containerId){
   data.forEach(function(p){
     var b=typeBadge(p.policy_type);
     var tags=(p.tags||[]).map(function(t){return'<span class="tag">'+esc(t)+'</span>'}).join('');
-    html+='<div class="cd"><span class="cb '+b+'">'+(p.policy_type||'')+'</span><div class="cd-body"><div class="cd-title">'+esc(p.title||'')+'</div><div class="cd-desc">'+esc((p.description||'').substring(0,100))+'</div><div class="tags">'+tags+'</div><div class="cd-bot"><span class="price">'+(p.amount||'面议')+'</span><span class="op">截止: '+(p.deadline||'长期有效')+'</span></div></div></div>';
+    html+='<div class="cd"><span class="cb '+b+'">'+(p.policy_type||'')+'</span><div class="cd-body"><div class="cd-title">'+esc(p.title||'')+'</div><div class="cd-desc">'+esc((p.description||'').substring(0,100))+'</div><div class="tags">'+tags+'</div><div class="cd-bot"><span class="price">'+(p.amount||'面议')+'</span><span class="op">'+(p.effective_date?'实施: '+p.effective_date+' | ':'')+'截止: '+(p.deadline||'长期有效')+'</span>'+(p.source_url?'<a class="btn btn-p btn-sm" href="'+esc(p.source_url)+'" target="_blank" rel="noopener" style="font-size:10px;margin-left:6px">原文 &rarr;</a>':'')+'</div></div></div>';
   });
   document.getElementById(containerId).innerHTML=html||'<p style="color:#94a3b8;text-align:center;padding:40px">暂无数据</p>';
 }
