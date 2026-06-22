@@ -1,0 +1,55 @@
+{
+  "update_interval": "2h",
+  "sources": [
+    {
+      "name": "南通市开发区管委会",
+      "url": "http://www.netda.gov.cn/",
+      "category": "政策发布"
+    },
+    {
+      "name": "南通市应急管理局",
+      "url": "http://yjj.nantong.gov.cn/",
+      "category": "安全生产"
+    },
+    {
+      "name": "南通市市场监管局",
+      "url": "http://scjgj.nantong.gov.cn/",
+      "category": "市场监管"
+    },
+    {
+      "name": "南通市行政审批局",
+      "url": "http://xzsp.nantong.gov.cn/",
+      "category": "行政审批"
+    },
+    {
+      "name": "南通市工信局",
+      "url": "http://gxj.nantong.gov.cn/",
+      "category": "产业政策"
+    },
+    {
+      "name": "南通市科技局",
+      "url": "http://kjj.nantong.gov.cn/",
+      "category": "科技创新"
+    },
+    {
+      "name": "南通市人社局",
+      "url": "http://rsj.nantong.gov.cn/",
+      "category": "人才社保"
+    },
+    {
+      "name": "南通市商务局",
+      "url": "http://swj.nantong.gov.cn/",
+      "category": "商务外贸"
+    },
+    {
+      "name": "江苏省工信厅",
+      "url": "http://gxt.jiangsu.gov.cn/",
+      "category": "省级政策"
+    },
+    {
+      "name": "中国政府网政策",
+      "url": "https://www.gov.cn/zhengce/",
+      "category": "国家政策"
+    }
+  ]
+}
